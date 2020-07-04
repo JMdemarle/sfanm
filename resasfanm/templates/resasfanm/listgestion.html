@@ -1,0 +1,40 @@
+
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Administration</li>
+{% endblock %}
+
+{% block content %}
+
+   <div class="row">
+
+  </div>
+
+  <br>
+  <br>
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+          <th>Date</th>
+          <th>Nb entrees</th>
+          <th>Nb sorties</th>
+          <th>Nb reines</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for capacite in les_capacites %}
+          <tr>
+
+            <td> {{ capacite.datecapa }} </td>
+            <td> <a href="{% url 'listentrees' capacite.datecapa %}">{{ capacite.get_entreesdate }} </a></td>
+            <td> <a href="{% url 'listsorties' capacite.datecapa %}">{{ capacite.get_sortiesdate }} </a></td>
+            <td> {{ capacite.get_encoursreines }} </a></td>
+            
+          </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br>
+   
+{% endblock %}

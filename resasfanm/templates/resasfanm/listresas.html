@@ -1,0 +1,44 @@
+
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  
+  <li class="breadcrumb-item active">Mes reservations</li>
+{% endblock %}
+
+{% block content %}
+
+   <div class="row">
+
+  </div>
+
+  <br>
+  <br>
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+          <th>Date Dépôt</th>
+          <th>Date retrait</th>
+          <th>Nombre ruches</th>
+          <th>Nombre reines</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for resa in les_resas %}
+          <tr>
+
+            <td> {{ resa.datedepot }}</td>
+            <td> {{ resa.dateretrait }}</td>
+            <td> {{ resa.nbruche }}</td>
+            <td> {{ resa.nbreine }}</td>
+            <td><a href="{% url 'capacites'  %}" class="btn btn-primary">Modifier</a></td>
+            <td><a href="{% url 'capacites'  %}" class="btn btn-danger">Annuler</a></td>
+            
+          </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br>
+    <a href="{% url 'capacites'  %}" class="btn btn-primary">Nouvelle reservation</a>
+  
+{% endblock %}

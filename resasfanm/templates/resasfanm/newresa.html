@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Crée une nouvelle réservation {% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'listresas' %}" >Mes réservations</a></li>
+
+{% if mod   == True %}
+    <li class="breadcrumb-item active"> Modification Réservation</li>
+{% else %}
+    <li class="breadcrumb-item active"> Création Réservation</li>
+{% endif %} 
+
+{% endblock %}
+
+
+{% block content %}
+{% if msg != "" %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+
+                        {{ msg }}
+
+                    </div>
+{% endif %}
+  {% crispy form %}
+{% endblock %}

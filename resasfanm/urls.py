@@ -1,0 +1,20 @@
+"""
+url de ruchers
+"""
+from django.urls import path, re_path
+from . import views
+from django.views.generic.base import RedirectView
+
+
+urlpatterns = [
+    path('', views.listresas, name='home'),
+
+    path('newresa/<int:idcapa>',views.newresa,name='newresa'),    
+    path('capacites',views.listcapacites,name='capacites'),
+    path('listresas',views.listresas,name='listresas'),
+    path('listgestion',views.listgestion,name='listgestion'),
+    path('listentrees/<str:dateentree>',views.listentrees,name='listentrees'),
+    path('listsorties/<str:datesortie>',views.listsorties,name='listsorties'),
+
+
+]

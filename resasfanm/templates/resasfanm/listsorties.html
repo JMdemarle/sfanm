@@ -1,0 +1,42 @@
+
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'listgestion' %}" >Administration</a></li>
+  <li class="breadcrumb-item active">Les Sortie du {{ date_sortie }} </li>
+{% endblock %}
+
+{% block content %}
+
+   <div class="row">
+
+  </div>
+
+  <br>
+  <br>
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+          <th>Apiculteur</th>
+          <th>Date Dépot</th>
+          <th>Nombre ruches</th>
+          <th>Nombre reines</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for resa in les_resas %}
+          <tr>
+            <td> {{ resa.apiculteur.nom }}</td>
+
+            <td> {{ resa.datedepot }}</td>
+            <td> {{ resa.nbruche }}</td>
+            <td> {{ resa.nbreine }}</td>
+            
+          </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br>
+    <a href="{% url 'listgestion'  %}" class="btn btn-primary">Retour</a>
+  
+{% endblock %}

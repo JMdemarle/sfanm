@@ -1,0 +1,36 @@
+
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Dates de depôt</li>
+{% endblock %}
+
+{% block content %}
+
+   <div class="row">
+
+   </div>
+
+  <br>
+  <br>
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+          <th>Date Dépot</th>
+          <th>Places totales</th>
+          <th>Places dispos</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for capacite in les_capacites %}
+          <tr>
+            <td>
+              <a href="{% url 'newresa' capacite.id %}">{{ capacite.datecapa }}</a> 
+            </td>
+            <td> {{ capacite.nreinesmax }}</td>
+            <td> {{ capacite.get_reinesdispos}}</td>
+          </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
