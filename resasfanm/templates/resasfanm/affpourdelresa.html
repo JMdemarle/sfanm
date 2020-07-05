@@ -1,0 +1,27 @@
+
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  
+  <li class="breadcrumb-item active">Mes reservations</li>
+{% endblock %}
+
+{% block content %}
+
+   <div class="row">
+
+  </div>
+
+  <br>
+  <br>
+ <div class="row">
+       <div class="col-lg-3 col-sm-6"> Date depot: {{ la_resa.datedepot}} </div>
+       <div class="col-lg-3 col-sm-6"> Nb reines: {{ la_resa.nbreine}} </div>
+  </div>
+  <br>
+   <div class="row">
+    <div class="col-lg-2 col-sm-3"><a href="{% url 'listresas'  %}" class="btn btn-primary">Revenir</a></div>
+    <div class="col-lg-2 col-sm-3"><a href="{% url 'delresa' resa.id %}" class="btn btn-danger">Annuler reéservation</a></div>
+  </div>
+
+{% endblock %}
