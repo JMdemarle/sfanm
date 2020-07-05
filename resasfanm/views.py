@@ -36,6 +36,10 @@ import datetime
 #from reportlab.rl_config import defaultPageSize
 
 # Create your views here.
+def home(request):
+	return render(request, 'resasfanm/home.html')
+	
+
 
 @login_required
 def newresa(request,idcapa):

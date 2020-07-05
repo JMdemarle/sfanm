@@ -7,7 +7,7 @@ from django.views.generic.base import RedirectView
 
 
 urlpatterns = [
-    path('', views.listresas, name='home'),
+    path('', views.listresas, name='homeresa'),
 
     path('newresa/<int:idcapa>',views.newresa,name='newresa'),    
     path('capacites',views.listcapacites,name='capacites'),
