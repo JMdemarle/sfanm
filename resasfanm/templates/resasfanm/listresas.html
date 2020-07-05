@@ -32,7 +32,7 @@
             <td> {{ resa.nbruche }}</td>
             <td> {{ resa.nbreine }}</td>
             <td><a href="{% url 'modresa' resa.id %}" class="btn btn-primary">Modifier</a></td>
-            <td><a href="{% url 'capacites'  %}" class="btn btn-danger">Annuler</a></td>
+            <td><a href="{% url 'affpourdelresa' resa.id %}" class="btn btn-danger">Annuler</a></td>
             
           </tr>
       {% endfor %}

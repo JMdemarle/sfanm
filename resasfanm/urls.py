@@ -11,6 +11,7 @@ urlpatterns = [
 
     path('newresa/<int:idcapa>',views.newresa,name='newresa'),
     path('modresa/<int:idresa>',views.modresa,name='modresa'),
+    path('delresa/<int:idresa>',views.delresa,name='delresa'),
     path('affpourdelresa/<int:idresa>',views.affpourdelresa,name='affpourdelresa'),    
 
 

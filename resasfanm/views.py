@@ -167,13 +167,14 @@ def modresa(request,idresa):
 @login_required	
 def affpourdelresa(request,idresa):
 	resam = Reservation.objects.get(id=idresa)
-	return render(request, 'resasfanm/affourdelresa.html', {'la_resa': resam})
+	return render(request, 'resasfanm/affpourdelresa.html', {'la_resa': resam})
 
 @login_required	
 def delresa(request,idresa):
 	resam = Reservation.objects.get(id=idresa)
 	resam.delete()
-	listresas(request)
+	resas = Reservation.objects.filter(apiculteur=request.user.apiculteur).order_by('datedepot')
+	return render(request, 'resasfanm/listresas.html', {'les_resas':resas})
 	
 @login_required	
 def listcapacites(request):
