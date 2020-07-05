@@ -20,6 +20,11 @@
           <th>Nb entrees</th>
           <th>Nb sorties</th>
           <th>Nb reines</th>
+          <th>Nb Apidea/Kieler</th>
+          <th>Nb Mini Plus</th>
+          <th>Nb Warre</th>
+          <th>Nb ruchettes Dadant</th>
+
       </tr>
     </thead>
     <tbody>
@@ -30,6 +35,11 @@
             <td> <a href="{% url 'listentrees' capacite.datecapa %}">{{ capacite.get_entreesdate }} </a></td>
             <td> <a href="{% url 'listsorties' capacite.datecapa %}">{{ capacite.get_sortiesdate }} </a></td>
             <td> {{ capacite.get_encoursreines }} </a></td>
+            <td> {{ capacite.get_encoursruches1 }} </a></td>
+            <td> {{ capacite.get_encoursruches2 }} </a></td>
+            <td> {{ capacite.get_encoursruches3 }} </a></td>
+            <td> {{ capacite.get_encoursruches4 }} </a></td>
+
             
           </tr>
       {% endfor %}

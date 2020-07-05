@@ -114,7 +114,33 @@ class Capacite(models.Model):
 			nbreines = nbreines + presence.resa.nbreine
 		return nbreines
 	
+	def get_encoursruches1(self):
+		presences = Presence.objects.filter(capa=self)
+		nbruches1 = 0
+		for presence in presences:
+			nbruches1 = nbruches1 + presence.resa.nbtypfecond1
+		return nbruches1
 
+	def get_encoursruches2(self):
+		presences = Presence.objects.filter(capa=self)
+		nbruches2 = 0
+		for presence in presences:
+			nbruches2 = nbruches2 + presence.resa.nbtypfecond2
+		return nbruches2
+
+	def get_encoursruches3(self):
+		presences = Presence.objects.filter(capa=self)
+		nbruches3 = 0
+		for presence in presences:
+			nbruches3 = nbruches3 + presence.resa.nbtypfecond3
+		return nbruches3
+
+	def get_encoursruches4(self):
+		presences = Presence.objects.filter(capa=self)
+		nbruches4 = 0
+		for presence in presences:
+			nbruches4 = nbruches4 + presence.resa.nbtypfecond4
+		return nbruches4
 
 
 class Presence(models.Model):
