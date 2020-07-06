@@ -37,6 +37,10 @@ import datetime
 
 # Create your views here.
 def home(request):
+	username = request.META['REMOTE_USER']
+	#password = request.GET.get('password')
+	print(username)
+	#print(password)
 	return render(request, 'resasfanm/home.html')
 	
 
