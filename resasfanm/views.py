@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.core import mail
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+from datetime import date, datetime
 
 #from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -105,10 +106,12 @@ def newresa(request,idcapa):
 					dated = dated + timedelta(days=7)
 				subject = 'SFANM - Confirmation de réservation'
 				html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': reservation})
-				plain_message = strip_tags(html_message)
+				#plain_message = strip_tags(html_message)
 				from_email = 'From <contact@sfanm.fr>'
 				to = request.user.email
-				mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)				
+				#mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)			
+				mail.send_mail(subject, plain_message, from_email, [to])				
+
 				return redirect('listresas')  # TODO: redirect to the created topic page
 	else:
 		form = NewReservationForm(initial={'la_date' : datededepot, 'choix_date' : datechoix})
@@ -199,7 +202,7 @@ def delresa(request,idresa):
 def listcapacites(request):
 # affiche les dates sur lesquelles l'apiculteur n'a pas réservé
 	datesreservees = Reservation.objects.filter(apiculteur=request.user.apiculteur).values_list('datedepot',flat = True)
-	capacites = Capacite.objects.filter(depotpossible=True).exclude(datecapa__in=datesreservees)
+	capacites = Capacite.objects.filter(depotpossible=True).filter(datecapa__gt = date.today()).exclude(datecapa__in=datesreservees)
 	return render(request, 'resasfanm/capacites.html', {'les_capacites':capacites})
 
 @login_required
