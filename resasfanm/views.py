@@ -110,7 +110,7 @@ def newresa(request,idcapa):
 				from_email = 'From <contact@sfanm.fr>'
 				to = request.user.email
 				#mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)			
-				mail.send_mail(subject, plain_message, from_email, [to])				
+				mail.send_mail(subject, html_message, from_email, [to])				
 
 				return redirect('listresas')  # TODO: redirect to the created topic page
 	else:
