@@ -38,6 +38,9 @@ import datetime
 # Create your views here.
 def home(request):
 	username = request.META.get('REMOTE_USER_VAR')
+	for el in request.META:
+		print(el)
+		print(request.META[el])
 	#password = request.GET.get('password')
 	msg = username
 	print(username)
