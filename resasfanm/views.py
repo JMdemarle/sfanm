@@ -7,6 +7,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+
+from django.core import mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
 #from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -98,6 +103,12 @@ def newresa(request,idcapa):
 					present.resa = reservation
 					present.save()
 					dated = dated + timedelta(days=7)
+				subject = 'SFANM - Confirmation de réservation'
+				html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': reservation})
+				plain_message = strip_tags(html_message)
+				from_email = 'From <contact@sfanm.fr>'
+				to = request.user.email
+				mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)				
 				return redirect('listresas')  # TODO: redirect to the created topic page
 	else:
 		form = NewReservationForm(initial={'la_date' : datededepot, 'choix_date' : datechoix})
