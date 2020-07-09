@@ -107,7 +107,7 @@ def newresa(request,idcapa):
 				subject = 'SFANM - Confirmation de réservation'
 				html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': reservation})
 				#plain_message = strip_tags(html_message)
-				from_email = 'From <contact@sfanm.fr>'
+				from_email = 'SFANM <contact@sfanm.fr>'
 				to = request.user.email
 				#mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)			
 				mail.send_mail(subject, html_message, from_email, [to])				
@@ -181,6 +181,14 @@ def modresa(request,idresa):
 				present.resa = resam
 				present.save()
 				dated = dated + timedelta(days=7)
+				subject = 'SFANM - Confirmation modification de réservation'
+			html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': reservation})
+			#plain_message = strip_tags(html_message)
+			from_email = 'SFANM <contact@sfanm.fr>'
+			to = request.user.email
+			#mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)			
+			mail.send_mail(subject, html_message, from_email, [to])				
+				
 			return redirect('listresas')  
 	else:
 		form = ModReservationForm(initial={'la_date' : datededepot, 'choix_date' : datechoix,'la_resa' : resam})
@@ -196,6 +204,14 @@ def delresa(request,idresa):
 	resam = Reservation.objects.get(id=idresa)
 	resam.delete()
 	resas = Reservation.objects.filter(apiculteur=request.user.apiculteur).order_by('datedepot')
+	subject = 'SFANM - Confirmation d"annulation de réservation'
+	html_message = render_to_string('resasfanm/mailconfirmationannulreservation.html', {'la_resa': resam})
+	#plain_message = strip_tags(html_message)
+	from_email = 'SFANM <contact@sfanm.fr>'
+	to = request.user.email
+	#mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)			
+	mail.send_mail(subject, html_message, from_email, [to])				
+	
 	return render(request, 'resasfanm/listresas.html', {'les_resas':resas})
 	
 @login_required	
