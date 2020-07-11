@@ -4,6 +4,8 @@ from django.contrib.auth import login as auth_login, authenticate, logout
 from django.views.generic.edit import FormView
 
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+
 from django.shortcuts import render, redirect
 
 from django.core.mail import send_mail, BadHeaderError
@@ -81,8 +83,7 @@ class loginpage(FormView):
             return HttpResponseRedirect(self.success_url)
 
         else:
-            messages.add_message(self.request, messages.INFO, 'Wrong credentials\
-                                please try again')
+            messages.add_message(self.request, messages.INFO, 'Informations de connexion erronées')
             return HttpResponseRedirect(reverse_lazy('login'))    
     
 def profile(request):
