@@ -20,6 +20,8 @@ urlpatterns = [
     path('listgestion',views.listgestion,name='listgestion'),
     path('listentrees/<str:dateentree>',views.listentrees,name='listentrees'),
     path('listsorties/<str:datesortie>',views.listsorties,name='listsorties'),
+    path('listsorties/<str:datesortie>',views.listsorties,name='listsorties'),
+    path('editentreesortie/<str:dateedit>',views.editentreesortie,name='editentreesortie'),
     
 
 

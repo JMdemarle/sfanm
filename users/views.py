@@ -13,18 +13,21 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 
 
-from .forms import SignUpForm, ContactForm, Okpourcontinuer, LoginForm
+from .forms import SignUpForm, ContactForm, Okpourcontinuer, SignupForm, LoginForm
 
 def signup(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            auth_login(request, user)
-            return redirect('listresas')
+    if request.method == 'GET':
+        form = SignupForm()
     else:
-        form = SignUpForm()
-    return render(request, 'users/signup.html', {'form': form})
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            from_email = form.cleaned_data['from_email']
+            try:
+                send_mail('demande adhésion', from_email, from_email, ['contact@sfnam.fr'])
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            return redirect('users/contactsuccess')
+    return render(request, "users/signup.html", {'form': form})
 
 def contactView(request):
     if request.method == 'GET':
@@ -36,7 +39,7 @@ def contactView(request):
             from_email = form.cleaned_data['from_email']
             message = form.cleaned_data['message']
             try:
-                send_mail(subject, message, from_email, ['jm.demarle@outlook.fr'])
+                send_mail(subject, message, from_email, ['contact@sfnam.fr'])
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
             return redirect('users/contactsuccess')

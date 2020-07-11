@@ -27,19 +27,19 @@ from django.views import generic
 from .forms import NewReservationForm, ModReservationForm
 from datetime import timedelta 
 import datetime
-#from io import BytesIO, StringIO
+
+from io import BytesIO, StringIO
 #from csv import writer,QUOTE_ALL
 #import csv
 #from zipfile import ZipFile
 
-
-#from reportlab.pdfgen import canvas
-#from reportlab.lib.pagesizes import A4
-#from reportlab.lib import colors
-#from reportlab.lib.units import mm, inch
-#from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
-#from reportlab.lib.styles import getSampleStyleSheet
-#from reportlab.rl_config import defaultPageSize
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib import colors
+from reportlab.lib.units import mm, inch
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.rl_config import defaultPageSize
 
 # Create your views here.
 @login_required
@@ -250,4 +250,97 @@ def listsorties(request,datesortie):
 
 	return render(request, 'resasfanm/listsorties.html', {'les_resas':resas, 'date_sortie': dates})
 	
+def editentreesortie(request,dateedit):
+	PAGE_HEIGHT=defaultPageSize[1]; PAGE_WIDTH=defaultPageSize[0]
+	styles = getSampleStyleSheet()
+
+	def myFirstPage(canvas, doc):
+		canvas.saveState()
+		canvas.setFont('Times-Bold',16)
+		canvas.drawCentredString(PAGE_WIDTH/2.0, PAGE_HEIGHT-20, Title)
+		canvas.setFont('Times-Roman',9)
+		canvas.drawString(inch, 0.25 * inch, "Première / %s" % pageinfo)
+		canvas.restoreState()
+
+	def myLaterPages(canvas, doc):
+		canvas.saveState()
+		canvas.setFont('Times-Roman',9)
+		canvas.drawString(inch, 0.75 * inch, "Page %d %s" % (doc.page, pageinfo))
+		canvas.restoreState()
 	
+	pdf_buffer = BytesIO()
+	doc = SimpleDocTemplate(pdf_buffer, pagesize=A4, topMargin=10*mm, bottomMargin=1*mm)	
+	#doc = SimpleDocTemplate("/tmp/somefilename.pdf", pagesize=A4, topMargin=5*mm, bottomMargin=1*mm)
+	Story = []
+	style = styles["Normal"]
+	Title = "Entrées et sorties du " + dateedit
+	pageinfo = "gestion SFANM"
+
+	Story.append(Spacer(1, 10*mm))
+	
+	ptext = '<font size="12"><u>Les entrées </u></font>'
+	Story.append(Paragraph(ptext, styles["Normal"]))
+
+	Story.append(Spacer(1, 10*mm))
+	
+	
+	datee = datetime.datetime.strptime(dateedit, "%Y-%m-%d").date()
+	resas = Reservation.objects.filter(datedepot=datee).order_by('apiculteur')
+	
+# Make heading for each column and start data list
+	data = [['Apicuteur','Nb reines','Nb ruches','Présent']]
+# Assemble data for each column using simple loop to append it into data list
+	for resa in resas:
+		data.append([resa.apiculteur,resa.nbreine,resa.nbruches,''])
+
+	tableThatSplitsOverPages = Table(data, colWidths=(75*mm,30*mm, 30*mm, 30*mm),rowHeights=(10*mm), repeatRows=1)
+	tableThatSplitsOverPages.hAlign = 'LEFT'
+	tblStyle = TableStyle([('TEXTCOLOR',(0,0),(-1,-1),colors.black),
+		('VALIGN',(0,0),(-1,-1),'TOP'),
+		('LINEBELOW',(0,0),(-1,-1),1,colors.black),
+		('GRID',(0,0),(-1,-1),1,colors.black)])
+	tableThatSplitsOverPages.setStyle(tblStyle)
+	Story.append(tableThatSplitsOverPages)
+	
+	Story.append(PageBreak())
+
+	Story.append(Spacer(1, 10*mm))
+	
+	ptext = '<font size="12"><u>Les sorties </u></font>'
+	Story.append(Paragraph(ptext, styles["Normal"]))
+
+	Story.append(Spacer(1, 10*mm))
+	
+
+	resas = Reservation.objects.filter(dateretrait=datee).order_by('apiculteur')
+	
+# Make heading for each column and start data list
+	data = [['Apicuteur','Nb reines','Nb ruches','Présent']]
+# Assemble data for each column using simple loop to append it into data list
+	for resa in resas:
+		data.append([resa.apiculteur,resa.nbreine,resa.nbruches,''])
+
+	tableThatSplitsOverPages = Table(data, colWidths=(75*mm,30*mm, 30*mm, 30*mm),rowHeights=(10*mm), repeatRows=1)
+	tableThatSplitsOverPages.hAlign = 'LEFT'
+	tblStyle = TableStyle([('TEXTCOLOR',(0,0),(-1,-1),colors.black),
+		('VALIGN',(0,0),(-1,-1),'TOP'),
+		('LINEBELOW',(0,0),(-1,-1),1,colors.black),
+		('GRID',(0,0),(-1,-1),1,colors.black)])
+	tableThatSplitsOverPages.setStyle(tblStyle)
+	Story.append(tableThatSplitsOverPages)
+		
+	doc.build(Story, onFirstPage=myFirstPage, onLaterPages=myLaterPages)
+
+
+	pdf_buffer.seek(0)
+#	return FileResponse(pdf_buffer, as_attachment=True, filename='hello.pdf')
+	pdf = pdf_buffer.getvalue()
+	pdf_buffer.close()
+	response = HttpResponse(content_type='application/pdf')
+	response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
+	response.write(pdf)
+
+	return response
+
+	return redirect('listgestion')
+		

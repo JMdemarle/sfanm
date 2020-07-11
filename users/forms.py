@@ -14,6 +14,9 @@ class ContactForm(forms.Form):
     subject = forms.CharField(required=True, label = 'Sujet')
     message = forms.CharField(widget=forms.Textarea, required=True)
     
+class SignupForm(forms.Form):
+    from_email = forms.EmailField(required=True, label = 'Votre mail')
+
 
 class Okpourcontinuer(forms.Form):
     pass

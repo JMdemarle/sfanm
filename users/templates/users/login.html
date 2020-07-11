@@ -9,15 +9,15 @@
       <div class="col-lg-4 col-md-6 col-sm-8">
         <div class="card">
           <div class="card-body">
-            <h3 class="card-title">Informations de connexion</h3>
+            <h3 class="card-title">Entrez vos identifiants</h3>
             {% for message in messages %}
-  <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    {{ message }}
-  </div>
-{% endfor %}
+              <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+              </div>
+            {% endfor %}
             <form method="post" novalidate>
               {% csrf_token %}
               {% include 'includes/form.html' %}
@@ -25,14 +25,13 @@
               <button type="submit" class="btn btn-primary btn-block">Log in</button>
             </form>
           </div>
-          <div class="card-footer text-muted text-center">
-            Nouveau à Mes RDV SFANM? <a href="{% url 'signup' %}">Demandez votre compte</a>
+          <div class="card-footer text-center py-2">
+            <a href="{% url 'password_reset' %}" >Mot de passe oublié</a>
           </div>
-        </div>
-        <div class="text-center py-2">
-          <small>
-            <a href="{% url 'password_reset' %}" class="text-muted">Mot de passe oublié</a>
-          </small>
+          
+          <div class="card-footer text-center">
+             <a href="{% url 'signup' %}">Formulaire d'Adhésion</a>
+          </div>
         </div>
       </div>
     </div>
