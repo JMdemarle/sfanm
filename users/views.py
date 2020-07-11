@@ -80,7 +80,11 @@ class loginpage(FormView):
 
         if user is not None:
             auth_login(self.request, user)
-            return HttpResponseRedirect(self.success_url)
+            if user.is_staff:
+                return redirect('home')
+            else:
+                return redirect('listresas') 
+            #return HttpResponseRedirect(self.success_url)
 
         else:
             messages.add_message(self.request, messages.INFO, 'Informations de connexion erronées')

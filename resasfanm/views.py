@@ -42,6 +42,7 @@ import datetime
 #from reportlab.rl_config import defaultPageSize
 
 # Create your views here.
+@login_required
 def home(request):
 	'''	username = request.META.get('REMOTE_USER_VAR')
 	for el in request.META:
@@ -52,7 +53,10 @@ def home(request):
 	print(username)
 	#print(password)'''
 	msg = ''
-	return render(request, 'resasfanm/home.html', {'msg' : msg})
+	if (request.user.is_staff):
+		return render(request, 'resasfanm/home.html', {'msg' : msg})
+	else:
+		return redirect('listresas') 
 	
 
 
