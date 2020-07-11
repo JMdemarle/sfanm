@@ -20,7 +20,7 @@ from resasfanm import views as resas_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('resasfanm/', include('resasfanm.urls')),
-    path('accounts/', include('accounts.urls')),
+    path('users/', include('users.urls')),
     path('', resas_views.home, name = 'home'),
     
 ]

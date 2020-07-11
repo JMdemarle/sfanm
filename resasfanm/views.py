@@ -84,7 +84,7 @@ def newresa(request,idcapa):
 					
 			if (resaok):
 				reservation = Reservation()
-				reservation.apiculteur = request.user.apiculteur
+				reservation.apiculteur = request.user
 				reservation.nbreine = form.cleaned_data['nbreine']
 				reservation.datedepot = form.cleaned_data['datedepot']
 				reservation.dateretrait = form.cleaned_data['dateretrait']
@@ -154,7 +154,7 @@ def modresa(request,idresa):
 		print('resaok')		
 		if (resaok):
 			#reservation = Reservation()
-			resam.apiculteur = request.user.apiculteur
+			resam.apiculteur = request.user
 			resam.nbreine = form.cleaned_data['nbreine']
 			resam.datedepot = form.cleaned_data['datedepot']
 			resam.dateretrait = form.cleaned_data['dateretrait']
@@ -182,7 +182,7 @@ def modresa(request,idresa):
 				present.save()
 				dated = dated + timedelta(days=7)
 				subject = 'SFANM - Confirmation modification de réservation'
-			html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': reservation})
+			html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': resam})
 			#plain_message = strip_tags(html_message)
 			from_email = 'SFANM <contact@sfanm.fr>'
 			to = request.user.email
@@ -203,7 +203,7 @@ def affpourdelresa(request,idresa):
 def delresa(request,idresa):
 	resam = Reservation.objects.get(id=idresa)
 	resam.delete()
-	resas = Reservation.objects.filter(apiculteur=request.user.apiculteur).order_by('datedepot')
+	resas = Reservation.objects.filter(apiculteur=request.user).order_by('datedepot')
 	subject = 'SFANM - Confirmation d"annulation de réservation'
 	html_message = render_to_string('resasfanm/mailconfirmationannulreservation.html', {'la_resa': resam})
 	#plain_message = strip_tags(html_message)
@@ -217,13 +217,13 @@ def delresa(request,idresa):
 @login_required	
 def listcapacites(request):
 # affiche les dates sur lesquelles l'apiculteur n'a pas réservé
-	datesreservees = Reservation.objects.filter(apiculteur=request.user.apiculteur).values_list('datedepot',flat = True)
+	datesreservees = Reservation.objects.filter(apiculteur=request.user).values_list('datedepot',flat = True)
 	capacites = Capacite.objects.filter(depotpossible=True).filter(datecapa__gt = date.today()).exclude(datecapa__in=datesreservees)
 	return render(request, 'resasfanm/capacites.html', {'les_capacites':capacites})
 
 @login_required
 def listresas(request):
-	resas = Reservation.objects.filter(apiculteur=request.user.apiculteur).order_by('datedepot')
+	resas = Reservation.objects.filter(apiculteur=request.user).order_by('datedepot')
 	return render(request, 'resasfanm/listresas.html', {'les_resas':resas})
 
 @login_required

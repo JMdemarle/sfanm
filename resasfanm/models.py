@@ -1,18 +1,21 @@
 from django.db import models
 from django.utils import timezone
 from django.utils.text import Truncator
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db.models.functions import Now, ExtractYear
 from django.dispatch import receiver 
+from django.conf import settings
+from users.models import CustomUser
+
 
 from decimal import *
 import datetime
 # Create your models here.
-
+'''
 class Apiculteur(models.Model):
 	nom = models.CharField(max_length=25, unique = True)
-	user = models.OneToOneField(User, on_delete=models.CASCADE,null = True)
+	user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,null = True)
 	def __str__(self):
 		""" 
 		Cette méthode que nous définirons dans tous les modèles
@@ -22,7 +25,7 @@ class Apiculteur(models.Model):
 		return self.user.username
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=CustomUser)
 def create_user_profile(sender, instance, created, **kwargs):
 	#print('create_user_profile ------------------------')
 	#print(instance.username)
@@ -30,7 +33,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 		
 		Apiculteur.objects.create(user=instance,nom=instance.username)
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=CustomUser)
 def save_user_profile(sender, instance, **kwargs):
 	#print('save_user_profile')
 	try:
@@ -39,9 +42,9 @@ def save_user_profile(sender, instance, **kwargs):
 		instance.apiculteur.nom = instance.username
 		Apiculteur.objects.create(user=instance)
 
-
+'''
 class Reservation(models.Model):
-	apiculteur = models.ForeignKey('Apiculteur', on_delete=models.CASCADE,related_name='reservations')
+	apiculteur = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='reservations')
 	
 	nbreine = models.IntegerField(default = 1, verbose_name="nombre reines")
 	datedepot = models.DateField(verbose_name="Date depot")
@@ -64,7 +67,10 @@ class Reservation(models.Model):
 		
 	class Meta:
 		unique_together = ('apiculteur', 'datedepot',)
-		
+	
+	@property
+	def nbruches(self):
+		return self.nbtypfecond1 + self.nbtypfecond2 + self.nbtypfecond3 + self.nbtypfecond4
 	
 		
 	

@@ -35,11 +35,11 @@
         <ul class="navbar-nav ml-auto">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              {{ user.username }}
+              {{ user.email }}
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
               <a class="dropdown-item" href="#">Mon Compte</a>
-              <a class="dropdown-item" href="#">Changement mot de passe</a>
+              <a class="dropdown-item" href="{% url 'password_reset' %}">Changement mot de passe</a>
               
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="{% url 'contact' %}">Nous contacter</a>
