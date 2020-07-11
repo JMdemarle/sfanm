@@ -23,7 +23,7 @@ def signup(request):
         if form.is_valid():
             from_email = form.cleaned_data['from_email']
             try:
-                send_mail('demande adhésion', from_email, from_email, ['contact@sfnam.fr'])
+                send_mail('demande adhésion', from_email, from_email, ['contact@sfanm.fr',from_email])
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
             return redirect('users/contactsuccess')
@@ -39,7 +39,7 @@ def contactView(request):
             from_email = form.cleaned_data['from_email']
             message = form.cleaned_data['message']
             try:
-                send_mail(subject, message, from_email, ['contact@sfnam.fr'])
+                send_mail(subject, message, from_email, ['contact@sfanm.fr'])
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
             return redirect('users/contactsuccess')
