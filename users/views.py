@@ -42,7 +42,7 @@ def signup(request):
                 html_message = render_to_string('users/signup_email.html', {'le_user': custuser})
 
                 try:
-                    send_mail('demande adhésion', html_message, emails, ['contact@sfanm.fr',emails])
+                    send_mail('[SFANM] : demande adhésion', html_message, emails, ['contact@sfanm.fr',emails])
                 except BadHeaderError:
                     return HttpResponse('Invalid header found.')
                 return redirect('users/contactsuccess')
