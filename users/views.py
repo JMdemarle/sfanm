@@ -3,6 +3,8 @@ from django.contrib.auth import login as auth_login, authenticate, logout
 
 from django.views.generic.edit import FormView
 
+from django.template.loader import render_to_string
+
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 
@@ -12,6 +14,7 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 
+from users.models import CustomUser
 
 from .forms import SignUpForm, ContactForm, Okpourcontinuer, SignupForm, LoginForm
 
@@ -21,12 +24,28 @@ def signup(request):
     else:
         form = SignupForm(request.POST)
         if form.is_valid():
-            from_email = form.cleaned_data['from_email']
-            try:
-                send_mail('demande adhésion', from_email, from_email, ['contact@sfanm.fr',from_email])
-            except BadHeaderError:
-                return HttpResponse('Invalid header found.')
-            return redirect('users/contactsuccess')
+            emails = form.cleaned_data['email']
+            if CustomUser.objects.filter(email=emails).exists(): # return True/False
+                messages.add_message(request, messages.ERROR, 'le compte existe. Identifiez-vous ou utliser le formulaire de contact')
+            else:
+                custuser = CustomUser()
+                custuser.email = emails
+                custuser.nom = form.cleaned_data['nom']
+                custuser.prenom = form.cleaned_data['prenom']
+                custuser.adresse1 = form.cleaned_data['adresse1']
+                custuser.adresse2 = form.cleaned_data['adresse2']
+                custuser.codepostal = form.cleaned_data['codepostal']
+                custuser.ville = form.cleaned_data['ville']
+                custuser.telephone = form.cleaned_data['telephone']
+                custuser.is_active = False
+                custuser.save()
+                html_message = render_to_string('users/signup_email.html', {'le_user': custuser})
+
+                try:
+                    send_mail('demande adhésion', html_message, emails, ['contact@sfanm.fr',emails])
+                except BadHeaderError:
+                    return HttpResponse('Invalid header found.')
+                return redirect('users/contactsuccess')
     return render(request, "users/signup.html", {'form': form})
 
 def contactView(request):
