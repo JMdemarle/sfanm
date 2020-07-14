@@ -30,8 +30,8 @@ class SignupForm(forms.Form):
     adresse2 = forms.CharField(max_length=40, required=False,widget=forms.TextInput(attrs={'class': 'form-control'}))
     codepostal = forms.IntegerField(required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
     ville = forms.CharField(max_length=35, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
-    telephone = PhoneNumberField(widget=forms.TextInput(attrs={'placeholder': _('N° avec indicatif Pays - ex +336123456789'),'class': 'form-control'}),label=_("Phone number"), required=True)
-    
+    telephone = PhoneNumberField(widget=forms.TextInput(attrs={'placeholder': _('N° avec indicatif Pays - ex 0612345678 devient +33612345678. En france, on remplace le 1er zéro par +33'),'class': 'form-control'}),label=_("Phone number"), required=True)
+    telephone.error_messages={'invalid': 'N° avec indicatif Pays - ex 0612345678 devient +33612345678. En france, on remplace le 1er zéro par +33'}
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
  
