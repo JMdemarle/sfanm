@@ -1,8 +1,8 @@
 from django import forms
-from .models import Reservation, Capacite, Presence
+from .models import Reservation, Capacite, Presence, Evenement, TypEmail
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column, HTML
+from crispy_forms.layout import Layout, Submit, Row, Column, HTML, ButtonHolder
 from crispy_forms.bootstrap import InlineField
 
 from datetime import date, datetime
@@ -45,7 +45,11 @@ class NewReservationForm(forms.Form):
                 Column('nbtypfecond4', css_class='form-group col-md-3 mb-0'),
             ),
             HTML("<br>"),
-            Submit('submit', 'Créer')
+            Row(
+
+                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'capacites'  %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
+                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Créer</button>"),
+            ),
         )
 
 class ModReservationForm(forms.Form):
@@ -92,7 +96,155 @@ class ModReservationForm(forms.Form):
                 Column('nbtypfecond4', css_class='form-group col-md-3 mb-0'),
             ),
             HTML("<br>"),
-            Submit('submit', 'Modifier')
+            Row(
+                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'listresas'  %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
+                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Modifier</button>"),
+            ),
+         
         )
 
  
+class NewEvenementForm(forms.Form):
+ 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        initial_arguments = kwargs.get('initial', None)
+
+        #self.fields['date'] = forms.DateTimeField(input_formats = ['%d-%m-%Y %H:%M'],widget=forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'},format=('%d-%m-%Y %H:%M')),initial=datetime.now, label = 'date heure' )
+        #self.fields['date'] = forms.DateTimeField(input_formats=['%d/%m/%y %H:%M'],widget=forms.DateTimeInput(attrs={'class': 'form-control','type':'datetime-local'},format=('%d-%m-%y %H:%M')), label = 'date fheure' )
+        #self.fields['date'] = forms.DateTimeField(input_formats = ['%d-%m-%Y %H:%M'],widget=forms.DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control'}),initial=datetime.now, label = 'date fheure' )
+        self.fields['date'] = forms.DateTimeField(input_formats=['%d/%m/%y %H:%M'],widget=forms.TextInput(attrs={'class': 'form-control'}),label = 'date JJ/MM/AA HH:MN')
+        self.fields['adresse1'] = forms.CharField(max_length=40, label = 'adresse1', required = False,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['adresse2'] = forms.CharField(max_length=40, label = 'adresse2', required = False,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['codepostal'] = forms.IntegerField(label = 'code postal', required = False,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['ville'] = forms.CharField(max_length=35, label = 'ville', required = False,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['intitule'] = forms.CharField(max_length=100, label = 'intitulé', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['nombremax'] = forms.IntegerField(label = 'nombre participants max', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['intitule'] = forms.CharField(max_length=100, label = 'intitulé', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['programme'] = forms.CharField(required=False,widget=forms.Textarea(attrs={'placeholder': 'Programme','rows':4, 'cols':80,'class': 'form-control'}))
+        self.fields['natmail1'] = forms.ModelChoiceField(queryset=TypEmail.objects.all(), label = 'type mailing 1', required = False,widget=forms.Select(attrs={'class': 'form-control'}))
+        #pres_CR = forms.ModelChoiceField(required=False, queryset=TypCR.objects.all(), label = 'Cellules Royales')
+
+        self.fields['destmail1'] = forms.ChoiceField(choices = Evenement.LDESTMAIL, label = 'type destinataire 1', required = False,widget=forms.Select(attrs={'class': 'form-control'}))
+        self.fields['datemail1'] = forms.DateField(input_formats=['%d/%m/%y'],widget=forms.DateInput(attrs={'class': 'form-control'},format = '%d/%m/%y'),label = 'date mail 1 JJ/MM/AA',required=False)
+        #self.fields['natmail2'] = forms.ChoiceField(choices = Evenement.LNATMAIL, label = 'type mailing 2', required = False,widget=forms.Select(attrs={'class': 'form-control'}))
+        self.fields['natmail2'] = forms.ModelChoiceField(queryset=TypEmail.objects.all(), label = 'type mailing 2', required = False,widget=forms.Select(attrs={'class': 'form-control'}))
+        self.fields['destmail2'] = forms.ChoiceField(choices = Evenement.LDESTMAIL, label = 'type destinataire 2', required = False,widget=forms.Select(attrs={'class': 'form-control'}))
+        self.fields['datemail2'] = forms.DateField(input_formats=['%d/%m/%y'],widget=forms.DateInput(attrs={'class': 'form-control'},format = '%d/%m/%y'),label = 'date mail 2 JJ/MM/AA',required=False)
+         
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('date', css_class='form-group col-md-3 mb-0'),
+                Column('nombremax', css_class='form-group col-md-3 mb-0'),
+                Column('intitule', css_class='form-group col-md-12 mb-0'),
+
+            ),
+            'programme','adresse1','adresse2',
+           Row(
+                Column('codepostal', css_class='form-group col-md-3 mb-0'),
+                Column('ville', css_class='form-group col-md-9 mb-0'),
+             ),
+            Row(
+                Column('datemail1', css_class='form-group col-md-3 mb-0'),
+                Column('natmail1', css_class='form-group col-md-3 mb-0'),
+                Column('destmail1', css_class='form-group col-md-3 mb-0'),
+             ),
+            Row(
+                Column('datemail2', css_class='form-group col-md-3 mb-0'),
+                Column('natmail2', css_class='form-group col-md-3 mb-0'),
+                Column('destmail2', css_class='form-group col-md-3 mb-0'),
+
+            ),
+
+            HTML("<br>"),
+            Submit('submit', 'Créer')
+        )
+        
+        
+        
+
+class ModEvenementForm(forms.Form):
+ 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        initial_arguments = kwargs.get('initial', None)
+        self.evt = initial_arguments.get('le_evt',None)
+         
+        self.fields['date'] = forms.DateTimeField(input_formats=['%d/%m/%y %H:%M'],widget=forms.DateTimeInput(attrs={'class': 'form-control'},format = '%d/%m/%y %H:%M'),label = 'date JJ/MM/AA HH:MN')
+        self.fields['adresse1'] = forms.CharField(max_length=40, label = 'adresse1', required = False,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['adresse2'] = forms.CharField(max_length=40, label = 'adresse2', required = False,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['codepostal'] = forms.IntegerField(label = 'code postal', required = False,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['ville'] = forms.CharField(max_length=35, label = 'ville', required = False,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['intitule'] = forms.CharField(max_length=100, label = 'intitulé', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['nombremax'] = forms.IntegerField(label = 'nombre participants max', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['intitule'] = forms.CharField(max_length=100, label = 'intitulé', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['programme'] = forms.CharField(required=False,widget=forms.Textarea(attrs={'placeholder': 'Programme','rows':4, 'cols':80,'class': 'form-control'}))
+        self.fields['natmail1'] = forms.ModelChoiceField(queryset=TypEmail.objects.all(), label = 'type mailing 1', required = False,widget=forms.Select(attrs={'class': 'form-control'}))
+
+        self.fields['destmail1'] = forms.ChoiceField(choices = Evenement.LDESTMAIL, label = 'type destinataire 1', required = False,widget=forms.Select(attrs={'class': 'form-control'}))
+        self.fields['datemail1'] = forms.DateField(input_formats=['%d/%m/%y'],widget=forms.DateInput(attrs={'class': 'form-control'},format = '%d/%m/%y'),label = 'date mail1 JJ/MM/AA', required = False)
+        self.fields['natmail2'] = forms.ModelChoiceField(queryset=TypEmail.objects.all(), label = 'type mailing 2', required = False,widget=forms.Select(attrs={'class': 'form-control'}))
+        self.fields['destmail2'] = forms.ChoiceField(choices = Evenement.LDESTMAIL, label = 'type destinataire 1', required = False,widget=forms.Select(attrs={'class': 'form-control'}))
+        self.fields['datemail2'] = forms.DateField(input_formats=['%d/%m/%y'],widget=forms.DateInput(attrs={'class': 'form-control'},format = '%d/%m/%y'),label = 'date mail2 JJ/MM/AA', required = False)
+
+        self.fields["date"].initial = self.evt.date
+        self.fields["adresse1"].initial = self.evt.adresse1
+        self.fields["adresse2"].initial = self.evt.adresse2
+        self.fields["codepostal"].initial = self.evt.codepostal
+        self.fields["ville"].initial = self.evt.ville
+        self.fields["intitule"].initial = self.evt.intitule
+        self.fields["nombremax"].initial = self.evt.nombremax
+        self.fields["programme"].initial = self.evt.programme
+        self.fields["natmail1"].initial = self.evt.natmail1
+        self.fields["destmail1"].initial = self.evt.destmail1
+        self.fields["datemail1"].initial = self.evt.datemail1
+        self.fields["natmail2"].initial = self.evt.natmail2
+        self.fields["destmail2"].initial = self.evt.destmail2
+        self.fields["datemail2"].initial = self.evt.datemail2
+         
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('date', css_class='form-group col-md-3 mb-0'),
+                Column('nombremax', css_class='form-group col-md-3 mb-0'),
+                Column('intitule', css_class='form-group col-md-12 mb-0'),
+
+            ),
+            'programme','adresse1','adresse2',
+           Row(
+                Column('codepostal', css_class='form-group col-md-3 mb-0'),
+                Column('ville', css_class='form-group col-md-9 mb-0'),
+             ),
+            Row(
+                Column('datemail1', css_class='form-group col-md-3 mb-0'),
+                Column('natmail1', css_class='form-group col-md-3 mb-0'),
+                Column('destmail1', css_class='form-group col-md-3 mb-0'),
+             ),
+            Row(
+                Column('datemail2', css_class='form-group col-md-3 mb-0'),
+                Column('natmail2', css_class='form-group col-md-3 mb-0'),
+                Column('destmail2', css_class='form-group col-md-3 mb-0'),
+
+            ),
+
+            HTML("<br>"),
+            Submit('submit', 'Modifier')
+        )
+        
+        
+
+class NewInscriptionForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+ 
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+             HTML("<br>"), 
+             Row(
+                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'listresas'  %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
+                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Inscription</button>"),
+                
+            ),
+
+        )

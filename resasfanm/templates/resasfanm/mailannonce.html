@@ -1,0 +1,22 @@
+Bonjour,
+
+La SFANM vous annonce la tenue de l'évènement suivant:
+
+- date : {{le_evt.date }}
+- intitulé: {{le_evt.intitule}}
+- programme:
+{{le_evt.programme}}
+
+{% if evt.adresse1 is None %}
+   L'emplacement vous sera communiqué ultérieurement
+{% else %}
+Lieu
+{{ le_evt.adresse1}}
+{{ le_evt.adresse2}}
+{{ le_evt.codepostal}} {{ le_evt.ville}}
+{% endif %}
+
+Nous vous invitons à vous inscrire via le site de la SFANM/
+
+A bientôt
+L'équipe de la SFANM

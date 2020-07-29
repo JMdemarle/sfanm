@@ -1,0 +1,42 @@
+
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+
+  <li class="breadcrumb-item active">Evénements</li>
+{% endblock %}
+
+{% block content %}
+
+   <div class="row">
+
+   </div>
+
+  <br>
+  <br>
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+          <th>intitule</th>
+          <th>Date</th>
+          <th>Places </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for evt in les_evts %}
+          <tr>
+            <td>
+              {{ evt.intitule }}
+            </td>
+            <td> {{ evt.date }}</td>
+            <td> {{ evt.nombremax}}</td>
+            <td>  <a href="{% url 'modevenement'  evt.id %}" class="btn btn-primary">Modifer</a></td>
+            <td>  <a href="{% url 'listeparticipants'  evt.id %}" class="btn btn-outline-primary">Participants</a></td>
+
+          </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'newevenement'  %}" class="btn btn-primary">Nouvel événement</a>
+
+{% endblock %}

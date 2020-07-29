@@ -1,0 +1,22 @@
+Bonjour,
+
+La SFANM vous rappelle que vous vous êtes inscrits à l'évènement suivant:
+
+- date : {{le_evt.date }}
+- intitulé: {{le_evt.intitule}}
+- programme:
+{{le_evt.programme}}
+
+{% if evt.adresse1 is None %}
+   L'emplacement vous sera communiqué ultérieurement
+{% else %}
+Lieu
+{{ le_evt.adresse1}}
+{{ le_evt.adresse2}}
+{{ le_evt.codepostal}} {{ le_evt.ville}}
+{% endif %}
+
+Si vous avez changé d'avis, nous vous invitons à annuler votre inscription sur le site de la SFANM.
+
+A bientôt
+L'équipe de la SFANM

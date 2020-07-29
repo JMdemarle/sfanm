@@ -30,8 +30,7 @@ class SignupForm(forms.Form):
     adresse2 = forms.CharField(max_length=40, required=False,widget=forms.TextInput(attrs={'class': 'form-control'}))
     codepostal = forms.IntegerField(required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
     ville = forms.CharField(max_length=35, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
-    telephone = PhoneNumberField(widget=forms.TextInput(attrs={'placeholder': _('N° avec indicatif Pays - ex 0612345678 devient +33612345678. En france, on remplace le 1er zéro par +33'),'class': 'form-control'}),label=_("Phone number"), required=True)
-    telephone.error_messages={'invalid': 'N° avec indicatif Pays - ex 0612345678 devient +33612345678. En france, on remplace le 1er zéro par +33'}
+    telephone = forms.CharField(max_length=15, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
  
@@ -52,13 +51,57 @@ class SignupForm(forms.Form):
             ),
              HTML("<br>"), 
              Row(
-                Button('cancel', 'Annuler',css_class='form-group col-md-4 mb-0 btn-info'),
+                Submit('cancel', 'Annuler',css_class='form-group col-md-4 mb-0 btn-info',formnovalidate='formnovalidate',),
                 Submit('submit', 'Soumettre',css_class='form-group col-md-4 mb-0 btn-danger'),
                 css_class='form-row'
             ),
 
         )
 
+class MonCompteForm(forms.Form):
+    nom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    prenom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    adresse1 = forms.CharField(max_length=40, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    adresse2 = forms.CharField(max_length=40, required=False,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    codepostal = forms.IntegerField(required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    ville = forms.CharField(max_length=35, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    telephone = forms.CharField(max_length=15, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        initial_arguments = kwargs.get('initial', None)
+        self.le_user = initial_arguments.get('le_user',None)
+        
+        self.fields['nom'].initial = self.le_user.nom
+        self.fields['prenom'].initial = self.le_user.prenom
+        self.fields['adresse1'].initial = self.le_user.adresse1
+        self.fields['adresse2'].initial = self.le_user.adresse2
+        self.fields['codepostal'].initial = self.le_user.codepostal
+        self.fields['ville'].initial = self.le_user.ville
+        self.fields['telephone'].initial = self.le_user.telephone
+        
+  
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('nom', css_class='form-group col-lg-6 col-md-6 mb-0'),
+                Column('prenom', css_class='form-group col-lg-6 col-md-6 mb-0'),
+
+            ),
+            'telephone',
+            'adresse1',
+            'adresse2',
+            Row(
+                Column('codepostal', css_class='form-group col-md-3 mb-0'),
+                Column('ville', css_class='form-group col-md-9 mb-0'),
+            ),
+             HTML("<br>"), 
+             Row(
+                Submit('cancel', 'Annuler',css_class='form-group col-md-4 mb-0 btn-info',formnovalidate='formnovalidate',),
+                Submit('submit', 'Soumettre',css_class='form-group col-md-4 mb-0 btn-danger'),
+                css_class='form-row'
+            ),
+
+        )
 
 class Okpourcontinuer(forms.Form):
     pass

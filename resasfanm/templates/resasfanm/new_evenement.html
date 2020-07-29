@@ -4,27 +4,21 @@
 {% load crispy_forms_tags %}
 
 
-{% block title %}Crée une nouvelle réservation {% endblock %}
+{% block title %}Crée une nouvel evenement {% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'listresas' %}" >Mes réservations</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'listevenements' %}" >Les évènements</a></li>
 
 {% if mod   == True %}
-    <li class="breadcrumb-item active"> Modification Réservation</li>
+    <li class="breadcrumb-item active"> Modification Evenement</li>
 {% else %}
-    <li class="breadcrumb-item active"> Création Réservation</li>
+    <li class="breadcrumb-item active"> Création Evenement</li>
 {% endif %} 
 
 {% endblock %}
 
 
 {% block content %}
-  {% if mod   == True %}
-    <h3>Modification de ma réservation</h3>
-  {% else %}
-    <h3>Nouvelle réservation</h3>
-  {% endif %} 
-
 {% if msg != "" %}
                     <div class="alert alert-danger">
                         <a class="close" href="#" data-dismiss="alert">×</a>

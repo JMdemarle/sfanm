@@ -2,8 +2,8 @@
 {% extends 'base.html' %}
 
 {% block breadcrumb %}
-  
   <li class="breadcrumb-item active">Mes reservations</li>
+
 {% endblock %}
 
 {% block content %}
@@ -11,9 +11,9 @@
    <div class="row">
 
   </div>
-
   <br>
   <br>
+ <h2> Mes réservations à la SFANM  <a href="{% url 'capacites'  %}" class="btn btn-primary">Nouvelle reservation</a></h2>
   <table class="table">
     <thead class="thead-inverse">
       <tr>
@@ -40,6 +40,37 @@
     </tbody>
   </table>
   <br>
-    <a href="{% url 'capacites'  %}" class="btn btn-primary">Nouvelle reservation</a>
-  
+    
+
+
+ <h2> Les évènements à la SFANM</h2>
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+          <th>Date</th>
+          <th>libellé</th>
+          <th>Places libres</th>
+          <th>Inscrit</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for evt in les_evts %}
+     
+          <tr>
+
+            <td> {{ evt.date }}</td>
+            <td> {{ evt.intitule }}</td>
+            <td> {{ evt.get_placeslibres }}</td>
+            <td> {{ evt.estinscrit|yesno:"oui,non"}} </td>
+            {% if evt.estinscrit %}
+             <td><a href="{% url 'affpourdelinscription' evt.id %}" class="btn btn-danger">Annuler</a></td>
+            {% else %}
+            <td><a href="{% url 'newinscription' evt.id %}" class="btn btn-primary">S inscrire</a></td>
+           {% endif %}
+          </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br>
+ 
 {% endblock %}

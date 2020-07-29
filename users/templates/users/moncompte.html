@@ -1,0 +1,30 @@
+{% extends './base_accounts.html' %}
+
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+{% block title %}Modifier mes informations{% endblock %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-md-10 col-sm-8">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Mes informations</h3>
+            {% for message in messages %}
+              <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+              </div>
+            {% endfor %}
+            
+             {% crispy form %}
+            
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

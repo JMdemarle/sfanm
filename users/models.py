@@ -46,10 +46,11 @@ class CustomUser(AbstractUser):
 	nom = models.CharField(max_length=25,null=False,default='.')
 	prenom = models.CharField(max_length=25,null=False,default='.')
 	adresse1 = models.CharField(max_length=40,null=False,default='.')
-	adreses2 = models.CharField(max_length=40,null=True,default='.')
+	adresse2 = models.CharField(max_length=40,null=True,default='.')
 	codepostal = models.IntegerField(default = 0,null=False)
 	ville = models.CharField(max_length=35,null=False,default='.')
-	telephone = PhoneNumberField()
+	telephone = models.CharField(max_length=15,null=True,default='.')
+	nbreinesmax = models.IntegerField(default = 10,null=False)
 
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = []

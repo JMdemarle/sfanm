@@ -2,16 +2,13 @@
 {% extends 'base.html' %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'listgestion' %}" >Administration</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'listgestion' %}" >Activité de la station</a></li>
   <li class="breadcrumb-item active">Les Entrées du {{ date_entree }} </li>
 {% endblock %}
 
 {% block content %}
 
-   <div class="row">
-
-  </div>
-
+  <h3>Les entrées</h3>
   <br>
   <br>
   <table class="table">

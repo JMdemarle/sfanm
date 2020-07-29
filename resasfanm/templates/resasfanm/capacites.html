@@ -2,16 +2,13 @@
 {% extends 'base.html' %}
 
 {% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'listresas' %}" >Mes réservations</a></li>
   <li class="breadcrumb-item active">Dates de depôt</li>
 {% endblock %}
 
 {% block content %}
 
-   <div class="row">
-
-   </div>
-
-  <br>
+  <h3>Dates auxquelles un dépot est possible</h3>  
   <br>
   <table class="table">
     <thead class="thead-inverse">
@@ -29,6 +26,8 @@
             </td>
             <td> {{ capacite.nreinesmax }}</td>
             <td> {{ capacite.get_reinesdispos}}</td>
+            <td><a href="{% url 'newresa' capacite.id %}" class="btn btn-outline-primary">Choisir</a></td>
+ 
           </tr>
       {% endfor %}
     </tbody>

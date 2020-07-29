@@ -6,46 +6,53 @@ from django.views.generic.edit import FormView
 from django.template.loader import render_to_string
 
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+
 from django.contrib import messages
+from django.core.files.storage import FileSystemStorage, default_storage
+
 
 from django.shortcuts import render, redirect
 
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
+import csv
 
 from users.models import CustomUser
 
-from .forms import SignUpForm, ContactForm, Okpourcontinuer, SignupForm, LoginForm
+from .forms import SignUpForm, ContactForm, Okpourcontinuer, SignupForm, LoginForm, MonCompteForm
 
 def signup(request):
     if request.method == 'GET':
         form = SignupForm()
     else:
         form = SignupForm(request.POST)
-        if form.is_valid():
-            emails = form.cleaned_data['email']
-            if CustomUser.objects.filter(email=emails).exists(): # return True/False
-                messages.add_message(request, messages.ERROR, 'le compte existe. Identifiez-vous ou utliser le formulaire de contact')
-            else:
-                custuser = CustomUser()
-                custuser.email = emails
-                custuser.nom = form.cleaned_data['nom']
-                custuser.prenom = form.cleaned_data['prenom']
-                custuser.adresse1 = form.cleaned_data['adresse1']
-                custuser.adresse2 = form.cleaned_data['adresse2']
-                custuser.codepostal = form.cleaned_data['codepostal']
-                custuser.ville = form.cleaned_data['ville']
-                custuser.telephone = form.cleaned_data['telephone']
-                custuser.is_active = False
-                custuser.save()
-                html_message = render_to_string('users/signup_email.html', {'le_user': custuser})
-
-                try:
-                    send_mail('[SFANM] : demande adhésion', html_message, 'contact@sfanm.fr', ['contact@sfanm.fr',emails])
-                except BadHeaderError:
-                    return HttpResponse('Invalid header found.')
-                return redirect('users/contactsuccess')
+        if "cancel" in request.POST:
+            return redirect('login')
+        else:
+            if form.is_valid():
+                emails = form.cleaned_data['email']
+                if CustomUser.objects.filter(email=emails).exists(): # return True/False
+                    messages.add_message(request, messages.ERROR, 'le compte existe. Identifiez-vous ou utliser le formulaire de contact')
+                else:
+                    custuser = CustomUser()
+                    custuser.email = emails
+                    custuser.nom = form.cleaned_data['nom']
+                    custuser.prenom = form.cleaned_data['prenom']
+                    custuser.adresse1 = form.cleaned_data['adresse1']
+                    custuser.adresse2 = form.cleaned_data['adresse2']
+                    custuser.codepostal = form.cleaned_data['codepostal']
+                    custuser.ville = form.cleaned_data['ville']
+                    custuser.telephone = form.cleaned_data['telephone']
+                    custuser.is_active = False
+                    custuser.save()
+                    html_message = render_to_string('users/signup_email.html', {'le_user': custuser})
+                    try:
+                        send_mail('[SFANM] : demande adhésion', html_message, 'contact@sfanm.fr', ['contact@sfanm.fr',emails])
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect('users/contactsuccess')
     return render(request, "users/signup.html", {'form': form})
 
 def contactView(request):
@@ -112,11 +119,101 @@ class loginpage(FormView):
             messages.add_message(self.request, messages.INFO, 'Informations de connexion erronées')
             return HttpResponseRedirect(reverse_lazy('login'))    
     
-def profile(request):
+'''def profile(request):
     if request.session.has_key('username'):
         posts = request.session['username']
         query = User.objects.filter(username=posts) 
         return render(request, 'app_foldername /profile.html', {"query":query})
     else:
-        return render(request, 'app_foldername/login.html', {})
+        return render(request, 'app_foldername/login.html', {}) '''
 
+@login_required
+def mon_compte(request):
+    msg = ''
+    custuser = request.user
+
+    if request.method == 'POST':
+        form = MonCompteForm(request.POST, initial={'le_user' : custuser})
+        if "cancel" in request.POST:
+            if custuser.is_staff:
+                return redirect('home')
+            else:
+                return redirect('listresas') 
+        else:
+            if form.is_valid():
+                custuser.nom = form.cleaned_data['nom']
+                custuser.prenom = form.cleaned_data['prenom']
+                custuser.adresse1 = form.cleaned_data['adresse1']
+                custuser.adresse2 = form.cleaned_data['adresse2']
+                custuser.codepostal = form.cleaned_data['codepostal']
+                custuser.ville = form.cleaned_data['ville']
+                custuser.telephone = form.cleaned_data['telephone']
+                custuser.save()
+                if custuser.is_staff:
+                    return redirect('home')
+                else:
+                    return redirect('listresas') 
+    else:
+        form = MonCompteForm(initial={'le_user' : custuser})
+    return render(request, 'users/moncompte.html', {'form': form, 'mod' : True, 'msg' : msg})
+    
+
+@login_required
+def cup(request):
+    msg = ''
+
+    if request.method == 'POST':
+        form = CupForm(request.POST)
+        if "cancel" in request.POST:
+            if custuser.is_staff:
+                return redirect('home')
+            else:
+                return redirect('listresas') 
+        else:
+            if form.is_valid():
+                
+                custuser.nom = form.cleaned_data['nom']
+                custuser.prenom = form.cleaned_data['prenom']
+                custuser.adresse1 = form.cleaned_data['adresse1']
+                custuser.adresse2 = form.cleaned_data['adresse2']
+                custuser.codepostal = form.cleaned_data['codepostal']
+                custuser.ville = form.cleaned_data['ville']
+                custuser.telephone = form.cleaned_data['telephone']
+                custuser.save()
+                if custuser.is_staff:
+                    return redirect('home')
+                else:
+                    return redirect('listresas') 
+    else:
+        form = MonCompteForm(initial={'le_user' : custuser})
+    return render(request, 'users/moncompte.html', {'form': form, 'mod' : True, 'msg' : msg})
+
+def simple_upload(request):
+    if request.method == 'POST' and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        filepath = fs.location + '/' + myfile.name
+        with open(filepath, encoding='latin-1') as f:
+            reader = csv.reader(f, delimiter=';')
+            for row in reader:
+                custuser = CustomUser()
+                custuser.email = row[0]
+                custuser.nom = row[1]
+
+                custuser.prenom = row[2]
+                custuser.adresse1 = row[3]
+                custuser.adresse2 = row[4]
+                custuser.codepostal = row[5]
+                custuser.ville = row[6]
+                custuser.is_active = True
+                custuser.save()
+                '''try:
+                    custuser.save()
+                except:
+                    print ('probleme svg')'''
+        f.close()
+                    
+        return render(request, 'users/simple_upload.html', {'uploaded_file_url': uploaded_file_url})
+    return render(request, 'users/simple_upload.html')

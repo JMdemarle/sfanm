@@ -11,6 +11,9 @@ urlpatterns = [
     path('login', views.loginpage.as_view(), name='login'),
     
     path('logout', auth_views.LogoutView.as_view(), name='logout'),
+
+    path('mon_compte',views.mon_compte,name='mon_compte'),
+    path('cup',views.cup,name='cup'),
     
     path('signup', views.signup, name='signup'),
     path('reset', auth_views.PasswordResetView.as_view(
@@ -29,6 +32,10 @@ urlpatterns = [
         name='password_reset_complete'),
     path('contact', views.contactView, name='contact'),
     path('users/contactsuccess', views.successView, name='contactsucccess'),
+
+    path('upload',views.simple_upload,name='upload'),
+    
+
     
 
 ]

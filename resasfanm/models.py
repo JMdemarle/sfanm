@@ -152,3 +152,68 @@ class Capacite(models.Model):
 class Presence(models.Model):
 	resa = models.ForeignKey('Reservation', on_delete=models.CASCADE,related_name='resas')
 	capa = models.ForeignKey('Capacite', on_delete=models.CASCADE,related_name='capas')
+
+class TypEmail(models.Model):
+	libellé = models.CharField(max_length=25,null=False,default='.')
+	template = models.CharField(max_length=35,null=False,default='.')
+	objet = models.CharField(max_length=100,null=False,default='.')
+	
+	def __str__(self):
+		return self.libellé
+	
+	#medicament = models.ForeignKey('TypMedoc', on_delete=models.CASCADE,related_name='medicament', null = True)
+	
+	
+class Evenement(models.Model):
+
+	LDESTMAIL = [
+		('0','Tous les membres'),
+		('1','Les membres inscrits'),
+		('2','Les membres non inscrits'),
+		]
+
+	date = models.DateTimeField(verbose_name="Date evenement")
+	adresse1 = models.CharField(max_length=40,null=True,default='.')
+	adresse2 = models.CharField(max_length=40,null=True,default='.')
+	codepostal = models.IntegerField(default = 0,null=True)
+	ville = models.CharField(max_length=35,null=True,default='.')
+
+	
+	nombremax = models.IntegerField(default = 0, verbose_name="nombre participants")
+	intitule = models.CharField(max_length=100,null=False,default='.')
+	programme = models.TextField(verbose_name = 'programme', null = True)
+	natmail1 = models.ForeignKey('TypEmail', on_delete=models.CASCADE,related_name='nmail1', null = True)
+	
+	destmail1 = models.IntegerField(choices=LDESTMAIL,null = True,default=0)
+	datemail1 = models.DateField(verbose_name="date mail 1",null=True)
+	natmail2 = models.ForeignKey('TypEmail', on_delete=models.CASCADE,related_name='nmail2', null = True)
+	destmail2 = models.IntegerField(choices=LDESTMAIL,null = True,default=0)
+	datemail2 = models.DateField(verbose_name="date mail 2",null=True)
+
+	class Meta:
+		unique_together = ('date', 'intitule',)
+		#ordering = ['date']
+
+	def __str__(self):
+		return self.date.strftime('%d/%m/%Y') + self.intitule
+		
+	def get_nbparticipants(self):
+		nbpart = Inscription.objects.filter(evenement=self).count()
+		return nbpart
+		
+	def get_placeslibres(self):
+		nblibre = self.nombremax - Inscription.objects.filter(evenement=self).count()
+		return nblibre		
+		
+
+class Inscription(models.Model):
+	evenement = models.ForeignKey('Evenement', on_delete=models.CASCADE,related_name='partevts')
+	apiculteur = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='partapis')
+
+	class Meta:
+		unique_together = ('evenement', 'apiculteur',)
+		
+	def __str__(self):
+		return self.apiculteur.nom + self.evenement.intitule
+		
+	

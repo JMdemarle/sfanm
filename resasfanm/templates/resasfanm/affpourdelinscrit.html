@@ -1,0 +1,41 @@
+
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'listresas' %}" >Mes réservations</a></li>
+  
+  <li class="breadcrumb-item active">Annulation</li>
+{% endblock %}
+
+{% block content %}
+
+
+  <br>
+  <br>
+ <h2> Annulation de mon inscription à {{le_evt.intitule }} </h2>
+ 
+  <div class="row">
+       <div class="col-lg-3 col-sm-6"> <u>Date :</u>  {{ le_evt.date}} </div>
+  </div>
+  <u>Programme: </u><br>
+  {{ le_evt.programme|linebreaks }}
+
+  {% if evt.adresse1 is None %}
+  <p>Le lieu est encore à définir</p>
+  {% else %}
+  <p><u>Lieu</u></p>
+  <div class="col-sm-12 ">   {{ le_evt.adresse1|default_if_none:"" }} </div>
+  <div class="col-sm-12 ">   {{ le_evt.adresse2|default_if_none:"" }} </div>
+  <div class="col-sm-2 "> {{ le_evt.codepostal|default_if_none:"" }}</div>
+  <div class="col-sm-8 "> {{ le_evt.ville|default_if_none:"" }}</div>
+  {% endif %}
+
+    
+  <br>
+   <div class="row">
+    <div class="col-lg-2 col-sm-3"><a href="{% url 'listresas'  %}" class="btn btn-outline-primary">Revenir</a></div>
+    <div class="col-lg-2 col-sm-3"><a href="{% url 'delinscription' le_evt.id %}" class="btn btn-outline-danger">Annuler inscription</a></div>
+  </div>
+
+ 
+{% endblock %}

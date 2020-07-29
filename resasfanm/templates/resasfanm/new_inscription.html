@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Crée une nouvel evenement {% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'listresas' %}" >Mes réservations</a></li>
+
+{% if mod   == True %}
+    <li class="breadcrumb-item active"> Modification Evenement</li>
+{% else %}
+    <li class="breadcrumb-item active"> Inscription</li>
+{% endif %} 
+
+{% endblock %}
+
+
+{% block content %}
+
+    <h3> {{ le_evt.intitule }} - {{ le_evt.date }} </h3>
+    <div class="container">
+        <div class="row">
+          <div>Programme</div>
+          <div class="col-sm-12 border">  {{ le_evt.programme|linebreaks }} </div>
+
+
+          {% if evt.adresse1 is None %}
+          <p>Le lieu est encore à définir</p>
+          {% else %}
+          <div>Lieu</div>
+          <div class="col-sm-12 ">   {{ le_evt.adresse1|default_if_none:"" }} </div>
+          <div class="col-sm-12 ">   {{ le_evt.adresse2|default_if_none:"" }} </div>
+          <div class="col-sm-2 "> {{ le_evt.codepostal|default_if_none:"" }}</div>
+          <div class="col-sm-8 "> {{ le_evt.ville|default_if_none:"" }}</div>
+          {% endif %}
+        </div>
+     </div>
+
+
+
+  {% crispy form %}
+{% endblock %}
