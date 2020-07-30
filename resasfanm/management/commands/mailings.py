@@ -5,7 +5,7 @@ from datetime import date, datetime, timedelta
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.template.loader import render_to_string
-#from django.core.files.storage import default_storage
+#from django.core.files.storage import  default_storage
 from django.template.loader import get_template
 
 from resasfanm.models import Reservation, Capacite, Presence, Evenement, Inscription
