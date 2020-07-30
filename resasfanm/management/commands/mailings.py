@@ -89,19 +89,19 @@ class Command(BaseCommand):
 			print (resa.datedepot)
 			print (resa.dateretrait)
 			
-			if (resa.datedepot == datej3 or 1==1 ):
+			if (resa.datedepot == datej3 ):
 				self.maildepot(resa)
-			if (resa.dateretrait == datej3 or 1==1 ):
+			if (resa.dateretrait == datej3 ):
 				self.mailretrait(resa)
 				
 		# mailing pour les évênements
 		evts = Evenement.objects.all()
 		for evt in evts:
 			if evt.datemail1 is not None:
-				if (evt.datemail1 == datej or 1 ==1):
+				if (evt.datemail1 == datej ):
 					self.mailevtdate(evt, evt.natmail1, evt.destmail1)
 			if evt.datemail2 is not None:
-				if (evt.datemail2 == datej or 1 ==1):
+				if (evt.datemail2 == datej ):
 					self.mailevtdate(evt, evt.natmail2, evt.destmail2)
 
 
