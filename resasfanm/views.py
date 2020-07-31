@@ -59,8 +59,8 @@ def home(request):
 	if (request.user.is_staff):
 		return render(request, 'resasfanm/home.html', {'msg' : msg})
 	else:
-		return redirect('listresas') 
-	
+#		return redirect('listresas') 
+		return render(request, 'resasfanm/maintenance.html')
 
 
 @login_required
