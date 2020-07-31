@@ -45,7 +45,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.rl_config import defaultPageSize
 
 # Create your views here.
-@login_required
+#@login_required
 def home(request):
 	'''	username = request.META.get('REMOTE_USER_VAR')
 	for el in request.META:
