@@ -5,6 +5,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import AbstractUser
 
+from django.contrib.auth.hashers import make_password
 
 
 class CustomUserManager(BaseUserManager):
@@ -58,3 +59,6 @@ class CustomUser(AbstractUser):
 
 	def __str__(self):
 		return self.email
+
+	def set_password(self, raw_password):
+		self.password = make_password(raw_password)

@@ -33,18 +33,18 @@ class Command(BaseCommand):
 		
 	def construitlistdest(self, evt, destin):
 		mbrs = CustomUser.objects.filter(is_active = True)
-		bcc = ''
+		bcc = []
 		for mbr in mbrs:
 			# 0 tous les membres
 			if (destin == 0):
-				bcc = bcc + mbr.email + ','
+				bcc.append(mbr.email)
 			# 1 les inscrits
 			elif (destin == 1):
 				if Inscription.objects.filter(evenement=evt,apiculteur=mbr).exists():
-					bcc = bcc + mbr.email + ','
+					bcc.append(mbr.email)
 			elif (destin == 2):
 				if not Inscription.objects.filter(evenement=evt,apiculteur=mbr).exists():
-					bcc = bcc + mbr.email + ','
+					bcc.append(mbr.email)
 		return bcc
 
 			
@@ -55,8 +55,11 @@ class Command(BaseCommand):
 			print (templa)
 			try:
 				tmp  = get_template(templa)
+			except:
+				print('non existe')
+			else:
 				print('existe')
-				todestbcc = '[' + self.construitlistdest(evt, destmail) + ']'
+				todestbcc = self.construitlistdest(evt, destmail)
 				print('retour calc dest')
 				print (todestbcc)
 				subject = natmail.objet + ' - ' + evt.intitule
@@ -64,16 +67,17 @@ class Command(BaseCommand):
 				html_message = render_to_string(templa, {'le_evt': evt})
 				print(html_message)
 				from_email = 'SFANM <contact@sfanm.fr>'
-				#mail.send_mail(subject, html_message, from_email, [to])
-				message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to='[contact@sfanm.fr]',bcc=todestbcc)
 				try:
-					print('envoi message' + subject)
+				#mail.send_mail(subject, html_message, from_email, [to])
+					message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=['contact@sfanm.fr'],bcc=todestbcc)
+				except Exception as e: print(e)
+				else:
+					print ('message préparé')
 					message.content_subtype = "html"
-					message.send() 
-				except:
-					print('pb envoi')
-			except:
-				print('non existe')
+					try:
+						message.send() 
+					except:
+						print('pb envoi')
 						
 
 	def handle(self, *args, **kwargs):
@@ -98,7 +102,7 @@ class Command(BaseCommand):
 		evts = Evenement.objects.all()
 		for evt in evts:
 			if evt.datemail1 is not None:
-				if (evt.datemail1 == datej ):
+				if (evt.datemail1 == datej or 1==1):
 					self.mailevtdate(evt, evt.natmail1, evt.destmail1)
 			if evt.datemail2 is not None:
 				if (evt.datemail2 == datej ):
