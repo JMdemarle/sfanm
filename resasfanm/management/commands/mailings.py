@@ -73,7 +73,7 @@ class Command(BaseCommand):
 				except Exception as e: print(e)
 				else:
 					print ('message préparé')
-					message.content_subtype = "text/plain"
+					#message.content_subtype = "text/plain"
 					try:
 						message.send() 
 					except:
