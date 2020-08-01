@@ -73,7 +73,7 @@ class Command(BaseCommand):
 				except Exception as e: print(e)
 				else:
 					print ('message préparé')
-					message.content_subtype = "html"
+					message.content_subtype = "text/plain"
 					try:
 						message.send() 
 					except:
@@ -102,7 +102,7 @@ class Command(BaseCommand):
 		evts = Evenement.objects.all()
 		for evt in evts:
 			if evt.datemail1 is not None:
-				if (evt.datemail1 == datej or 1==1):
+				if (evt.datemail1 == datej):
 					self.mailevtdate(evt, evt.natmail1, evt.destmail1)
 			if evt.datemail2 is not None:
 				if (evt.datemail2 == datej ):
