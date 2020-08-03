@@ -87,7 +87,7 @@ class Capacite(models.Model):
 		nous traiterons plus tard dans l'administration
 		"""
 		return self.datecapa.strftime('%d/%m/%Y')
-		
+
 	class Meta:
 		ordering = ['datecapa']
 
