@@ -79,21 +79,47 @@ def successView(request):
         if form.is_valid():
             return redirect('home')
     return render(request, "users/Okpourcontinuer.html", {'form': form})
-'''
+
 def loginpage(request):
-    if request.method == 'POST':
-        email = request.POST['email']
-        password =  request.POST['password']
-        post = User.objects.filter(username=username)
-        if post:
-            email = request.POST['emai']
-            request.session['email'] = username
-            return redirect("home")
-        else:
-            return render(request, 'users/login.html', {})
-    return render(request, 'users/login.html', {})
- '''   
-class loginpage(FormView):
+    if request.method == 'GET':
+        form = LoginForm()
+    else:
+        form = LoginForm(request.POST)
+        
+        #email = request.POST['email']
+        #password =  request.POST['password']
+        #post = User.objects.filter(username=username)
+        if form.is_valid():
+            username = form.cleaned_data['email']
+            print(username)
+            password = form.cleaned_data['password']
+            user = authenticate(username=username,password=password)
+            print('user')
+            print(user)
+            print(password)
+        #if post:
+            #email = request.POST['emai']
+            #request.session['email'] = username
+            #return redirect("home")
+            if user is not None:
+                print('on y pass')
+                auth_login(request, user)
+                if user.is_staff:
+                    print('staff')
+                #return redirect('home')
+                    return HttpResponseRedirect(reverse_lazy('home')) 
+                else:
+                #return redirect('listresas') 
+                    return HttpResponseRedirect(reverse_lazy('listresas')) 
+            #return HttpResponseRedirect(self.success_url)
+            
+            else:
+                messages.add_message(request, messages.INFO, 'Informations de connexion erronées')
+                return render(request, 'users/login.html', {'form': form})
+    return render(request, 'users/login.html', {'form': form})
+ 
+ 
+'''class loginpage(FormView):
     """login view"""
 
     form_class = LoginForm
@@ -121,7 +147,9 @@ class loginpage(FormView):
 
         else:
             messages.add_message(self.request, messages.INFO, 'Informations de connexion erronées')
-            return HttpResponseRedirect(reverse_lazy('login'))    
+            return HttpResponseRedirect(reverse_lazy('login'))    '''
+
+
     
 '''def profile(request):
     if request.session.has_key('username'):

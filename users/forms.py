@@ -109,3 +109,16 @@ class LoginForm(forms.Form):
     """user login form"""
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput())
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+      
+  
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'email',
+            'password',
+             HTML("<br>"), 
+            
+            Submit('submit', 'Soumettre',css_class='form-group col-md-4 mb-0 btn-primary'),
+        )
+    

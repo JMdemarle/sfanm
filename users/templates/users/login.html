@@ -1,6 +1,9 @@
 
-{% extends './base_accounts.html' %}
 
+
+{% extends './base_accounts.html' %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
 {% block title %}Connection à Mes RDV SFANM{% endblock %}
 
 {% block content %}
@@ -20,9 +23,9 @@
             {% endfor %}
             <form method="post" novalidate>
               {% csrf_token %}
-              {% include 'includes/form.html' %}
+             {% crispy form %}
               
-              <button type="submit" class="btn btn-primary btn-block">Log in</button>
+                          
             </form>
           </div>
           <div class="card-footer text-center py-2">
