@@ -108,10 +108,12 @@ class loginpage(FormView):
                             password=credentials['password'])
 
         if user is not None:
+            print('on y pass')
             auth_login(self.request, user)
             if user.is_staff:
+                print('staff')
                 #return redirect('home')
-                return HttpResponseRedirect(reverse_lazy('home')) 
+                return HttpResponseRedirect(reverse_lazy('listresas')) 
             else:
                 #return redirect('listresas') 
                 return HttpResponseRedirect(reverse_lazy('listresas')) 
