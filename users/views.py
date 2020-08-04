@@ -110,9 +110,11 @@ class loginpage(FormView):
         if user is not None:
             auth_login(self.request, user)
             if user.is_staff:
-                return redirect('home')
+                #return redirect('home')
+                return HttpResponseRedirect(reverse_lazy('home')) 
             else:
-                return redirect('listresas') 
+                #return redirect('listresas') 
+                return HttpResponseRedirect(reverse_lazy('listresas')) 
             #return HttpResponseRedirect(self.success_url)
 
         else:
