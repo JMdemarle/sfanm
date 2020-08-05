@@ -7,6 +7,8 @@ from django.template.loader import render_to_string
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+
 
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage, default_storage
@@ -80,6 +82,7 @@ def successView(request):
             return redirect('home')
     return render(request, "users/Okpourcontinuer.html", {'form': form})
 
+@csrf_exempt
 def loginpage(request):
     if request.method == 'GET':
         form = LoginForm()
