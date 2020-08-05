@@ -86,7 +86,7 @@ def successView(request):
 
 @ensure_csrf_cookie
 def loginpage(request):
-    rotate_token(request)
+    #rotate_token(request)
     if request.method == 'GET':
         form = LoginForm()
     else:
