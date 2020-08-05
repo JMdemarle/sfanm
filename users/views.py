@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-
+from django.middleware.csrf import rotate_token
 
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage, default_storage
@@ -84,6 +84,7 @@ def successView(request):
 
 
 def loginpage(request):
+    rotate_token(request)
     if request.method == 'GET':
         form = LoginForm()
     else:
@@ -109,7 +110,7 @@ def loginpage(request):
                 auth_login(request, user)
                 if user.is_staff:
                     print('staff')
-                    return redirect(request,'home')
+                    return redirect('home')
                     #return HttpResponseRedirect(reverse_lazy('home')) 
                 else:
                 #return redirect('listresas') 
