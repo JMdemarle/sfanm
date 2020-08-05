@@ -87,11 +87,14 @@ def successView(request):
 @ensure_csrf_cookie
 def loginpage(request):
     #rotate_token(request)
+    print('login')
     if request.method == 'GET':
+        print('get')
         form = LoginForm()
     else:
+        print('esle')
         form = LoginForm(request.POST)
-        
+        print('post form')
         #email = request.POST['email']
         #password =  request.POST['password']
         #post = User.objects.filter(username=username)
