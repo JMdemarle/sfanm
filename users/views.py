@@ -109,8 +109,8 @@ def loginpage(request):
                 auth_login(request, user)
                 if user.is_staff:
                     print('staff')
-                    return redirect('home')
-                    #return HttpResponseRedirect(reverse_lazy('listresas')) 
+                    #return redirect('home')
+                    return HttpResponseRedirect(reverse_lazy('home')) 
                 else:
                 #return redirect('listresas') 
                     return HttpResponseRedirect(reverse_lazy('listresas')) 
