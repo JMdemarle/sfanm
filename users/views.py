@@ -84,7 +84,7 @@ def successView(request):
             return redirect('home')
     return render(request, "users/Okpourcontinuer.html", {'form': form})
 
-@ensure_csrf_cookie
+#@ensure_csrf_cookie
 def loginpage(request):
     #rotate_token(request)
     if request.method == 'GET':
