@@ -21,6 +21,7 @@
                 {{ message }}
               </div>
             {% endfor %}
+            {% csrf_token %}
              {% crispy form %}
               
                           
