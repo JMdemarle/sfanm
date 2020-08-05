@@ -92,7 +92,7 @@ def loginpage(request):
     print('login')
     if request.method == 'GET':
         print('get')
-        form = LoginForm(request.GET)
+        form = LoginForm()
     else:
         print('esle')
         form = LoginForm(request.POST)
