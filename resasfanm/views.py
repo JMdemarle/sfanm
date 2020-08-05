@@ -55,6 +55,7 @@ def home(request):
 	msg = username
 	print(username)
 	#print(password)'''
+	
 	msg = ''
 	if (request.user.is_staff):
 		return render(request, 'resasfanm/home.html', {'msg' : msg})
