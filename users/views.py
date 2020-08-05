@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from django.middleware.csrf import rotate_token
+from django.views.decorators.clickjacking import xframe_options_exempt
 
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage, default_storage
@@ -85,6 +86,7 @@ def successView(request):
     return render(request, "users/Okpourcontinuer.html", {'form': form})
 
 @ensure_csrf_cookie
+@xframe_options_exempt
 def loginpage(request):
     #rotate_token(request)
     print('login')
