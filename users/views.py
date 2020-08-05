@@ -82,7 +82,7 @@ def successView(request):
             return redirect('home')
     return render(request, "users/Okpourcontinuer.html", {'form': form})
 
-@csrf_exempt
+
 def loginpage(request):
     if request.method == 'GET':
         form = LoginForm()
@@ -109,8 +109,8 @@ def loginpage(request):
                 auth_login(request, user)
                 if user.is_staff:
                     print('staff')
-                    #return redirect('home')
-                    return HttpResponseRedirect(reverse_lazy('home')) 
+                    return redirect(request,'home')
+                    #return HttpResponseRedirect(reverse_lazy('home')) 
                 else:
                 #return redirect('listresas') 
                     return HttpResponseRedirect(reverse_lazy('listresas')) 
