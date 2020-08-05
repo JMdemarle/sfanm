@@ -8,6 +8,8 @@ from django.template.loader import render_to_string
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 from django.middleware.csrf import rotate_token
 
 from django.contrib import messages
@@ -82,7 +84,7 @@ def successView(request):
             return redirect('home')
     return render(request, "users/Okpourcontinuer.html", {'form': form})
 
-
+@ensure_csrf_cookie
 def loginpage(request):
     rotate_token(request)
     if request.method == 'GET':
