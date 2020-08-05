@@ -21,11 +21,9 @@
                 {{ message }}
               </div>
             {% endfor %}
-            <form method="post" novalidate>
              {% crispy form %}
               
                           
-            </form>
           </div>
           <div class="card-footer text-center py-2">
             <a href="{% url 'password_reset' %}" >Mot de passe oublié</a>
