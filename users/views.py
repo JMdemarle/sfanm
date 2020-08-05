@@ -110,7 +110,7 @@ def loginpage(request):
                 if user.is_staff:
                     print('staff')
                 #return redirect('home')
-                    return HttpResponseRedirect(reverse_lazy('home')) 
+                    return HttpResponseRedirect(reverse_lazy('mistresas')) 
                 else:
                 #return redirect('listresas') 
                     return HttpResponseRedirect(reverse_lazy('listresas')) 
