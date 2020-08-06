@@ -89,38 +89,25 @@ def successView(request):
 @xframe_options_exempt
 def loginpage(request):
     #rotate_token(request)
-    print('login')
     if request.method == 'GET':
-        print('get')
         form = LoginForm()
     else:
-        print('esle')
         form = LoginForm(request.POST)
-        print('post form')
-        #email = request.POST['email']
-        #password =  request.POST['password']
-        #post = User.objects.filter(username=username)
         if form.is_valid():
             username = form.cleaned_data['email']
-            print(username)
             password = form.cleaned_data['password']
             user = authenticate(username=username,password=password)
-            print('user')
-            print(user)
-            print(password)
         #if post:
             #email = request.POST['emai']
             #request.session['email'] = username
             #return redirect("home")
             if user is not None:
-                print('on y pass')
                 auth_login(request, user)
                 if user.is_staff:
-                    print('staff')
                     return redirect('home')
                     #return HttpResponseRedirect(reverse_lazy('home')) 
                 else:
-                #return redirect('listresas') 
+                    return redirect('listresas') 
                     return HttpResponseRedirect(reverse_lazy('listresas')) 
             #return HttpResponseRedirect(self.success_url)
             
