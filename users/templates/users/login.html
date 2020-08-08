@@ -21,9 +21,10 @@
                 {{ message }}
               </div>
             {% endfor %}
+            <div css_class="mw-100">
             {% csrf_token %}
              {% crispy form %}
-              
+              </div>
                           
           </div>
           <div class="card-footer text-center py-2">
@@ -33,6 +34,10 @@
           <div class="card-footer text-center">
              <a href="{% url 'signup' %}">Formulaire d'Adhésion</a>
           </div>
+          <div class="card-footer text-center">
+             <a href="{% url 'contact' %}">Nous contacter</a>
+          </div>
+          
         </div>
       </div>
     </div>

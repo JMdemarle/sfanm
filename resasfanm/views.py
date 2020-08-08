@@ -184,7 +184,7 @@ def modresa(request,idresa):
 				present.resa = resam
 				present.save()
 				dated = dated + timedelta(days=7)
-				subject = 'SFANM - Confirmation modification de réservation'
+			subject = 'SFANM - Confirmation modification de réservation'
 			html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': resam})
 			#plain_message = strip_tags(html_message)
 			from_email = 'SFANM <contact@sfanm.fr>'

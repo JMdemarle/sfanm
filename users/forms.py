@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Button
+from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Button, Div
 from crispy_forms.bootstrap import InlineField
 
 
@@ -115,10 +115,14 @@ class LoginForm(forms.Form):
   
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            'email',
-            'password',
-             HTML("<br>"), 
+            Div (
+                'email',
+                'password',
+                HTML("<br>"), 
             
-            Submit('submit', 'Soumettre',css_class='form-group col-md-4 mb-0 btn-primary'),
+                Submit('submit', "S'identifier",css_class='form-group col-md-4 mb-0 btn-primary btn-block'),
+                css_class="mw-100",
+ 
+            )
         )
     
