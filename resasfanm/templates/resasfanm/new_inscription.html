@@ -26,16 +26,16 @@
           <div>Programme</div>
           <div class="col-sm-12 border">  {{ le_evt.programme|linebreaks }} </div>
 
+  {% if le_evt.adresse1 is None and le_evt.adresse1 != '.' %}
+  <p>Le lieu est encore à définir</p>
+  {% else %}
+  <p><u>Lieu</u></p>
+  <div class="col-sm-12 ">   {{ le_evt.adresse1|default_if_none:"" }} </div>
+  <div class="col-sm-12 ">   {{ le_evt.adresse2|default_if_none:"" }} </div>
+  <span class="col-sm-2 "> {{ le_evt.codepostal|default_if_none:"" }}</span>
+  <span class="col-sm-10 "> {{ le_evt.ville|default_if_none:"" }}</span>
+  {% endif %}
 
-          {% if le_evt.adresse1 is None %}
-          <p>Le lieu est encore à définir</p>
-          {% else %}
-          <div>Lieu</div>
-          <div class="col-sm-12 ">   {{ le_evt.adresse1|default_if_none:"" }} </div>
-          <div class="col-sm-12 ">   {{ le_evt.adresse2|default_if_none:"" }} </div>
-          <div class="col-sm-2 "> {{ le_evt.codepostal|default_if_none:"" }}</div>
-          <div class="col-sm-8 "> {{ le_evt.ville|default_if_none:"" }}</div>
-          {% endif %}
         </div>
      </div>
 

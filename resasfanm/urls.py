@@ -21,6 +21,8 @@ urlpatterns = [
     
     path('newinscription/<idevt>',views.newinscription,name='newinscription'),
     path('delinscription/<idevt>',views.delinscription,name='delinscription'),
+    path('voirevt/<idevt>',views.voirevt,name='voirevt'),
+
     path('affpourdelinscription/<idevt>',views.affpourdelinscription,name='affpourdelinscription'),
 
     path('capacites',views.listcapacites,name='capacites'),

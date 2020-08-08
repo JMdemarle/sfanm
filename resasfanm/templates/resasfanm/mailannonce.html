@@ -5,9 +5,9 @@ La SFANM vous annonce la tenue de l'évènement suivant:
 - date : {{le_evt.date }}
 - intitulé: {{le_evt.intitule}}
 - programme:
-{{le_evt.programme}}
+{{le_evt.programme|linebreaks}}
 
-{% if evt.adresse1 is None %}
+{% if le_evt.adresse1 is None %}
    L'emplacement vous sera communiqué ultérieurement
 {% else %}
 Lieu

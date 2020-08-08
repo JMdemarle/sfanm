@@ -489,7 +489,12 @@ def delinscription(request,idevt):
 	return redirect('listresas')  
 
 	#return render(request, 'resasfanm/listresas.html')
-
+	
+@login_required	
+def voirevt(request,idevt):
+	evt = Evenement.objects.get(id=idevt)
+	return render(request, 'resasfanm/voirevt.html', {'le_evt': evt})
+	
 @login_required	
 @staff_member_required
 def listeparticipants(request,idevt):

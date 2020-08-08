@@ -3,9 +3,15 @@
 {% load widget_tweaks %}
 {% load crispy_forms_tags %}
 
+{% block breadcrumb %}
+
+{% endblock %}
+
+{% block content %}
+
 <h1>Menu administrateur SFANM</h1>
 
-<h2>L'administrateur est aussi un membre</h2>
+<h2>estion de mes réservations</h2>
 <a href="{% url 'listresas'  %}" >Liste de mes réservations</a>
 <br>
 <br>
@@ -19,4 +25,4 @@
 <br>
 <a href="{% url 'admin:users_customuser_changelist'  %}" >Gestion des membres</a>
 
-
+{% endblock %}
