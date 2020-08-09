@@ -1,0 +1,40 @@
+
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'listresas' %}" >Mes réservations</a></li>
+  
+  <li class="breadcrumb-item active">Voir évènement</li>
+{% endblock %}
+
+{% block content %}
+
+
+  <br>
+  <br>
+ <h2> Détail de {{le_evt.intitule }} </h2>
+ 
+  <div class="row">
+       <div class="col-lg-3 col-sm-6"> <u>Date :</u>  {{ le_evt.date}} </div>
+  </div>
+  <u>Programme: </u><br>
+  {{ le_evt.programme|linebreaks }}
+
+  {% if le_evt.adresse1 is None and le_evt.adresse1 != '.' %}
+  <p>Le lieu est encore à définir</p>
+  {% else %}
+  <p><u>Lieu</u></p>
+  <div class="col-sm-12 ">   {{ le_evt.adresse1|default_if_none:"" }} </div>
+  <div class="col-sm-12 ">   {{ le_evt.adresse2|default_if_none:"" }} </div>
+  <span class="col-sm-2 "> {{ le_evt.codepostal|default_if_none:"" }}</span>
+  <span class="col-sm-10 "> {{ le_evt.ville|default_if_none:"" }}</span>
+  {% endif %}
+
+    
+  <br><br>  ²
+   <div class="row">
+    <div class="col-lg-2 col-sm-3"><a href="{% url 'listresas'  %}" class="btn btn-outline-primary">Revenir</a></div>
+  </div>
+
+ 
+{% endblock %}
