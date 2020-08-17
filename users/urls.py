@@ -19,7 +19,8 @@ urlpatterns = [
     path('reset', auth_views.PasswordResetView.as_view(
         template_name='users/password_reset.html',
         email_template_name='users/password_reset_email.html',
-        subject_template_name='users/password_reset_subject.txt'), 
+        subject_template_name='users/password_reset_subject.txt',
+        from_email='contact@sfanm.fr'), 
         name='password_reset'),
     path('reset/done',
         auth_views.PasswordResetDoneView.as_view(template_name='users/password_reset_done.html'),
@@ -34,7 +35,7 @@ urlpatterns = [
     path('users/contactsuccess', views.successView, name='contactsucccess'),
 
     path('upload',views.simple_upload,name='upload'),
-    
+        
 
     
 
