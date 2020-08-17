@@ -36,6 +36,8 @@
             <td><a href="{% url 'affpourdelresa' resa.id %}" class="btn btn-danger">Annuler</a></td>
             
           </tr>
+      {% empty %}
+        <p>Vous n'avez pas de réservation à venir</p>
       {% endfor %}
     </tbody>
   </table>
@@ -70,6 +72,8 @@
             <td><a href="{% url 'voirevt' evt.id %}" class="btn btn-secondary">détail</a></td>
 
           </tr>
+      {% empty %}
+        <p>Il n'y a pas de formation/évènement planifié</p>
       {% endfor %}
     </tbody>
   </table>
