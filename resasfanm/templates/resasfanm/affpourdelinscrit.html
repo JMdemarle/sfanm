@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'listresas' %}" >Mes réservations</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'listevtsmembre' %}" >Mes Inscription</a></li>
   
   <li class="breadcrumb-item active">Annulation</li>
 {% endblock %}
@@ -34,7 +34,7 @@
     
   <br>
    <div class="row">
-    <div class="col-lg-2 col-sm-3"><a href="{% url 'listresas'  %}" class="btn btn-outline-primary">Revenir</a></div>
+    <div class="col-lg-2 col-sm-3"><a href="{% url 'listevtsmembre'  %}" class="btn btn-outline-primary">Revenir</a></div>
     <div class="col-lg-2 col-sm-3"><a href="{% url 'delinscription' le_evt.id %}" class="btn btn-outline-danger">Annuler inscription</a></div>
   </div>
 

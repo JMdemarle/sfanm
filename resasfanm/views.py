@@ -70,6 +70,16 @@ def newresa(request,idcapa):
 	capa = Capacite.objects.get(id=idcapa)
 	datededepot = capa.datecapa
 	dateret1 = datededepot + timedelta(days=14)
+	if not(Capacite.objects.filter(datecapa=dateret1).exists()):
+		subject = 'SFANM - Problème de définition des dates de réservation'
+		html_message = 'il n est pas possible de retirer les ruches après la date de dépôt'
+		from_email = 'SFANM <contact@sfanm.fr>'
+		to = 'contact@sfanm.fr'
+		mail.send_mail(subject, html_message, from_email, [to])				
+
+		return render(request, 'resasfanm/resaimpossible.html')
+
+		
 	dateret2 = dateret1 + timedelta(days=7)
 	if Capacite.objects.filter(datecapa=dateret2).exists():
 		datechoix = ((dateret1 , dateret1),(dateret2, dateret2))
@@ -201,6 +211,8 @@ def modresa(request,idresa):
 def affpourdelresa(request,idresa):
 	resam = Reservation.objects.get(id=idresa)
 	return render(request, 'resasfanm/affpourdelresa.html', {'la_resa': resam})
+	
+
 
 @login_required	
 def delresa(request,idresa):
@@ -222,25 +234,16 @@ def listcapacites(request):
 	capacites = Capacite.objects.filter(depotpossible=True).filter(datecapa__gt = date.today()).exclude(datecapa__in=datesreservees)
 	return render(request, 'resasfanm/capacites.html', {'les_capacites':capacites})
 
-@login_required
 def listresas(request):
-#  affiche les réservations de l'apiculteur et les évènements	
+#  affiche les réservations de l'apiculteur et les évènements
+	if not request.user.is_authenticated:
+		doujeviens = 'listresas'
+		return redirect('login',doujeviens)
+	
 	resas = Reservation.objects.filter(apiculteur=request.user).order_by('datedepot')
-	#inscrita = Inscription.objects.filter(apiculteur=request.user)
-	#touslesevts = Evenement.objects.filter(date__gte = date.today())
-	#evtsinscrits = Evenement.objects.filter(date__gte = date.today(),partevts__apiculteur=request.user)
-	#evtspasinscrits = touslesevts.difference(evtsinscrits)
-	#evtsinscrits.annotate(estinscrit=Value(True, BooleanField()))
-	#evtspasinscrits.annotate(estinscrit=Value(False, BooleanField()))
-	#evts = evtspasinscrits.union(evtsinscrits).order_by('date')
-	evts = Evenement.objects.filter(date__gte = date.today()).order_by('date')
-	for evt in evts:
-		if Inscription.objects.filter(evenement=evt,apiculteur=request.user).exists():
-			evt.estinscrit=True
-		else:
-			evt.estinscrit=False
-			
-	return render(request, 'resasfanm/listresas.html', {'les_resas':resas,'les_evts':evts})
+
+		
+	return render(request, 'resasfanm/listresas.html', {'les_resas':resas})
 
 @login_required
 @staff_member_required
@@ -429,8 +432,21 @@ def modevenement(request,idevt):
 @login_required	
 @staff_member_required
 def listevenements(request):
-	evts = Evenement.objects.filter(date__gt = date.today())
+	evts = Evenement.objects.filter(date__gt = date.today()).order_by('date')
 	return render(request, 'resasfanm/listevenements.html', {'les_evts':evts})
+
+def listevtsmembre(request):
+	if not request.user.is_authenticated:
+		doujeviens = 'listevtsmembre'
+		return redirect('login',doujeviens)
+	evts = Evenement.objects.filter(date__gte = date.today()).order_by('date')
+	for evt in evts:
+		if Inscription.objects.filter(evenement=evt,apiculteur=request.user).exists():
+			evt.estinscrit=True
+		else:
+			evt.estinscrit=False
+	
+	return render(request, 'resasfanm/listevtsmembre.html', {'les_evts':evts})
 
 @login_required
 def newinscription(request,idevt):
@@ -463,7 +479,7 @@ def newinscription(request,idevt):
 					#mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)			
 					mail.send_mail(subject, html_message, from_email, [to])				
 
-					return redirect('listresas')  # TODO: redirect to the created topic page
+					return redirect('listevtsmembre')  # TODO: redirect to the created topic page
 	else:
 		form = NewInscriptionForm()
 	return render(request, 'resasfanm/new_inscription.html', {'form': form, 'mod' : False, 'msg' : msg, 'le_evt' : evt})
@@ -485,7 +501,7 @@ def delinscription(request,idevt):
 	#mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)			
 	mail.send_mail(subject, html_message, from_email, [to])				
 	inscript.delete()
-	return redirect('listresas')  
+	return redirect('listevtsmembre')  
 
 	#return render(request, 'resasfanm/listresas.html')
 	

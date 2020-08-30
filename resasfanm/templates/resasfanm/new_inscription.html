@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'baseevt.html' %}
 
 {% load widget_tweaks %}
 {% load crispy_forms_tags %}
@@ -7,7 +7,7 @@
 {% block title %}Crée une nouvel evenement {% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'listresas' %}" >Mes réservations</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'listevtsmembre' %}" >Mes Inscriptions</a></li>
 
 {% if mod   == True %}
     <li class="breadcrumb-item active"> Modification Evenement</li>

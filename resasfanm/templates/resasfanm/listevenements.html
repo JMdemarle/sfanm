@@ -20,6 +20,7 @@
           <th>intitule</th>
           <th>Date</th>
           <th>Places </th>
+          <th>Nb participants</th>
       </tr>
     </thead>
     <tbody>
@@ -30,8 +31,10 @@
             </td>
             <td> {{ evt.date }}</td>
             <td> {{ evt.nombremax}}</td>
+            <td> {{ evt.get_nbparticipants }}</td>
             <td>  <a href="{% url 'modevenement'  evt.id %}" class="btn btn-primary">Modifer</a></td>
             <td>  <a href="{% url 'listeparticipants'  evt.id %}" class="btn btn-outline-primary">Participants</a></td>
+
 
           </tr>
       {% endfor %}

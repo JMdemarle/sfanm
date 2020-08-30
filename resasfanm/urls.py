@@ -13,9 +13,12 @@ urlpatterns = [
     path('modresa/<int:idresa>',views.modresa,name='modresa'),
     path('delresa/<int:idresa>',views.delresa,name='delresa'),
     path('affpourdelresa/<int:idresa>',views.affpourdelresa,name='affpourdelresa'),    
+    
 
     path('newevenement',views.newevenement,name='newevenement'),
     path('listevenements',views.listevenements,name='listevenements'),
+    path('listevtsmembre',views.listevtsmembre,name='listevtsmembre'),
+    
     path('modevenement/<idevt>',views.modevenement,name='modevenement'),
     path('listeparticipants/<idevt>',views.listeparticipants,name='listeparticipants'),
     

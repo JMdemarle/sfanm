@@ -242,7 +242,7 @@ class NewInscriptionForm(forms.Form):
         self.helper.layout = Layout(
              HTML("<br>"), 
              Row(
-                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'listresas'  %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
+                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'listevtsmembre'  %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
                 HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Inscription</button>"),
                 
             ),

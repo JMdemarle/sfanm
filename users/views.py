@@ -16,12 +16,11 @@ from django.views.decorators.clickjacking import xframe_options_exempt
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage, default_storage
 
-
 from django.shortcuts import render, redirect
 
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy,resolve, Resolver404
 import csv
 
 from users.models import CustomUser
@@ -29,12 +28,23 @@ from users.models import CustomUser
 from .forms import SignUpForm, ContactForm, Okpourcontinuer, SignupForm, LoginForm, MonCompteForm
 
 def signup(request):
+    url = request.GET.get("next")
     if request.method == 'GET':
         form = SignupForm()
     else:
         form = SignupForm(request.POST)
         if "cancel" in request.POST:
-            return redirect('login')
+            try:
+                resolve(url)
+                return HttpResponseRedirect(url)
+            except Resolver404: # Make sure the url comes from your project
+                if request.user.is_authenticated:
+                    if custuser.is_staff:
+                        return redirect('home')
+                    else:
+                        return redirect('listresas')
+                else:
+                    return redirect('signup')
         else:
             if form.is_valid():
                 emails = form.cleaned_data['email']
@@ -57,10 +67,11 @@ def signup(request):
                         send_mail('[SFANM] : demande adhésion', html_message, 'contact@sfanm.fr', ['contact@sfanm.fr',emails])
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
-                    return redirect('users/contactsuccess')
+                    return redirect('contactsuccess',url)
     return render(request, "users/signup.html", {'form': form})
 
 def contactView(request):
+    url = request.GET.get("next")
     if request.method == 'GET':
         form = ContactForm()
     else:
@@ -69,26 +80,40 @@ def contactView(request):
             subject = form.cleaned_data['subject']
             from_email = form.cleaned_data['from_email']
             message = form.cleaned_data['message']
-            try:
-                send_mail(subject, message, from_email, ['contact@sfanm.fr'])
-            except BadHeaderError:
-                return HttpResponse('Invalid header found.')
-            return redirect('users/contactsuccess')
+            #try:
+            #    send_mail(subject, message, from_email, ['contact@sfanm.fr'])
+            #except BadHeaderError:
+            #    return HttpResponse('Invalid header found.')
+                
+            return redirect('contactsuccess',url)
     return render(request, "users/contact_email.html", {'form': form})
 
-def successView(request):
+def successView(request,url):
     if request.method == 'GET':
         form = Okpourcontinuer()
     else:
         form = Okpourcontinuer(request.POST)
         if form.is_valid():
+            try:
+                resolve(url)
+                return HttpResponseRedirect(url)
+            except Resolver404: # Make sure the url comes from your project
+                if request.user.is_authenticated:
+                    if custuser.is_staff:
+                        return redirect('home')
+                    else:
+                        return redirect('listresas') 
+                else:
+                    return redirect('signup')
+            
             return redirect('home')
     return render(request, "users/Okpourcontinuer.html", {'form': form})
 
 @ensure_csrf_cookie
 @xframe_options_exempt
-def loginpage(request):
+def loginpage(request,doujeviens):
     #rotate_token(request)
+    #print(doujeviens)
     if request.method == 'GET':
         form = LoginForm()
     else:
@@ -107,15 +132,24 @@ def loginpage(request):
                     return redirect('home')
                     #return HttpResponseRedirect(reverse_lazy('home')) 
                 else:
-                    return redirect('listresas') 
-                    return HttpResponseRedirect(reverse_lazy('listresas')) 
+                    return redirect(doujeviens)
+                    
+                    #"return redirect('listresas') 
+                    #return HttpResponseRedirect(reverse_lazy('listresas')) 
             #return HttpResponseRedirect(self.success_url)
             
             else:
                 messages.add_message(request, messages.INFO, 'Informations de connexion erronées')
-                return render(request, 'users/login.html', {'form': form})
-    return render(request, 'users/login.html', {'form': form})
- 
+                return render(request, 'users/loginevt.html', {'form': form, 'doujeviens': doujeviens})
+    return render(request, 'users/loginevt.html', {'form': form, 'doujeviens': doujeviens})
+
+def logoutevt(request):
+     logout(request)
+     return redirect('listevtsmembre')
+     
+def logoutresa(request):
+     logout(request)
+     return redirect('listresas')     
  
 '''class loginpage(FormView):
     """login view"""
@@ -161,14 +195,19 @@ def loginpage(request):
 def mon_compte(request):
     msg = ''
     custuser = request.user
+    url = request.GET.get("next")
 
     if request.method == 'POST':
         form = MonCompteForm(request.POST, initial={'le_user' : custuser})
         if "cancel" in request.POST:
-            if custuser.is_staff:
-                return redirect('home')
-            else:
-                return redirect('listresas') 
+            try:
+                resolve(url)
+                return HttpResponseRedirect(url)
+            except Resolver404: # Make sure the url comes from your project
+                if custuser.is_staff:
+                    return redirect('home')
+                else:
+                    return redirect('listresas') 
         else:
             if form.is_valid():
                 custuser.nom = form.cleaned_data['nom']
@@ -179,10 +218,15 @@ def mon_compte(request):
                 custuser.ville = form.cleaned_data['ville']
                 custuser.telephone = form.cleaned_data['telephone']
                 custuser.save()
-                if custuser.is_staff:
-                    return redirect('home')
-                else:
-                    return redirect('listresas') 
+                try:
+                    resolve(url)
+                    return HttpResponseRedirect(url)
+                except Resolver404: # Make sure the url comes from your project
+                
+                    if custuser.is_staff:
+                        return redirect('home')
+                    else:
+                        return redirect('listresas') 
     else:
         form = MonCompteForm(initial={'le_user' : custuser})
     return render(request, 'users/moncompte.html', {'form': form, 'mod' : True, 'msg' : msg})
@@ -225,18 +269,20 @@ def simple_upload(request):
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
         filepath = fs.location + '/' + myfile.name
-        with open(filepath, encoding='latin-1') as f:
+        # encod latin-1
+        with open(filepath, encoding='utf') as f:
             reader = csv.reader(f, delimiter=';')
             for row in reader:
                 custuser = CustomUser()
-                custuser.email = row[0]
+                custuser.email = row[3]
                 custuser.nom = row[1]
 
                 custuser.prenom = row[2]
-                custuser.adresse1 = row[3]
-                custuser.adresse2 = row[4]
+                custuser.adresse1 = row[4]
+                custuser.adresse2 = ''
                 custuser.codepostal = row[5]
                 custuser.ville = row[6]
+                custuser.telephone =row[8]
                 custuser.is_active = True
                 custuser.save()
                 '''try:

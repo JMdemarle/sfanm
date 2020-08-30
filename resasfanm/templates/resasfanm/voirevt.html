@@ -1,8 +1,8 @@
 
-{% extends 'base.html' %}
+{% extends 'baseevt.html' %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'listresas' %}" >Mes réservations</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'listevtsmembre' %}" >Mes Inscriptions</a></li>
   
   <li class="breadcrumb-item active">Voir évènement</li>
 {% endblock %}
@@ -33,7 +33,7 @@
     
   <br><br> 
    <div class="row">
-    <div class="col-lg-2 col-sm-3"><a href="{% url 'listresas'  %}" class="btn btn-outline-primary">Revenir</a></div>
+    <div class="col-lg-2 col-sm-3"><a href="{% url 'listevtsmembre'  %}" class="btn btn-outline-primary">Revenir</a></div>
   </div>
 
  
