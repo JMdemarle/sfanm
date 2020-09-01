@@ -1,0 +1,49 @@
+
+{% extends 'baseevt.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Les évênements</li>
+
+{% endblock %}
+
+{% block content %}
+
+   <div class="row">
+
+  </div>
+  <br>
+  <br>
+
+
+ <h2> Les évènements à la SFANM</h2>
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+          <th>Date</th>
+          <th>libellé</th>
+          <th>Places libres</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for evt in les_evts %}
+     
+          <tr>
+
+            <td> {{ evt.date }}</td>
+            <td> {{ evt.intitule }}</td>
+            <td> {{ evt.get_placeslibres }}</td>
+
+          </tr>
+      {% empty %}
+        <p>Il n'y a pas de formation/évènement planifié</p>
+      {% endfor %}
+    </tbody>
+  </table>
+  <br>
+  <div class="row">
+    <a href="{% url 'login' 'listevtsmembre' %}" class="btn btn-outline-primary col-lg-3">Se connecter</a>
+    <a href="{% url 'password_reset_evt' %} " class="btn btn-outline-danger col-lg-3">Mot de passe oublié</a>
+    <a href="{% url 'signup' %}?next=/resasfanm/listevts" class="btn btn-outline-success col-lg-3">Adhérer à la station</a>
+    <a href="{% url 'contact' %}?next=/resasfanm/listevts" class="btn btn-outline-info col-lg-3">Nous contacter</a>
+  </div>
+{% endblock %}

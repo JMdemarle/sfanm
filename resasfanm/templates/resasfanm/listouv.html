@@ -1,0 +1,38 @@
+
+{% extends 'baseresa.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Dates de depôt</li>
+{% endblock %}
+
+{% block content %}
+
+  <h3>Dates auxquelles un dépot est possible</h3>  
+  <br>
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+          <th>Date Dépot</th>
+          <th>Places totales</th>
+          <th>Places dispos</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for capacite in les_capacites %}
+          <tr>
+            <td> {{ capacite.datecapa }} </td>
+            <td> {{ capacite.nreinesmax }}</td>
+            <td> {{ capacite.get_reinesdispos}}</td>
+ 
+          </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <div class="row">
+    <a href="{% url 'login' 'listresas' %}" class="btn btn-outline-primary col-lg-3">Se connecter</a>
+    <a href="{% url 'password_reset_resa' %} " class="btn btn-outline-danger col-lg-3">Mot de passe oublié</a>
+    <a href="{% url 'signup' %}?next=/resasfanm/listouv" class="btn btn-outline-success col-lg-3">Adhérer à la station</a>
+    <a href="{% url 'contact' %}?next=/resasfanm/listouv" class="btn btn-outline-info col-lg-3">Nous contacter</a>
+  </div>  
+{% endblock %}

@@ -234,6 +234,17 @@ def listcapacites(request):
 	capacites = Capacite.objects.filter(depotpossible=True).filter(datecapa__gt = date.today()).exclude(datecapa__in=datesreservees)
 	return render(request, 'resasfanm/capacites.html', {'les_capacites':capacites})
 
+
+def listouv(request):
+#  affiche les dates d'ouverture de la station (pas besoin d'authentification
+	if request.user.is_authenticated:
+		return redirect('listresas')
+
+	capacites = Capacite.objects.filter(depotpossible=True).filter(datecapa__gt = date.today())
+	return render(request, 'resasfanm/listouv.html', {'les_capacites':capacites})
+
+	
+	
 def listresas(request):
 #  affiche les réservations de l'apiculteur et les évènements
 	if not request.user.is_authenticated:
@@ -447,6 +458,13 @@ def listevtsmembre(request):
 			evt.estinscrit=False
 	
 	return render(request, 'resasfanm/listevtsmembre.html', {'les_evts':evts})
+
+def listevts(request):
+	if request.user.is_authenticated:
+		return redirect('listevtsmembre')
+	evts = Evenement.objects.filter(date__gte = date.today()).order_by('date')
+	
+	return render(request, 'resasfanm/listevts.html', {'les_evts':evts})
 
 @login_required
 def newinscription(request,idevt):

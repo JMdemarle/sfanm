@@ -12,7 +12,7 @@
       <div class="col-lg-4 col-md-6 col-sm-8">
         <div class="card">
           <div class="card-body">
-            <h3 class="card-title">Entrez vos identifiants {{doujeviens}}</h3>
+            <h3 class="card-title">Entrez vos identifiants</h3>
             {% for message in messages %}
               <div class="alert {{ message.tags }} alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -29,7 +29,7 @@
           </div>
           <div class="card-footer text-center py-2">
             {% if doujeviens == 'listresas' %}
-               <a href="{% url 'password_reset_resa' %}" >Mot de passe oublié (résa)</a>
+               <a href="{% url 'password_reset_resa' %}" >Mot de passe oublié</a>
             
             {% else %}
                <a href="{% url 'password_reset_evt' %}" >Mot de passe oublié</a>
@@ -37,7 +37,7 @@
           </div>
           
           <div class="card-footer text-center">
-             <a href="{% url 'signup' %}?next={{ request.path }}">Adhérer zà la station</a>
+             <a href="{% url 'signup' %}?next={{ request.path }}">Adhérer à la station</a>
           </div>
           <div class="card-footer text-center">
              <a href="{% url 'contact' %}?next={{ request.path }}">Nous contacter</a>

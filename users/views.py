@@ -145,11 +145,11 @@ def loginpage(request,doujeviens):
 
 def logoutevt(request):
      logout(request)
-     return redirect('listevtsmembre')
+     return redirect('listevts')
      
 def logoutresa(request):
      logout(request)
-     return redirect('listresas')     
+     return redirect('listouv')     
  
 '''class loginpage(FormView):
     """login view"""

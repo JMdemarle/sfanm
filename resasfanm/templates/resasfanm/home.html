@@ -11,17 +11,19 @@
 
 <h1>Menu administrateur SFANM</h1>
 
-<h2>Gestion de mes réservations</h2>
+<h2>Gestion de mes réservations et inscriptions</h2>
 <a href="{% url 'listresas'  %}" >Liste de mes réservations</a>
+<br>
+<a href="{% url 'listresas'  %}" >Liste de mes inscriptions</a>
 <br>
 <br>
 <br>
 <h2>Menu administration</h2>
-<a href="{% url 'listgestion'  %}" >Gestion de la station</a>
+<a href="{% url 'listgestion'  %}" >Visualisation de l'occupation de la station</a>
 <br>
-<a href="{% url 'listevenements'  %}" >Gestion des évênements</a>
+<a href="{% url 'listevenements'  %}" >Gestion des formations</a>
 <br>
-<a href="{% url 'admin:resasfanm_capacite_changelist'  %}" >Gestion des ouvertures</a>
+<a href="{% url 'admin:resasfanm_capacite_changelist'  %}" >Gestion des dates d'ouvertures</a>
 <br>
 <a href="{% url 'admin:users_customuser_changelist'  %}" >Gestion des membres</a>
 
