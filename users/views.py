@@ -80,10 +80,10 @@ def contactView(request):
             subject = form.cleaned_data['subject']
             from_email = form.cleaned_data['from_email']
             message = form.cleaned_data['message']
-            #try:
-            #    send_mail(subject, message, from_email, ['contact@sfanm.fr'])
-            #except BadHeaderError:
-            #    return HttpResponse('Invalid header found.')
+            try:
+                send_mail(subject, message, from_email, ['contact@sfanm.fr'])
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
                 
             return redirect('contactsuccess',url)
     return render(request, "users/contact_email.html", {'form': form})
