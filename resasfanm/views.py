@@ -509,10 +509,10 @@ def affpourdelinscription(request,idevt):
 
 @login_required		
 def delinscription(request,idevt):
-	#evt = Evenement.objects.get(id=idevt)
+	evt = Evenement.objects.get(id=idevt)
 	inscript = Inscription.objects.get(evenement=idevt,apiculteur=request.user.id)
-	subject = 'SFANM - Confirmation d"annulation de réservation'
-	html_message = render_to_string('resasfanm/mailconfirmationannulinscription.html', {'la_inscript' : inscript})
+	subject = 'SFANM - Confirmation d"annulation d"inscription'
+	html_message = render_to_string('resasfanm/mailconfirmationannulinscription.html', {'le_evt' : evt})
 	#plain_message = strip_tags(html_message)
 	from_email = 'SFANM <contact@sfanm.fr>'
 	to = request.user.email
