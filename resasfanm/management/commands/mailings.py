@@ -21,7 +21,7 @@ class Command(BaseCommand):
 		html_message = render_to_string('resasfanm/maildepot.html', {'la_resa': resa})
 		from_email = 'SFANM <contact@sfanm.fr>'
 		to = resa.apiculteur.email
-		#mail.send_mail(subject, html_message, from_email, [to])				
+		mail.send_mail(subject, html_message, from_email, [to])				
 		
 	def mailretrait(self, resa):
 		print(resa.apiculteur.nom)
@@ -29,7 +29,7 @@ class Command(BaseCommand):
 		html_message = render_to_string('resasfanm/mailretrait.html', {'la_resa': resa})
 		from_email = 'SFANM <contact@sfanm.fr>'
 		to = resa.apiculteur.email
-		#mail.send_mail(subject, html_message, from_email, [to])
+		mail.send_mail(subject, html_message, from_email, [to])
 		
 	def construitlistdest(self, evt, destin):
 		mbrs = CustomUser.objects.filter(is_active = True)
