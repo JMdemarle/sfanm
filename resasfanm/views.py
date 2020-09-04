@@ -177,6 +177,14 @@ def modresa(request,idresa):
 		if nbreinedemand > request.user.nbreinesmax:
 			resaok = False
 			msg += 'Vous dépassez votre quotat de ' + str(request.user.nbreinesmax) + ' reines'	
+		nbtypfecond1 = form.cleaned_data['nbtypfecond1']
+		nbtypfecond2 = form.cleaned_data['nbtypfecond2']
+		nbtypfecond3 = form.cleaned_data['nbtypfecond3']
+		nbtypfecond4 = form.cleaned_data['nbtypfecond4']
+		if (nbtypfecond1 + nbtypfecond2 + nbtypfecond3 + nbtypfecond4) > nbreinedemand:
+			resaok = False
+			msg += 'Le nombre de ruches est supérieur à celui des reines !  '	
+			
 		if (resaok):
 			#reservation = Reservation()
 			resam.apiculteur = request.user
