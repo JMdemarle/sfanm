@@ -31,21 +31,20 @@ class Command(BaseCommand):
 		to = resa.apiculteur.email
 		mail.send_mail(subject, html_message, from_email, [to])
 		
-	def construitlistdest(self, evt, destin):
-		mbrs = CustomUser.objects.filter(is_active = True)
-		bcc = []
-		for mbr in mbrs:
+	def maildest(self, mbr, evt, destin):
 			# 0 tous les membres
-			if (destin == 0):
-				bcc.append(mbr.email)
-			# 1 les inscrits
-			elif (destin == 1):
-				if Inscription.objects.filter(evenement=evt,apiculteur=mbr).exists():
-					bcc.append(mbr.email)
-			elif (destin == 2):
-				if not Inscription.objects.filter(evenement=evt,apiculteur=mbr).exists():
-					bcc.append(mbr.email)
-		return bcc
+		AEnvoyer = False
+		if (destin == 0):
+			AEnvoyer = True
+		# 1 les inscrits
+		elif (destin == 1):
+			if Inscription.objects.filter(evenement=evt,apiculteur=mbr).exists():
+				AEnvoyer = True
+		# les non inscrits
+		elif (destin == 2):
+			if not Inscription.objects.filter(evenement=evt,apiculteur=mbr).exists():
+				AEnvoyer = True
+		return AEnvoyer
 
 			
 		
@@ -59,25 +58,25 @@ class Command(BaseCommand):
 				print('non existe')
 			else:
 				print('existe')
-				todestbcc = self.construitlistdest(evt, destmail)
-				print('retour calc dest')
-				print (todestbcc)
-				subject = natmail.objet + ' - ' + evt.intitule
-				print(subject)
-				html_message = render_to_string(templa, {'le_evt': evt})
-				print(html_message)
-				from_email = 'SFANM <contact@sfanm.fr>'
-				try:
-				#mail.send_mail(subject, html_message, from_email, [to])
-					message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=['contact@sfanm.fr'],bcc=todestbcc)
-				except Exception as e: print(e)
-				else:
-					print ('message préparé')
-					#message.content_subtype = "text/plain"
-					try:
-						message.send() 
-					except:
-						print('pb envoi')
+				# boucle sur les membres
+				mbrs = CustomUser.objects.filter(is_active = True)
+				for mbr in mbrs:
+					if self.maildest(mbr, evt, destmail):
+						subject = natmail.objet + ' - ' + evt.intitule
+						html_message = render_to_string(templa, {'le_evt': evt})
+						print(html_message)
+						from_email = 'SFANM <contact@sfanm.fr>'
+						try:
+						#mail.send_mail(subject, html_message, from_email, [to])
+							message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[mbr.email])
+						except Exception as e: print(e)
+						else:
+							print ('message préparé')
+							#message.content_subtype = "text/plain"
+							try:
+								message.send() 
+							except:
+								print('pb envoi')
 						
 
 	def handle(self, *args, **kwargs):
