@@ -7,16 +7,9 @@ body {
   background-color: transparent;
 }
 
-.card-body {
-  background-color: transparent;
-}
-
-.card {
-  background-color: transparent;
-}
 
 .special-card {
-            background-color: rgba(245, 245, 245, 0.4) !important;
+            background-color: rgba(245, 245, 245, 0.4);
         }
 
 .logo {
