@@ -4,11 +4,11 @@ body {
 
 
 .container {
-  background-color: #EBEBEB;
+  background-color: transparent;
 }
 
 .card-body {
-  background-color: pink;
+  background-color: transparent;
 }
 
 .logo {
