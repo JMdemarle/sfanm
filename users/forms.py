@@ -50,8 +50,8 @@ class SignupForm(forms.Form):
             ),
              HTML("<br>"), 
              Row(
-                Submit('cancel', 'Annuler',css_class='form-group col-md-4 mb-0 btn-info',formnovalidate='formnovalidate',),
-                Submit('submit', 'Soumettre',css_class='form-group col-md-4 mb-0 btn-danger'),
+                Submit('cancel', 'Annuler',css_class='form-group col-lg-3 col-md-4 mb-0 btn-info',formnovalidate='formnovalidate',),
+                Submit('submit', 'Soumettre',css_class='form-group col-lg-3 col-md-4 mb-0 btn-danger'),
                 css_class='form-row'
             ),
 
