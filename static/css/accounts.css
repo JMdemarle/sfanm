@@ -1,5 +1,5 @@
 body {
-  background-image: url(../img/light_honeycomb.png);
+  background-color: transparent;
 }
 
 
@@ -7,6 +7,9 @@ body {
   background-color: #EBEBEB;
 }
 
+.card-body {
+  background-color: pink;
+}
 
 .logo {
   font-family: 'Peralta', cursive;
