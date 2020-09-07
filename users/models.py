@@ -46,7 +46,7 @@ class CustomUser(AbstractUser):
 	nom = models.CharField(max_length=25,null=False,default='.')
 	prenom = models.CharField(max_length=25,null=False,default='.')
 	adresse1 = models.CharField(max_length=40,null=False,default='.')
-	adresse2 = models.CharField(max_length=40,null=True,default='.')
+	adresse2 = models.CharField(max_length=40,null=True,blank=True)
 	codepostal = models.IntegerField(default = 0,null=False)
 	ville = models.CharField(max_length=35,null=False,default='.')
 	telephone = models.CharField(max_length=15,null=True,default='.')
