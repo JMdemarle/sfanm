@@ -32,8 +32,8 @@
             <td> {{ resa.dateretrait }}</td>
             <td> {{ resa.nbruches }}</td>
             <td> {{ resa.nbreine }}</td>
-            <td><a href="{% url 'modresa' resa.id %}" class="btn btn-primary">Modifier</a></td>
-            <td><a href="{% url 'affpourdelresa' resa.id %}" class="btn btn-danger">Annuler</a></td>
+            <td><a href="{% url 'modresa' resa.id %}" class="btn btn-primary">Modifier Réservation</a></td>
+            <td><a href="{% url 'affpourdelresa' resa.id %}" class="btn btn-danger">Annuler Réservation</a></td>
             
           </tr>
       {% empty %}
