@@ -39,10 +39,10 @@ class NewReservationForm(forms.Form):
                 Column('dateretrait', css_class='form-group col-md-3 mb-0'),
             ),
             Row(
-                Column('nbtypfecond1', css_class='form-group col-md-3 mb-0'),
-                Column('nbtypfecond2', css_class='form-group col-md-3 mb-0'),
-                Column('nbtypfecond3', css_class='form-group col-md-3 mb-0'),
-                Column('nbtypfecond4', css_class='form-group col-md-3 mb-0'),
+                Column('nbtypfecond1', css_class='form-group col-lg-3 col-md-6 mb-0'),
+                Column('nbtypfecond2', css_class='form-group col-lg-3 col-md-6 mb-0'),
+                Column('nbtypfecond3', css_class='form-group col-lg-3 col-md-6 mb-0'),
+                Column('nbtypfecond4', css_class='form-group col-lg-3 col-md-6 mb-0'),
             ),
             HTML("<br>"),
             Row(
