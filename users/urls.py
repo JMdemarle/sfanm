@@ -16,6 +16,12 @@ urlpatterns = [
     path('logoutevt', views.logoutevt, name='logoutevt'),
     path('logoutresa', views.logoutresa, name='logoutresa'),
 
+    path('listmembres',views.listmembres,name='listmembres'),   
+    path('mailacquit/<int:membreid>',views.mailacquit,name='mailacquit'),
+    path('membresrazacquitte',views.membresrazacquitte,name='membresrazacquitte'),
+    path('modmembre/<int:membreid>',views.modmembre,name='modmembre'),
+    
+
 
     path('mon_compte',views.mon_compte,name='mon_compte'),
     

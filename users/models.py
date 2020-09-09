@@ -51,6 +51,8 @@ class CustomUser(AbstractUser):
 	ville = models.CharField(max_length=35,null=False,default='.')
 	telephone = models.CharField(max_length=15,null=True,default='.')
 	nbreinesmax = models.IntegerField(default = 10,null=False)
+	acquitte = models.BooleanField(default = False, null = False)
+	
 
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = []

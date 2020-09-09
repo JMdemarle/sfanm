@@ -57,6 +57,37 @@ class SignupForm(forms.Form):
 
         )
 
+
+class ModMembreForm(forms.Form):
+    is_active = forms.BooleanField(required=False, label ='actif')
+    nbreinesmax = forms.IntegerField(required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        initial_arguments = kwargs.get('initial', None)
+        self.le_membre = initial_arguments.get('le_membre',None)
+        
+        self.fields['is_active'].initial = self.le_membre.is_active
+        self.fields['acquitte'].initial = self.le_membre.acquitte
+        self.fields['nbreinesmax'].initial = self.le_membre.nbreinesmax
+        
+  
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('is_active', css_class='form-group col-lg-4 col-md-4 mb-0'),
+                Column('acuitte', css_class='form-group col-lg-4 col-md-4 mb-0'),
+                Column('nbreinesmax', css_class='form-group col-lg-4 col-md-4 mb-0'),
+
+            ),
+             HTML("<br>"), 
+             Row(
+                Submit('cancel', 'Annuler',css_class='form-group col-md-4 mb-0 btn-info',formnovalidate='formnovalidate',),
+                Submit('submit', 'Soumettre',css_class='form-group col-md-4 mb-0 btn-danger'),
+                css_class='form-row'
+            ),
+        )
+
+
 class MonCompteForm(forms.Form):
     nom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
     prenom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))

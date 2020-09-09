@@ -7,6 +7,7 @@ from django.template.loader import render_to_string
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -19,13 +20,71 @@ from django.core.files.storage import FileSystemStorage, default_storage
 from django.shortcuts import render, redirect
 
 from django.core.mail import send_mail, BadHeaderError
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy,resolve, Resolver404
 import csv
 
 from users.models import CustomUser
 
-from .forms import SignUpForm, ContactForm, Okpourcontinuer, SignupForm, LoginForm, MonCompteForm
+from .forms import SignUpForm, ContactForm, Okpourcontinuer, SignupForm, LoginForm, MonCompteForm, ModMembreForm
+
+@staff_member_required
+def listmembres(request):
+    if not request.user.is_authenticated:
+        doujeviens = 'listmembres'
+        return redirect('login',doujeviens)
+    membres = CustomUser.objects.all().order_by('nom')
+    return render(request, 'users/listmembres.html', {'les_membres':membres})
+
+@login_required	
+@staff_member_required    
+def mailacquit(request,membreid):
+    membre = CustomUser.objects.get(id=membreid)
+    membre.is_active = True
+    membre.acquitte = True
+    membre.save()
+    subject = 'SFANM - Confirmation d Adhésion'
+    html_message = render_to_string('users/mailconfirmationadhesion.html', {'le_user' : membre})
+	#plain_message = strip_tags(html_message)
+    from_email = 'SFANM <contact@sfanm.fr>'
+    to = membre.email
+	#mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)			
+    send_mail(subject, html_message, from_email, ['contact@sfanm.fr',to])	
+    return redirect('contactsuccess','/users/listmembres')
+	#return redirect('listmembres')  
+
+@login_required	
+@staff_member_required
+def membresrazacquitte(request):
+    membres = CustomUser.objects.all()
+    for membre in membres:
+        membre.acquitte = False
+        membre.save()
+
+
+@login_required	
+@staff_member_required
+def modmembre(request,membreid):
+    membre = CustomUser.objects.get(id=membreid)
+    print(membre.nom)
+    form = ModMembreForm(request.POST, initial={'le_membre' : membre})
+    if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('listmembres')
+        else:
+            if form.is_valid():
+                print('form is valid')
+                membre.is_active = form.cleaned_data['is_active']
+                membre.nbreinesmax = form.cleaned_data['nbreinesmax']
+                membre.acquitte = form.cleaned_data['acquitte']
+                
+                membre.save()
+                return redirect('listmembres')
+    else:
+        form = ModMembreForm(initial={'le_membre' : membre})
+    return render(request, 'users/modmembre.html', {'form': form,'le_membre': membre})
+
 
 def signup(request):
     url = request.GET.get("next")
