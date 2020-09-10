@@ -1,0 +1,19 @@
+{% extends 'baseadmin.html' %}
+
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Crée une nouvel evenement {% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'listmembres' %}" >Les adhérents</a></li>
+    <li class="breadcrumb-item active"> Modification Adhérent</li>
+
+{% endblock %}
+
+
+{% block content %}
+<p>{{le_membre.nom}}</p>
+  {% crispy form %}
+{% endblock %}

@@ -1,0 +1,42 @@
+
+{% extends 'baseadmin.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Liste des adhérents</li>
+{% endblock %}
+
+{% block content %}
+  <h3>Membres de la station</h3>
+  <br>
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+          <th>nom</th>
+          <th>prenom</th>
+          <th>email </th>
+          <th>nb reines</th>
+          <th>actif</th>
+          <th>reçu</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for membre in les_membres %}
+          <tr>
+            <td>
+              {{ membre.nom }}
+            </td>
+            <td> {{ membre.prenom }}</td>
+            <td> {{ membre.email }}</td>
+            <td> {{ membre.nbreinesmax }}</td>
+            <td> {{ membre.is_active|yesno:"oui,non" }}</td>
+            <td> {{ membre.acquitte|yesno:"oui,non" }}</td>
+            
+            <td><a href="{% url 'mailacquit' membre.id %}" class="btn btn-outline-primary">envoi reçu</a></td>
+            <td><a href="{% url 'modmembre' membre.id %}" class="btn btn-outline-primary">Modifier</a></td>
+            
+          </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
