@@ -10,7 +10,8 @@ from django.urls import reverse_lazy
 
 urlpatterns = [
     #path('login', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
-    path('login/<str:doujeviens>', views.loginpage, name='login'),
+    path('loginm/<str:doujeviens>', views.loginpage, name='loginm'),
+    path('login', views.login, name='login'),
     
     path('logout', auth_views.LogoutView.as_view(), name='logout'),
     path('logoutevt', views.logoutevt, name='logoutevt'),
@@ -19,6 +20,8 @@ urlpatterns = [
     path('listmembres',views.listmembres,name='listmembres'),   
     path('mailacquit/<int:membreid>',views.mailacquit,name='mailacquit'),
     path('membresrazacquitte',views.membresrazacquitte,name='membresrazacquitte'),
+    path('razacquitte',views.razacquitte,name='razacquitte'),
+    
     path('modmembre/<int:membreid>',views.modmembre,name='modmembre'),
     
 
@@ -67,6 +70,7 @@ urlpatterns = [
         name='password_reset_complete'),
     path('contact', views.contactView, name='contact'),
     path('contactsuccess<path:url>', views.successView, name='contactsuccess'),
+    path('signupsuccess', views.signupsuccess, name='signupsuccess'),
 
     path('upload',views.simple_upload,name='upload'),
         

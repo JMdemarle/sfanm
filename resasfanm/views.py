@@ -45,7 +45,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.rl_config import defaultPageSize
 
 # Create your views here.
-#@login_required
+@login_required
 def home(request):
 	'''	username = request.META.get('REMOTE_USER_VAR')
 	for el in request.META:
@@ -265,7 +265,7 @@ def listresas(request):
 #  affiche les réservations de l'apiculteur et les évènements
 	if not request.user.is_authenticated:
 		doujeviens = 'listresas'
-		return redirect('login',doujeviens)
+		return redirect('loginm',doujeviens)
 	
 	resas = Reservation.objects.filter(apiculteur=request.user).order_by('datedepot')
 
@@ -465,7 +465,7 @@ def listevenements(request):
 def listevtsmembre(request):
 	if not request.user.is_authenticated:
 		doujeviens = 'listevtsmembre'
-		return redirect('login',doujeviens)
+		return redirect('loginm',doujeviens)
 	evts = Evenement.objects.filter(date__gte = date.today()).order_by('date')
 	for evt in evts:
 		if Inscription.objects.filter(evenement=evt,apiculteur=request.user).exists():

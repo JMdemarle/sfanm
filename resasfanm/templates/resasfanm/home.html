@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'baseadmin.html' %}
 
 {% load widget_tweaks %}
 {% load crispy_forms_tags %}
@@ -21,9 +21,13 @@
 <h2>Menu administration</h2>
 <a href="{% url 'listgestion'  %}" >Visualisation de l'occupation de la station</a>
 <br>
+<a href="{% url 'admin:resasfanm_capacite_changelist'  %}" >Gestion des dates d'ouvertures</a>
+<br>
 <a href="{% url 'listevenements'  %}" >Gestion des formations</a>
 <br>
-<a href="{% url 'admin:resasfanm_capacite_changelist'  %}" >Gestion des dates d'ouvertures</a>
+<a href="{% url 'listmembres'  %}" >Listes des membres - reçus et droit d accès</a>
+<br>
+<a href="{% url 'razacquitte'  %}" >Réinitialisation des reçus (début d'année)</a>
 <br>
 <a href="{% url 'admin:users_customuser_changelist'  %}" >Gestion des membres</a>
 

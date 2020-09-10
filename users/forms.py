@@ -60,6 +60,7 @@ class SignupForm(forms.Form):
 
 class ModMembreForm(forms.Form):
     is_active = forms.BooleanField(required=False, label ='actif')
+    acquitte = forms.BooleanField(required=False, label ='reçu envoyé')
     nbreinesmax = forms.IntegerField(required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -75,7 +76,7 @@ class ModMembreForm(forms.Form):
         self.helper.layout = Layout(
             Row(
                 Column('is_active', css_class='form-group col-lg-4 col-md-4 mb-0'),
-                Column('acuitte', css_class='form-group col-lg-4 col-md-4 mb-0'),
+                Column('acquitte', css_class='form-group col-lg-4 col-md-4 mb-0'),
                 Column('nbreinesmax', css_class='form-group col-lg-4 col-md-4 mb-0'),
 
             ),

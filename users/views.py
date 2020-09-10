@@ -61,7 +61,12 @@ def membresrazacquitte(request):
     for membre in membres:
         membre.acquitte = False
         membre.save()
+    return redirect('listmembres')
 
+@login_required	
+@staff_member_required
+def razacquitte(request):
+    return render(request, 'users/razacquitte.html')
 
 @login_required	
 @staff_member_required
@@ -126,7 +131,7 @@ def signup(request):
                         send_mail('[SFANM] : demande adhésion', html_message, 'contact@sfanm.fr', ['contact@sfanm.fr',emails])
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
-                    return redirect('contactsuccess',url)
+                    return redirect('signupsuccess',url)
     return render(request, "users/signup.html", {'form': form})
 
 def contactView(request):
@@ -168,9 +173,13 @@ def successView(request,url):
             return redirect('home')
     return render(request, "users/Okpourcontinuer.html", {'form': form})
 
+def signupsuccess(request,url):
+   return render(request, 'users/okstop.html')
+
 @ensure_csrf_cookie
 @xframe_options_exempt
 def loginpage(request,doujeviens):
+    # lgon pour menu réservations et menu formation
     #rotate_token(request)
     #print(doujeviens)
     if request.method == 'GET':
@@ -201,6 +210,36 @@ def loginpage(request,doujeviens):
                 messages.add_message(request, messages.INFO, 'Informations de connexion erronées')
                 return render(request, 'users/loginevt.html', {'form': form, 'doujeviens': doujeviens})
     return render(request, 'users/loginevt.html', {'form': form, 'doujeviens': doujeviens})
+
+@ensure_csrf_cookie
+@xframe_options_exempt
+def login(request):
+# login pour admin
+    #rotate_token(request)
+    #print(doujeviens)
+    if request.method == 'GET':
+        form = LoginForm()
+    else:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username,password=password)
+        #if post:
+            #email = request.POST['emai']
+            #request.session['email'] = username
+            #return redirect("home")
+            if user is not None:
+                auth_login(request, user)
+                if user.is_staff:
+                    return redirect('home')
+            
+            else:
+                messages.add_message(request, messages.INFO, 'Informations de connexion erronées')
+                return render(request, 'users/loginevt.html', {'form': form})
+    return render(request, 'users/loginevt.html', {'form': form})
+
+
 
 def logoutevt(request):
      logout(request)
