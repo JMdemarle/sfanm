@@ -48,7 +48,7 @@ class NewReservationForm(forms.Form):
             Row(
 
                 HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'capacites'  %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
-                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Créer</button>"),
+                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Réserver</button>"),
             ),
         )
 

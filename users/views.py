@@ -103,7 +103,7 @@ def signup(request):
                 return HttpResponseRedirect(url)
             except Resolver404: # Make sure the url comes from your project
                 if request.user.is_authenticated:
-                    if custuser.is_staff:
+                    if request.user.is_staff:
                         return redirect('home')
                     else:
                         return redirect('listresas')
