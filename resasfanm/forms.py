@@ -26,10 +26,10 @@ class NewReservationForm(forms.Form):
 #        self.fields['dateretrait'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'},format=('%Y-%m-%d')))
         self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix) 
 
-        self.fields['nbtypfecond1'] = forms.IntegerField(label = 'Nombre Apidéa/Kieler  ', required = True)
-        self.fields['nbtypfecond2'] = forms.IntegerField(label = 'Nombre MiniPlus       ', required = True)
-        self.fields['nbtypfecond3'] = forms.IntegerField(label = 'Nombre Warré          ', required = True)
-        self.fields['nbtypfecond4'] = forms.IntegerField(label = 'Nombre Ruchette-dadant', required = True)
+        self.fields['nbtypfecond1'] = forms.IntegerField(label = 'Nombre Apidéa/Kieler  ', required = True,initial='0')
+        self.fields['nbtypfecond2'] = forms.IntegerField(label = 'Nombre MiniPlus       ', required = True,initial='0')
+        self.fields['nbtypfecond3'] = forms.IntegerField(label = 'Nombre Warré          ', required = True,initial='0')
+        self.fields['nbtypfecond4'] = forms.IntegerField(label = 'Nombre Ruchette-dadant', required = True,initial='0')
         
         self.helper = FormHelper()
         self.helper.layout = Layout(
