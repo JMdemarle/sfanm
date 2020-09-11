@@ -1,11 +1,16 @@
 
-{% extends 'base.html' %}
+{% extends 'baseevt.html' %}
 
+      {% if user.is_staff %}
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'listevtsmembre' %}" >Mes Inscription</a></li>
-  
-  <li class="breadcrumb-item active">Annulation</li>
+
+          <li class="breadcrumb-item"><a href="{% url 'listevtsmembre' %}" >Mes Inscription</a></li>
+          <li class="breadcrumb-item active">Annulation</li>
+
+
 {% endblock %}
+      {% endif %}
+
 
 {% block content %}
 
