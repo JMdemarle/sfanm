@@ -113,7 +113,8 @@ def signup(request):
             if form.is_valid():
                 emails = form.cleaned_data['email']
                 if CustomUser.objects.filter(email=emails).exists(): # return True/False
-                    messages.add_message(request, messages.ERROR, 'le compte existe. Identifiez-vous ou utliser le formulaire de contact')
+                    messages.add_message(request, messages.ERROR, 'Le compte existe.')
+                    messages.add_message(request, messages.ERROR, 'Identifiez-vous ou utliser le formulaire de contact')
                 else:
                     custuser = CustomUser()
                     custuser.email = emails
