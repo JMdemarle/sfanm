@@ -1,10 +1,13 @@
 
 {% extends 'baseresa.html' %}
 
-{% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'listresas' %}" >Mes réservations</a></li>
-  <li class="breadcrumb-item active">Dates de depôt</li>
-{% endblock %}
+{% if user.is_staff %}
+
+  {% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'listresas' %}" >Mes réservations</a></li>
+    <li class="breadcrumb-item active">Dates de depôt</li>
+  {% endblock %}
+{% endif %}
 
 {% block content %}
 

@@ -1,10 +1,12 @@
 
 {% extends 'baseresa.html' %}
+    {% if user.is_staff %}
 
-{% block breadcrumb %}
-  <li class="breadcrumb-item active">Mes reservations</li>
+      {% block breadcrumb %}
+      <li class="breadcrumb-item active">Mes reservations</li>
 
-{% endblock %}
+      {% endblock %}
+    {% endif %}
 
 {% block content %}
 
