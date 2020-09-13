@@ -16,6 +16,11 @@ body {
   color: rgba(0,0,0,.9);
 }
 
+input, textarea{
+    background-color:#DAF7A6;
+    color: #000000;
+}
+
 .logo a:hover,
 .logo a:active {
   text-decoration: none;

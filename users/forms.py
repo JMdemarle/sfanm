@@ -24,6 +24,7 @@ class ContactForm(forms.Form):
 class SignupForm(forms.Form):
     email = forms.EmailField(required=True, label = 'Votre mail',widget=forms.TextInput(attrs={'class': 'form-control'}))
     nom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+#    nom = forms.CharField(max_length=25, required=True)
     prenom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
     adresse1 = forms.CharField(max_length=40, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
     adresse2 = forms.CharField(max_length=40, required=False,widget=forms.TextInput(attrs={'class': 'form-control'}))

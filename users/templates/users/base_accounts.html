@@ -12,7 +12,18 @@
 </head>   
 
 {% block stylesheet %}
-  <link rel="stylesheet" href="{% static 'css/accounts.css' %}">
+<!--  <link rel="stylesheet" href="{% static 'css/accounts.css' %}">  -->
+    <style>    
+    body {
+      background-color: transparent;
+    }
+    input[type="text"], textarea{
+    background-color:#DAF7A6;
+    color: #000000;
+    }
+
+    </style>
+  
 {% endblock %}
 
 {% block body %}
