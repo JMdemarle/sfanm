@@ -51,7 +51,7 @@ class SignupForm(forms.Form):
             ),
              HTML("<br>"), 
              Row(
-                Submit('submit', 'Soumettre',css_class='form-group col-lg-3 col-md-4 mb-0 btn-danger'),
+                Submit('submit', 'Soumettre',css_class='form-group col-lg-3 col-md-4 mb-0 btn-success'),
                 css_class='form-row'
             ),
 
