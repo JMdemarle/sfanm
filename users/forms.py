@@ -35,6 +35,8 @@ class SignupForm(forms.Form):
         super().__init__(*args, **kwargs)
  
         self.helper = FormHelper()
+        self.helper.label_class = 'bg-info'
+ 
         self.helper.layout = Layout(
             Row(
                 Column('nom', css_class='form-group col-lg-6 col-md-6 mb-0'),
