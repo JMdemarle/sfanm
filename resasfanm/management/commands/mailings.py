@@ -19,7 +19,7 @@ class Command(BaseCommand):
 		print(resa.apiculteur.nom)
 		subject = 'SFANM - Rappel de votre depot du ' + resa.datedepot.strftime('%d-%m-%Y')
 		html_message = render_to_string('resasfanm/maildepot.html', {'la_resa': resa})
-		from_email = 'SFANM <contact@sfanm.fr>'
+		from_email = 'SFANM <noreply@sfanm.fr>'
 		to = resa.apiculteur.email
 		mail.send_mail(subject, html_message, from_email, [to])				
 		
@@ -27,7 +27,7 @@ class Command(BaseCommand):
 		print(resa.apiculteur.nom)
 		subject = 'SFANM - Rappel de votre retrait du ' + resa.dateretrait.strftime('%d-%m-%Y')
 		html_message = render_to_string('resasfanm/mailretrait.html', {'la_resa': resa})
-		from_email = 'SFANM <contact@sfanm.fr>'
+		from_email = 'SFANM <noreply@sfanm.fr>'
 		to = resa.apiculteur.email
 		mail.send_mail(subject, html_message, from_email, [to])
 		
@@ -65,7 +65,7 @@ class Command(BaseCommand):
 						subject = natmail.objet + ' - ' + evt.intitule
 						html_message = render_to_string(templa, {'le_evt': evt})
 						print(html_message)
-						from_email = 'SFANM <contact@sfanm.fr>'
+						from_email = 'SFANM <noreply@sfanm.fr>'
 						try:
 						#mail.send_mail(subject, html_message, from_email, [to])
 							message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[mbr.email])

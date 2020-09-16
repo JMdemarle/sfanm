@@ -47,7 +47,7 @@ def mailacquit(request,membreid):
     subject = 'SFANM - Confirmation d Adhésion'
     html_message = render_to_string('users/mailconfirmationadhesion.html', {'le_user' : membre})
 	#plain_message = strip_tags(html_message)
-    from_email = 'SFANM <contact@sfanm.fr>'
+    from_email = 'SFANM <noreplyt@sfanm.fr>'
     to = membre.email
 	#mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)			
     send_mail(subject, html_message, from_email, ['contact@sfanm.fr',to])	
@@ -129,7 +129,7 @@ def signup(request):
                     custuser.save()
                     html_message = render_to_string('users/signup_email.html', {'le_user': custuser})
                     try:
-                        send_mail('[SFANM] : demande adhésion', html_message, 'contact@sfanm.fr', ['contact@sfanm.fr',emails])
+                        send_mail('[SFANM] : demande adhésion', html_message, 'noreply@sfanm.fr', ['contact@sfanm.fr',emails])
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     return redirect('signupsuccess',url)
