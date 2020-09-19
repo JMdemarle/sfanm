@@ -15,6 +15,8 @@ from django.templatetags.static import static
 from django.db.models import Exists, Value, BooleanField
 
 from django.core import mail
+from django.core.mail import EmailMessage
+
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from datetime import date, datetime
@@ -613,6 +615,24 @@ def test(request,idresa):
 	response = HttpResponse(content_type='application/pdf')
 	response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
 	response.write(pdf)
+	subject = 'test resa '
+	html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': resa})
+	from_email = 'SFANM <noreply@sfanm.fr>'
+	try:
+						#mail.send_mail(subject, html_message, from_email, [to])
+		message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[resa.apiculteur.email])
+		message.attach('etiquettes.pdf', pdf, 'application/pdf')
+
+	except Exception as e: print(e)
+	else:
+		print ('message préparé')
+			#message.content_subtype = "text/plain"
+		try:
+			message.send() 
+		except:
+			print('pb envoi')
+
+	
 
 	return response
 	
