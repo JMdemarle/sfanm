@@ -13,6 +13,7 @@ urlpatterns = [
     path('modresa/<int:idresa>',views.modresa,name='modresa'),
     path('delresa/<int:idresa>',views.delresa,name='delresa'),
     path('affpourdelresa/<int:idresa>',views.affpourdelresa,name='affpourdelresa'), 
+    path('test/<int:idresa>',views.test,name='test'),
     
 
     path('newevenement',views.newevenement,name='newevenement'),

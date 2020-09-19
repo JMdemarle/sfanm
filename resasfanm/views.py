@@ -9,6 +9,8 @@ from django.core.exceptions import ValidationError
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+from django.templatetags.static import static
+
 
 from django.db.models import Exists, Value, BooleanField
 
@@ -40,7 +42,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.units import mm, inch
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, Image
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.rl_config import defaultPageSize
 
@@ -550,3 +552,68 @@ def listeparticipants(request,idevt):
 	parts = Inscription.objects.filter(evenement=idevt).order_by('apiculteur__nom')
 	evt = Evenement.objects.get(id=idevt)
 	return render(request, 'resasfanm/listparticipants.html', {'les_parts':parts, 'le_evt':evt})
+	
+def test(request,idresa):
+	PAGE_HEIGHT=defaultPageSize[1]; PAGE_WIDTH=defaultPageSize[0]
+	styles = getSampleStyleSheet()
+
+	def myFirstPage(canvas, doc):
+		canvas.saveState()
+		canvas.setFont('Times-Bold',16)
+		canvas.drawCentredString(PAGE_WIDTH/2.0, PAGE_HEIGHT-40, Title)
+		canvas.setFont('Times-Roman',9)
+		canvas.drawString(inch, 0.25 * inch, " %s" % pageinfo)
+		canvas.restoreState()
+
+	def myLaterPages(canvas, doc):
+		canvas.saveState()
+		canvas.setFont('Times-Roman',9)
+		canvas.drawString(inch, 0.75 * inch, "Page %d %s" % (doc.page, pageinfo))
+		canvas.restoreState()
+
+	resa = Reservation.objects.get(id=idresa)
+	resa.datedepot
+	pdf_buffer = BytesIO()
+	doc = SimpleDocTemplate(pdf_buffer, pagesize=A4, leftMargin=15*mm,topMargin=10*mm, bottomMargin=1*mm)	
+	#doc = SimpleDocTemplate("/tmp/somefilename.pdf", pagesize=A4, topMargin=5*mm, bottomMargin=1*mm)
+	Story = []
+	style = styles["Normal"]
+	Title = "Etiquettes à coller sur vos ruchettes" 
+	pageinfo = "Etiquettes SFANM (c)"
+
+	Story.append(Spacer(1, 10*mm))
+	
+	ptext = '<para align="center" size="16">%s <br/><br/> %s <br/><br/> %s<br/> <br/> <font size="12">Déposé le %s </font></para>' % ( resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone, resa.datedepot.strftime("%d / %m / %y" ))
+	parag = Paragraph(ptext, styles["Normal"])
+	img = Image(static("img/sfanmlogo.jpg"),width=28*mm,height=28*mm)
+	#img = Image('/home/pi/django/sfanm/static/img/sfanmlogo.jpg',)
+	data = []
+	for i in range (1,6):
+		data.append([img,parag,img,parag])
+
+	tableThatSplitsOverPages = Table(data, colWidths=(30*mm,60*mm,30*mm,60*mm),rowHeights=(50*mm), repeatRows=5)
+	tableThatSplitsOverPages.hAlign = 'CENTER'
+	tableThatSplitsOverPages.vAlign = 'CENTER'
+	tblStyle = TableStyle([('TEXTCOLOR',(0,0),(-1,-1),colors.black),
+		('VALIGN',(0,0),(-1,-1),'CENTER'),
+		('LINEBELOW',(0,0),(-1,-1),1,colors.black),
+		('BOX',(0,0),(-1,-1),1,colors.black),
+		('BOX',(0,0),(-3,-1),1,colors.black)])
+
+	tableThatSplitsOverPages.setStyle(tblStyle)
+	Story.append(tableThatSplitsOverPages)
+	
+	doc.build(Story, onFirstPage=myFirstPage, onLaterPages=myLaterPages)
+
+
+	pdf_buffer.seek(0)
+#	return FileResponse(pdf_buffer, as_attachment=True, filename='hello.pdf')
+	pdf = pdf_buffer.getvalue()
+	pdf_buffer.close()
+	response = HttpResponse(content_type='application/pdf')
+	response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
+	response.write(pdf)
+
+	return response
+	
+	return redirect('listresas')
