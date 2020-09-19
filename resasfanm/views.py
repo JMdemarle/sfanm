@@ -1,3 +1,4 @@
+import os
 from django.http import Http404
 from django.http import HttpResponse, FileResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -600,7 +601,8 @@ def Etiquette(idresa):
 	
 	ptext = '<para align="center" size="16">%s <br/><br/> %s <br/><br/> %s<br/> <br/> <font size="12">Déposé le %s </font></para>' % ( resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone, resa.datedepot.strftime("%d / %m / %y" ))
 	parag = Paragraph(ptext, styles["Normal"])
-	img = Image(static("img/sfanmlogo.jpg"),width=28*mm,height=28*mm)
+	#img = Image(static("img/sfanmlogo.jpg"),width=28*mm,height=28*mm)
+	img = Image(os.path.join(settings.STATIC_ROOT, 'img/sfanmlogo.jpg'),width=28*mm,height=28*mm)
 	#img = Image('/home/pi/django/sfanm/static/img/sfanmlogo.jpg',)
 	data = []
 	for i in range (1,6):
