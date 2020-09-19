@@ -36,7 +36,6 @@
             <td> {{ resa.nbreine }}</td>
             <td><a href="{% url 'modresa' resa.id %}" class="btn btn-primary">Modifier Réservation</a></td>
             <td><a href="{% url 'affpourdelresa' resa.id %}" class="btn btn-danger">Annuler Réservation</a></td>
-            <td><a href="{% url 'test' resa.id %}" class="btn btn-danger">test pdf mail</a></td>
             
           </tr>
       {% empty %}

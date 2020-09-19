@@ -142,8 +142,21 @@ def newresa(request,idcapa):
 				#plain_message = strip_tags(html_message)
 				from_email = 'SFANM <noreply@sfanm.fr>'
 				to = request.user.email
-				#mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)			
-				mail.send_mail(subject, html_message, from_email, [to])				
+				pdf = Etiquette(reservation.id)
+				try:
+						#mail.send_mail(subject, html_message, from_email, [to])
+					message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[to])
+					message.attach('etiquettes.pdf', pdf, 'application/pdf')
+
+				except Exception as e: print(e)
+				else:
+					print ('message préparé')
+			#message.content_subtype = "text/plain"
+					try:
+						message.send() 
+						print('mail envoyé')
+					except:
+						print('pb envoi')
 
 				return redirect('listresas')  # TODO: redirect to the created topic page
 	else:
@@ -555,7 +568,7 @@ def listeparticipants(request,idevt):
 	evt = Evenement.objects.get(id=idevt)
 	return render(request, 'resasfanm/listparticipants.html', {'les_parts':parts, 'le_evt':evt})
 	
-def test(request,idresa):
+def Etiquette(idresa):
 	PAGE_HEIGHT=defaultPageSize[1]; PAGE_WIDTH=defaultPageSize[0]
 	styles = getSampleStyleSheet()
 
@@ -612,28 +625,4 @@ def test(request,idresa):
 #	return FileResponse(pdf_buffer, as_attachment=True, filename='hello.pdf')
 	pdf = pdf_buffer.getvalue()
 	pdf_buffer.close()
-	response = HttpResponse(content_type='application/pdf')
-	response['Content-Disposition'] = 'inline; filename="mypdf.pdf"'
-	response.write(pdf)
-	subject = 'test resa '
-	html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': resa})
-	from_email = 'SFANM <noreply@sfanm.fr>'
-	try:
-						#mail.send_mail(subject, html_message, from_email, [to])
-		message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[resa.apiculteur.email])
-		message.attach('etiquettes.pdf', pdf, 'application/pdf')
-
-	except Exception as e: print(e)
-	else:
-		print ('message préparé')
-			#message.content_subtype = "text/plain"
-		try:
-			message.send() 
-		except:
-			print('pb envoi')
-
-	
-
-	return response
-	
-	return redirect('listresas')
+	return pdf
