@@ -18,7 +18,7 @@ urlpatterns = [
     path('newevenement',views.newevenement,name='newevenement'),
     path('listevenements',views.listevenements,name='listevenements'),
     path('listevts',views.listevts,name='listevts'), # liste des évênements visible par tous
-    path('listouv',views.listouv,name='listouv'), # liste des évênements pour tous    
+    path('listouv',views.listouv,name='listouv'), # liste des ouvertures pour tous    
 
     path('listevtsmembre',views.listevtsmembre,name='listevtsmembre'),
     

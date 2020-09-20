@@ -22,20 +22,21 @@ class ContactForm(forms.Form):
     message = forms.CharField(widget=forms.Textarea, required=True)
     
 class SignupForm(forms.Form):
-    email = forms.EmailField(required=True, label = 'Votre mail',widget=forms.TextInput(attrs={'class': 'form-control'}))
-    nom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(required=True, label = 'Votre mail',widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Email'}))
+    nom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Nom'}))
 #    nom = forms.CharField(max_length=25, required=True)
-    prenom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
-    adresse1 = forms.CharField(max_length=40, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
-    adresse2 = forms.CharField(max_length=40, required=False,widget=forms.TextInput(attrs={'class': 'form-control'}))
-    codepostal = forms.IntegerField(required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
-    ville = forms.CharField(max_length=35, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
-    telephone = forms.CharField(max_length=15, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    prenom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Prénom'}))
+    adresse1 = forms.CharField(max_length=40, required=True,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Adresse 1'}))
+    adresse2 = forms.CharField(max_length=40, required=False,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Adresse 2'}))
+    codepostal = forms.IntegerField(required=True,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Code Postal'}))
+    ville = forms.CharField(max_length=35, required=True,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Ville'}))
+    telephone = forms.CharField(max_length=15, required=True,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Téléphonr'}))
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
  
         self.helper = FormHelper()
         self.helper.label_class = 'bg-info'
+        self.helper.form_show_labels = False
  
         self.helper.layout = Layout(
             Row(
@@ -43,10 +44,15 @@ class SignupForm(forms.Form):
                 Column('prenom', css_class='form-group col-lg-6 col-md-6 mb-0'),
 
             ),
+            HTML("<br>"), 
             'email',
+            HTML("<br>"), 
             'telephone',
+            HTML("<br>"), 
             'adresse1',
+            HTML("<br>"), 
             'adresse2',
+            HTML("<br>"), 
             Row(
                 Column('codepostal', css_class='form-group col-md-3 mb-0'),
                 Column('ville', css_class='form-group col-md-9 mb-0'),

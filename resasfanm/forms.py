@@ -21,19 +21,21 @@ class NewReservationForm(forms.Form):
         self.datechoix = initial_arguments.get('choix_date',None)
         
 #        self.fields['api'] = forms.CharField(max_length=25)
-        self.fields['nbreine'] = forms.IntegerField(label = 'Nombre reines', required = True)
-        self.fields['datedepot'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
+        self.fields['nbreine'] = forms.IntegerField(label = 'Nombre reines', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['datedepot'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date','class': 'form-control'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
 #        self.fields['dateretrait'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'},format=('%Y-%m-%d')))
-        self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix) 
+        self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix,widget=forms.Select(attrs={'class': 'form-control'})) 
 
-        self.fields['nbtypfecond1'] = forms.IntegerField(label = 'Nombre Apidéa/Kieler  ', required = True,initial='0')
-        self.fields['nbtypfecond2'] = forms.IntegerField(label = 'Nombre MiniPlus       ', required = True,initial='0')
-        self.fields['nbtypfecond3'] = forms.IntegerField(label = 'Nombre Warré          ', required = True,initial='0')
-        self.fields['nbtypfecond4'] = forms.IntegerField(label = 'Nombre Ruchette-dadant', required = True,initial='0')
+        self.fields['nbtypfecond1'] = forms.IntegerField(label = 'Nombre Apidéa/Kieler  ', required = True,initial='0',widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['nbtypfecond2'] = forms.IntegerField(label = 'Nombre MiniPlus       ', required = True,initial='0',widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['nbtypfecond3'] = forms.IntegerField(label = 'Nombre Warré          ', required = True,initial='0',widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['nbtypfecond4'] = forms.IntegerField(label = 'Nombre Ruchette-dadant', required = True,initial='0',widget=forms.TextInput(attrs={'class': 'form-control'}))
         
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            'nbreine',
+            Row(
+                Column('nbreine', css_class='form-group col-md-3 mb-0'),
+            ),
             Row(
                 Column('datedepot', css_class='form-group col-md-3 mb-0'),
                 Column('dateretrait', css_class='form-group col-md-3 mb-0'),
@@ -47,14 +49,13 @@ class NewReservationForm(forms.Form):
             HTML("<br>"),
             Row(
 
-                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'capacites'  %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
-                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Réserver</button>"),
+                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'capacites'  %}' class='btn btn-success btn-block'>Revenir</a></div>"),
+                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-primary btn-block', >Réserver</button>"),
             ),
         )
 
 class ModReservationForm(forms.Form):
-
-    nbreine = forms.IntegerField(label = 'Nombre reines', required = True)
+    nbreine = forms.IntegerField(label = 'Nombre reines', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
  
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -65,13 +66,13 @@ class ModReservationForm(forms.Form):
         self.resa = initial_arguments.get('la_resa',None)
         
         #self.fields['nbreine'] = forms.IntegerField(label = 'Nombre reines', required = True, initial = self.resa.nbreine)
-        self.fields['datedepot'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
-        self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix) 
+        self.fields['datedepot'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date','class': 'form-control'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
+        self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix,widget=forms.Select(attrs={'class': 'form-control'})) 
 
-        self.fields['nbtypfecond1'] = forms.IntegerField(label = 'Nombre Apidéa/Kieler  ', required = True)
-        self.fields['nbtypfecond2'] = forms.IntegerField(label = 'Nombre MiniPlus       ', required = True)
-        self.fields['nbtypfecond3'] = forms.IntegerField(label = 'Nombre Warré          ', required = True)
-        self.fields['nbtypfecond4'] = forms.IntegerField(label = 'Nombre Ruchette-dadant', required = True)
+        self.fields['nbtypfecond1'] = forms.IntegerField(label = 'Nombre Apidéa/Kieler  ', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['nbtypfecond2'] = forms.IntegerField(label = 'Nombre MiniPlus       ', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['nbtypfecond3'] = forms.IntegerField(label = 'Nombre Warré          ', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['nbtypfecond4'] = forms.IntegerField(label = 'Nombre Ruchette-dadant', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
 
         self.fields["nbreine"].initial = self.resa.nbreine
         self.fields['datedepot'].initial = self.resa.datedepot
@@ -84,7 +85,8 @@ class ModReservationForm(forms.Form):
         
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            'nbreine',
+            Row (Column('nbreine', css_class='form-group col-md-3 mb-0'),
+            ),
             Row(
                 Column('datedepot', css_class='form-group col-md-3 mb-0'),
                 Column('dateretrait', css_class='form-group col-md-3 mb-0'),
@@ -97,8 +99,8 @@ class ModReservationForm(forms.Form):
             ),
             HTML("<br>"),
             Row(
-                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'listresas'  %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
-                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Modifier</button>"),
+                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'listresas'  %}' class='btn btn-success btn-block'>Revenir</a></div>"),
+                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-primary btn-block', >Modifier</button>"),
             ),
          
         )
@@ -242,8 +244,8 @@ class NewInscriptionForm(forms.Form):
         self.helper.layout = Layout(
              HTML("<br>"), 
              Row(
-                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'listevtsmembre'  %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
-                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Inscription</button>"),
+                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'listevtsmembre'  %}' class='btn btn-success btn-block'>Revenir</a></div>"),
+                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-primary btn-block', >Inscription</button>"),
                 
             ),
 

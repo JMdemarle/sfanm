@@ -138,6 +138,8 @@ def newresa(request,idcapa):
 					present.resa = reservation
 					present.save()
 					dated = dated + timedelta(days=7)
+					
+				#  Envoi mail
 				subject = 'SFANM - Confirmation de réservation'
 				html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': reservation})
 				#plain_message = strip_tags(html_message)
@@ -228,13 +230,28 @@ def modresa(request,idresa):
 				present.resa = resam
 				present.save()
 				dated = dated + timedelta(days=7)
+				
+			#  Envoi mail
 			subject = 'SFANM - Confirmation modification de réservation'
 			html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': resam})
 			#plain_message = strip_tags(html_message)
 			from_email = 'SFANM <noreply@sfanm.fr>'
 			to = request.user.email
-			#mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)			
-			mail.send_mail(subject, html_message, from_email, [to])				
+			pdf = Etiquette(resam.id)
+			try:
+						#mail.send_mail(subject, html_message, from_email, [to])
+				message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[to])
+				message.attach('etiquettes.pdf', pdf, 'application/pdf')
+
+			except Exception as e: print(e)
+			else:
+				print ('message préparé')
+			#message.content_subtype = "text/plain"
+				try:
+					message.send() 
+					print('mail envoyé')
+				except:
+					print('pb envoi')
 				
 			return redirect('listresas')  
 	else:
@@ -588,7 +605,6 @@ def Etiquette(idresa):
 		canvas.restoreState()
 
 	resa = Reservation.objects.get(id=idresa)
-	resa.datedepot
 	pdf_buffer = BytesIO()
 	doc = SimpleDocTemplate(pdf_buffer, pagesize=A4, leftMargin=15*mm,topMargin=10*mm, bottomMargin=1*mm)	
 	#doc = SimpleDocTemplate("/tmp/somefilename.pdf", pagesize=A4, topMargin=5*mm, bottomMargin=1*mm)
@@ -599,11 +615,11 @@ def Etiquette(idresa):
 
 	Story.append(Spacer(1, 10*mm))
 	
-	ptext = '<para align="center" size="16">%s <br/><br/> %s <br/><br/> %s<br/> <br/> <font size="12">Déposé le %s </font></para>' % ( resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone, resa.datedepot.strftime("%d / %m / %y" ))
+	ptext = '<para align="center" size="16">%s <br/><br/> %s <br/><br/> %s<br/> <br/> <font size="12">Déposé le %s <br\>Retrait le %s</font></para>' \
+	  % ( resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone, resa.datedepot.strftime("%d / %m / %y" ), resa.dateretrait.strftime("%d / %m / %y" ))
+	print (ptext)
 	parag = Paragraph(ptext, styles["Normal"])
-	#img = Image(static("img/sfanmlogo.jpg"),width=28*mm,height=28*mm)
 	img = Image(os.path.join(settings.STATIC_ROOT, 'img/sfanmlogo.jpg'),width=28*mm,height=28*mm)
-	#img = Image('/home/pi/django/sfanm/static/img/sfanmlogo.jpg',)
 	data = []
 	for i in range (1,6):
 		data.append([img,parag,img,parag])
