@@ -30,7 +30,7 @@ class SignupForm(forms.Form):
     adresse2 = forms.CharField(max_length=40, required=False,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Adresse 2'}))
     codepostal = forms.IntegerField(required=True,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Code Postal'}))
     ville = forms.CharField(max_length=35, required=True,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Ville'}))
-    telephone = forms.CharField(max_length=15, required=True,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Téléphonr'}))
+    telephone = forms.CharField(max_length=15, required=True,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Téléphone'}))
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
  
