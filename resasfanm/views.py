@@ -615,7 +615,7 @@ def Etiquette(idresa):
 
 	Story.append(Spacer(1, 10*mm))
 	
-	ptext = '<para align="center" size="16">%s <br/><br/> %s <br/><br/> %s<br/> <br/> <font size="12">Déposé le %s <br\>Retrait le %s</font></para>' \
+	ptext = '<para align="center" size="16">%s <br/><br/> %s <br/><br/> %s<br/> <br/> <font size="12">Déposé le %s <br/>Retrait le %s</font></para>' \
 	  % ( resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone, resa.datedepot.strftime("%d / %m / %y" ), resa.dateretrait.strftime("%d / %m / %y" ))
 	print (ptext)
 	parag = Paragraph(ptext, styles["Normal"])
