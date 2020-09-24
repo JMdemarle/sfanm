@@ -132,7 +132,7 @@ def signup(request):
                         send_mail('[SFANM] : demande adhésion', html_message, 'noreply@sfanm.fr', ['contact@sfanm.fr',emails])
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
-                    return redirect('signupsuccess',url)
+                    return redirect('signupsuccess')
     return render(request, "users/signup.html", {'form': form})
 
 def contactView(request):
@@ -174,8 +174,8 @@ def successView(request,url):
             return redirect('home')
     return render(request, "users/Okpourcontinuer.html", {'form': form})
 
-def signupsuccess(request,url):
-   return render(request, 'users/okstop.html')
+def signupsuccess(request):
+   return render(request, 'users/Okstop.html')
 
 @ensure_csrf_cookie
 @xframe_options_exempt
