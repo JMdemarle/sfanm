@@ -361,6 +361,7 @@ def cup(request):
         form = MonCompteForm(initial={'le_user' : custuser})
     return render(request, 'users/moncompte.html', {'form': form, 'mod' : True, 'msg' : msg})
 
+# Chargement de la liste des adhérents
 def simple_upload(request):
     if request.method == 'POST' and request.FILES['myfile']:
         myfile = request.FILES['myfile']
@@ -383,6 +384,7 @@ def simple_upload(request):
                 custuser.ville = row[6]
                 custuser.telephone =row[8]
                 custuser.is_active = True
+                custuser.acquitte = True
                 custuser.save()
                 '''try:
                     custuser.save()
