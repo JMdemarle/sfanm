@@ -240,6 +240,32 @@ def login(request):
                 return render(request, 'users/loginevt.html', {'form': form})
     return render(request, 'users/loginevt.html', {'form': form})
 
+@ensure_csrf_cookie
+@xframe_options_exempt
+def loginadmin(request):
+# login pour admin
+    #rotate_token(request)
+    #print(doujeviens)
+    if request.method == 'GET':
+        form = LoginForm()
+    else:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            user = authenticate(username=username,password=password)
+        #if post:
+            #email = request.POST['emai']
+            #request.session['email'] = username
+            #return redirect("home")
+            if user is not None:
+                auth_login(request, user)
+                return redirect('home')
+            
+            else:
+                messages.add_message(request, messages.INFO, 'Informations de connexion erronées')
+                return render(request, 'users/loginadmin.html', {'form': form})
+    return render(request, 'users/loginadmin.html', {'form': form})
 
 
 def logoutevt(request):

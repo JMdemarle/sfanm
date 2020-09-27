@@ -50,7 +50,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.rl_config import defaultPageSize
 
 # Create your views here.
-@login_required
+#@login_required
 def home(request):
 	'''	username = request.META.get('REMOTE_USER_VAR')
 	for el in request.META:
@@ -62,11 +62,14 @@ def home(request):
 	#print(password)'''
 	
 	msg = ''
-	if (request.user.is_staff):
-		return render(request, 'resasfanm/home.html', {'msg' : msg})
+	if not request.user.is_authenticated:
+		return redirect('loginadmin')
 	else:
+		if (request.user.is_staff):
+			return render(request, 'resasfanm/home.html', {'msg' : msg})
+		else:
 #		return redirect('listresas') 
-		return render(request, 'resasfanm/maintenance.html')
+			return render(request, 'resasfanm/maintenance.html')
 
 
 @login_required
