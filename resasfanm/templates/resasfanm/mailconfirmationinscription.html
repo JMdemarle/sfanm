@@ -7,10 +7,18 @@ La SFANM vous confirme l'inscription suivante:
 - programme:
 {{le_evt.programme}}
 
+{% if le_evt.adresse1 and le_evt.adresse1.strip %}
 Lieu
 {{ le_evt.adresse1}}
 {{ le_evt.adresse2}}
 {{ le_evt.codepostal}} {{ le_evt.ville}}
+{% else %}
+   L'emplacement vous sera communiqué ultérieurement
+{% endif %}
+
 
 A bientôt
 L'équipe de la SFANM
+
+mail envoyé à {{le_api.prenom}} {{le_api.nom}}
+

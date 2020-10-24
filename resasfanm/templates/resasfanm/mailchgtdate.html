@@ -8,17 +8,21 @@ La SFANM vous informe du changement de date/horaire de l'évènement suivant:
 
 Il se tiendra le {{le_evt.date|date:"d F Y" }} à {{le_evt.date|time:"H:i" }}
 
-{% if le_evt.adresse1 is None %}
-   L'emplacement vous sera communiqué ultérieurement
-{% else %}
+
+{% if le_evt.adresse1 and le_evt.adresse1.strip %}
 Lieu
 {{ le_evt.adresse1}}
 {{ le_evt.adresse2}}
 {{ le_evt.codepostal}} {{ le_evt.ville}}
+{% else %}
+   L'emplacement vous sera communiqué ultérieurement
 {% endif %}
+
 
 
 Nous vous invitons le cas échéant à mettre à jour votre inscription viaa le site de la SFANM.
 
 A bientôt
 L'équipe de la SFANM
+
+

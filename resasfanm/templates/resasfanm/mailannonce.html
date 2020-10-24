@@ -7,16 +7,20 @@ La SFANM vous annonce la tenue de l'évènement suivant:
 - programme:
 {{le_evt.programme|linebreaks}}
 
-{% if le_evt.adresse1 is None %}
-   L'emplacement vous sera communiqué ultérieurement
-{% else %}
+
+{% if le_evt.adresse1 and le_evt.adresse1.strip %}
 Lieu
 {{ le_evt.adresse1}}
 {{ le_evt.adresse2}}
 {{ le_evt.codepostal}} {{ le_evt.ville}}
+{% else %}
+   L'emplacement vous sera communiqué ultérieurement
 {% endif %}
 
 Nous vous invitons à vous inscrire via le site de la SFANM/
 
 A bientôt
 L'équipe de la SFANM
+
+mail envoyé à {{le_api.prenom}} {{le_api.nom}}
+

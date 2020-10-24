@@ -118,8 +118,8 @@ def signup(request):
                 else:
                     custuser = CustomUser()
                     custuser.email = emails
-                    custuser.nom = form.cleaned_data['nom']
-                    custuser.prenom = form.cleaned_data['prenom']
+                    custuser.nom = form.cleaned_data['nom'].upper()
+                    custuser.prenom = form.cleaned_data['prenom'].title()
                     custuser.adresse1 = form.cleaned_data['adresse1']
                     custuser.adresse2 = form.cleaned_data['adresse2']
                     custuser.codepostal = form.cleaned_data['codepostal']
@@ -335,8 +335,8 @@ def mon_compte(request):
                     return redirect('listresas') 
         else:
             if form.is_valid():
-                custuser.nom = form.cleaned_data['nom']
-                custuser.prenom = form.cleaned_data['prenom']
+                custuser.nom = form.cleaned_data['nom'].upper()
+                custuser.prenom = form.cleaned_data['prenom'].title()
                 custuser.adresse1 = form.cleaned_data['adresse1']
                 custuser.adresse2 = form.cleaned_data['adresse2']
                 custuser.codepostal = form.cleaned_data['codepostal']

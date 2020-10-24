@@ -541,10 +541,11 @@ def newinscription(request,idevt):
 				if (inscriok):
 					inscription = Inscription()
 					inscription.apiculteur = request.user
+					api = request.user
 					inscription.evenement = evt
 					inscription.save()
 					subject = 'SFANM - Confirmation d"inscription'
-					html_message = render_to_string('resasfanm/mailconfirmationinscription.html', {'le_evt': evt})
+					html_message = render_to_string('resasfanm/mailconfirmationinscription.html', {'le_evt': evt, 'le_api': api})
 					#plain_message = strip_tags(html_message)
 					from_email = 'SFANM <ne-pas-repondre@sfanm.fr>'
 					to = request.user.email
