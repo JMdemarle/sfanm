@@ -37,7 +37,7 @@ def listmembres(request):
     membres = CustomUser.objects.all().order_by('nom')
     return render(request, 'users/listmembres.html', {'les_membres':membres})
 
-@login_required	
+@login_required 
 @staff_member_required    
 def mailacquit(request,membreid):
     membre = CustomUser.objects.get(id=membreid)
@@ -46,15 +46,15 @@ def mailacquit(request,membreid):
     membre.save()
     subject = 'SFANM - Confirmation d Adhésion'
     html_message = render_to_string('users/mailconfirmationadhesion.html', {'le_user' : membre})
-	#plain_message = strip_tags(html_message)
+    #plain_message = strip_tags(html_message)
     from_email = 'SFANM <ne-pas-repondre@sfanm.fr>'
     to = membre.email
-	#mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)			
-    send_mail(subject, html_message, from_email, ['contact@sfanm.fr',to])	
+    #mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)            
+    send_mail(subject, html_message, from_email, ['contact@sfanm.fr',to])   
     return redirect('contactsuccess','/users/listmembres')
-	#return redirect('listmembres')  
+    #return redirect('listmembres')  
 
-@login_required	
+@login_required 
 @staff_member_required
 def membresrazacquitte(request):
     membres = CustomUser.objects.all()
@@ -63,12 +63,12 @@ def membresrazacquitte(request):
         membre.save()
     return redirect('listmembres')
 
-@login_required	
+@login_required 
 @staff_member_required
 def razacquitte(request):
     return render(request, 'users/razacquitte.html')
 
-@login_required	
+@login_required 
 @staff_member_required
 def modmembre(request,membreid):
     membre = CustomUser.objects.get(id=membreid)
@@ -234,6 +234,8 @@ def login(request):
                 auth_login(request, user)
                 if user.is_staff:
                     return redirect('home')
+                else:
+                    return redirect('listresas') 
             
             else:
                 messages.add_message(request, messages.INFO, 'Informations de connexion erronées')
