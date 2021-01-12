@@ -5,7 +5,7 @@ from django.utils.translation import gettext as _
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column, HTML, Button, Div
-from crispy_forms.bootstrap import InlineField
+from crispy_forms.bootstrap import InlineField, TabHolder, Tab
 
 
 
@@ -20,8 +20,12 @@ class ContactForm(forms.Form):
     from_email = forms.EmailField(required=True, label = 'Votre mail')
     subject = forms.CharField(required=True, label = 'Sujet')
     message = forms.CharField(widget=forms.Textarea, required=True)
-    
+
 class SignupForm(forms.Form):
+    pass
+
+    
+class SignupNewForm(forms.Form):
     email = forms.EmailField(required=True, label = 'Votre mail',widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Email'}))
     nom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Nom'}))
 #    nom = forms.CharField(max_length=25, required=True)
@@ -40,29 +44,46 @@ class SignupForm(forms.Form):
  
         self.helper.layout = Layout(
             Row(
-                Column('nom', css_class='form-group col-lg-6 col-md-6 mb-0'),
-                Column('prenom', css_class='form-group col-lg-6 col-md-6 mb-0'),
-
+               Column('nom', css_class='form-group col-lg-6 col-md-6 mb-0'),
+               Column('prenom', css_class='form-group col-lg-6 col-md-6 mb-0'),
             ),
             HTML("<br>"), 
-            'email',
+           'email',
             HTML("<br>"), 
-            'telephone',
+           'telephone',
             HTML("<br>"), 
-            'adresse1',
+           'adresse1',
             HTML("<br>"), 
-            'adresse2',
+           'adresse2',
             HTML("<br>"), 
             Row(
                 Column('codepostal', css_class='form-group col-md-3 mb-0'),
                 Column('ville', css_class='form-group col-md-9 mb-0'),
             ),
-             HTML("<br>"), 
-             Row(
+            HTML("<br>"), 
+            Row(
                 Submit('submit', 'Soumettre',css_class='form-group col-lg-3 col-md-4 mb-0 btn-success'),
                 css_class='form-row'
             ),
+        )
 
+class SignupAgainForm(forms.Form):
+    email = forms.EmailField(required=True, label = 'Votre mail',widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Email'}))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+ 
+        self.helper = FormHelper()
+        self.helper.label_class = 'bg-info'
+        self.helper.form_show_labels = False
+ 
+        self.helper.layout = Layout(
+            HTML("<br>"), 
+           'email',
+            HTML("<br>"), 
+            Row(
+                Submit('submit', 'Soumettre',css_class='form-group col-lg-3 col-md-4 mb-0 btn-success'),
+                css_class='form-row'
+            ),
         )
 
 

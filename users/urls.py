@@ -33,6 +33,8 @@ urlpatterns = [
     path('cup',views.cup,name='cup'),
     
     path('signup', views.signup, name='signup'),
+    path('signupnew', views.signupnew, name='signupnew'),
+    path('signupagain', views.signupagain, name='signupagain'),
     
     path('reset', auth_views.PasswordResetView.as_view(
         template_name='users/password_reset.html',

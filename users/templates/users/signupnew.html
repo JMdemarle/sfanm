@@ -1,0 +1,32 @@
+{% extends './base_accounts.html' %}
+
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+{% block title %}Adhérer à la SFANM{% endblock %}
+
+{% block content %}
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-md-10 col-sm-8">
+        <div class="card bg-transparent border-0">
+          <div class="card-body bg-transparent">
+            {% if messages %}
+            
+            {% for message in messages %}
+
+               <div style="text-align:center ; color:red">     {{ message }} <br></div>
+            {% endfor %}
+            <br>
+            <a href="{% url 'signupagain' %}" class="btn btn-primary text-align:center">Renouvellement d'adhésion</a>
+            <br><br>
+            {% endif %}
+            <h3 class="card-title">Demande d'adhésion</h3>
+            
+             {% crispy form %}
+            
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

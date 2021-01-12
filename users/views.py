@@ -27,7 +27,7 @@ import csv
 
 from users.models import CustomUser
 
-from .forms import SignUpForm, ContactForm, Okpourcontinuer, SignupForm, LoginForm, MonCompteForm, ModMembreForm
+from .forms import SignUpForm, ContactForm, Okpourcontinuer, SignupForm, SignupNewForm, SignupAgainForm, LoginForm, MonCompteForm, ModMembreForm
 
 @staff_member_required
 def listmembres(request):
@@ -92,11 +92,15 @@ def modmembre(request,membreid):
 
 
 def signup(request):
+   return render(request, 'users/signup.html')
+
+
+def signupnew(request):
     url = request.GET.get("next")
     if request.method == 'GET':
-        form = SignupForm()
+        form = SignupNewForm()
     else:
-        form = SignupForm(request.POST)
+        form = SignupNewForm(request.POST)
         if "cancel" in request.POST:
             try:
                 resolve(url)
@@ -114,7 +118,7 @@ def signup(request):
                 emails = form.cleaned_data['email']
                 if CustomUser.objects.filter(email=emails).exists(): # return True/False
                     messages.add_message(request, messages.ERROR, 'Le compte existe.')
-                    messages.add_message(request, messages.ERROR, 'Identifiez-vous ou utliser le formulaire de contact')
+                    messages.add_message(request, messages.ERROR, 'Est-ce pour un renouvellement d"adhésion?')
                 else:
                     custuser = CustomUser()
                     custuser.email = emails
@@ -127,13 +131,48 @@ def signup(request):
                     custuser.telephone = form.cleaned_data['telephone']
                     custuser.is_active = False
                     custuser.save()
-                    html_message = render_to_string('users/signup_email.html', {'le_user': custuser})
+                    html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "d'adhésion"})
                     try:
                         send_mail('[SFANM] : demande adhésion', html_message, 'ne-pas-repondre@sfanm.fr', ['contact@sfanm.fr',emails])
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     return redirect('signupsuccess')
-    return render(request, "users/signup.html", {'form': form})
+    return render(request, "users/signupnew.html", {'form': form})
+
+def signupagain(request):
+    url = request.GET.get("next")
+    if request.method == 'GET':
+        form = SignupAgainForm()
+    else:
+        form = SignupAgainForm(request.POST)
+        if "cancel" in request.POST:
+            try:
+                resolve(url)
+                return HttpResponseRedirect(url)
+            except Resolver404: # Make sure the url comes from your project
+                if request.user.is_authenticated:
+                    if request.user.is_staff:
+                        return redirect('home')
+                    else:
+                        return redirect('listresas')
+                else:
+                    return redirect('signup')
+        else:
+            if form.is_valid():
+                emails = form.cleaned_data['email']
+                if CustomUser.objects.filter(email=emails).exists(): # return True/False
+                    custuser = CustomUser.objects.get(email=emails)
+                    html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "de renouvellement d'adhésion" })
+                    try:
+                        send_mail('[SFANM] : demande renouvellement adhésion', html_message, 'ne-pas-repondre@sfanm.fr', ['contact@sfanm.fr',emails])
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect('signupsuccess')
+                    
+                else:
+                    messages.add_message(request, messages.ERROR, 'Le compte n"existe pas.')
+                    messages.add_message(request, messages.ERROR, 'Corrigez votre Email  ou faites une "nouvelle adhésion"')
+    return render(request, "users/signupagain.html", {'form': form})
 
 def contactView(request):
     url = request.GET.get("next")
