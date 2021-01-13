@@ -162,7 +162,7 @@ def signupagain(request):
                 emails = form.cleaned_data['email']
                 if CustomUser.objects.filter(email=emails).exists(): # return True/False
                     custuser = CustomUser.objects.get(email=emails)
-                    html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "de renouvellement d'adhésion" })
+                    html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "de renouvellement d adhésion" })
                     try:
                         send_mail('[SFANM] : demande renouvellement adhésion', html_message, 'ne-pas-repondre@sfanm.fr', ['contact@sfanm.fr',emails])
                     except BadHeaderError:
