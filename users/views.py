@@ -131,7 +131,7 @@ def signupnew(request):
                     custuser.telephone = form.cleaned_data['telephone']
                     custuser.is_active = False
                     custuser.save()
-                    html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "d'adhésion"})
+                    html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "d adhésion"})
                     try:
                         send_mail('[SFANM] : demande adhésion', html_message, 'ne-pas-repondre@sfanm.fr', ['contact@sfanm.fr',emails])
                     except BadHeaderError:
