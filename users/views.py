@@ -133,7 +133,7 @@ def signupnew(request):
                     custuser.save()
                     html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "d adhésion"})
                     try:
-                        send_mail('[SFANM] : demande adhésion', html_message, 'ne-pas-repondre@sfanm.fr', ['contact@sfanm.fr',emails])
+                        send_mail('[SFANM] : demande adhésion', html_message, 'ne-pas-repondre@sfanm.fr', ['contact@sfanm.fr',emails,'jm.demarle@outlook.fr'])
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     return redirect('signupsuccess')
@@ -164,7 +164,7 @@ def signupagain(request):
                     custuser = CustomUser.objects.get(email=emails)
                     html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "de renouvellement d adhésion" })
                     try:
-                        send_mail('[SFANM] : demande renouvellement adhésion', html_message, 'ne-pas-repondre@sfanm.fr', ['contact@sfanm.fr',emails])
+                        send_mail('[SFANM] : demande renouvellement adhésion', html_message, 'ne-pas-repondre@sfanm.fr', ['contact@sfanm.fr',emails,'jm.demarle@outlook.fr'])
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     return redirect('signupsuccess')
