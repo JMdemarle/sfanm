@@ -50,7 +50,7 @@ def mailacquit(request,membreid):
     from_email = 'SFANM <ne-pas-repondre@sfanm.fr>'
     to = membre.email
     #mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)            
-    send_mail(subject, html_message, from_email, ['contact@sfanm.fr',to])   
+    send_mail(subject, html_message, from_email, ['contact@sfanm.fr',to,'jm.demarle@outlook.fr'])   
     return redirect('contactsuccess','/users/listmembres')
     #return redirect('listmembres')  
 
