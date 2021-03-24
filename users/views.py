@@ -247,7 +247,15 @@ def loginpage(request,doujeviens):
             #return HttpResponseRedirect(self.success_url)
             
             else:
-                messages.add_message(request, messages.INFO, 'Informations de connexion erronées')
+                nb = CustomUser.objects.filter(email=username).count()
+                if nb > 0:
+                    us = CustomUser.objects.filter(email=username)
+                    if us[0].acquitte == False:    
+                        messages.add_message(request, messages.INFO, 'Accès non encore ouvert')
+                    else:
+                        messages.add_message(request, messages.INFO, 'Mot de passe erroné')                     
+                else:
+                    messages.add_message(request, messages.INFO, 'Informations de connexion erronées - email')
                 return render(request, 'users/loginevt.html', {'form': form, 'doujeviens': doujeviens})
     return render(request, 'users/loginevt.html', {'form': form, 'doujeviens': doujeviens})
 

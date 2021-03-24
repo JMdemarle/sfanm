@@ -12,11 +12,11 @@ from .models import CustomUser
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ('email', 'nom', 'prenom','adresse1','adresse2','codepostal','ville','telephone','nbreinesmax','is_staff', 'is_active',)
-    list_filter = ('email', 'is_staff', 'is_active',)
+    list_display = ('email', 'nom', 'prenom','adresse1','adresse2','codepostal','ville','telephone','nbreinesmax','is_staff', 'is_active','acquitte',)
+    list_filter = ('email', 'is_staff', 'is_active','acquitte',)
     fieldsets = (
         (None, {'fields': ('email','password', 'nom','prenom','nbreinesmax')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active','is_superuser')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active','is_superuser','acquitte')}),
         ('coordonnées',{'fields': ('adresse1','adresse2','codepostal','ville','telephone')}),
     )
     add_fieldsets = (
