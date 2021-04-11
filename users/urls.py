@@ -36,7 +36,8 @@ urlpatterns = [
     path('signupnew', views.signupnew, name='signupnew'),
     path('signupagain', views.signupagain, name='signupagain'),
     
-    path('reset', auth_views.PasswordResetView.as_view(
+#    path('reset', auth_views.PasswordResetView.as_view(
+    path('reset', views.PasswordResetViewNew.as_view(
         template_name='users/password_reset.html',
         email_template_name='users/password_reset_email.html',
         subject_template_name='users/password_reset_subject.txt',

@@ -5,7 +5,9 @@ from django.views.generic.edit import FormView
 
 from django.template.loader import render_to_string
 
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm
+from django.contrib.auth.views import PasswordResetView
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_exempt
@@ -60,6 +62,7 @@ def membresrazacquitte(request):
     membres = CustomUser.objects.all()
     for membre in membres:
         membre.acquitte = False
+        membre.is_active = False
         membre.save()
     return redirect('listmembres')
 
@@ -94,9 +97,22 @@ def modmembre(request,membreid):
 def signup(request):
    return render(request, 'users/signup.html')
 
+class PasswordResetViewNew(PasswordResetView):
+    def post(self, request, *args, **kwargs):
+        email = request.POST.get('email')
+        if CustomUser.objects.filter(email=email).exists():
+            if CustomUser.objects.get(email=email).is_active:
+                return super(PasswordResetViewNew, self).post(request, *args, **kwargs)
+            else:
+                messages.add_message(request, messages.ERROR, 'Compte inactif. Les droits ne sont pas ouverts')
+        else:
+            messages.add_message(request, messages.ERROR, 'Le compte n"existe pas.')
+        return render(request, "users/password_reset.html", {'form': PasswordResetForm})
+                   
+
 
 def signupnew(request):
-    url = request.GET.get("next")
+    url = request.GET.get("next")       
     if request.method == 'GET':
         form = SignupNewForm()
     else:
