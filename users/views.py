@@ -49,7 +49,7 @@ def mailacquit(request,membreid):
     subject = 'SFANM - Confirmation d Adhésion'
     html_message = render_to_string('users/mailconfirmationadhesion.html', {'le_user' : membre})
     #plain_message = strip_tags(html_message)
-    from_email = 'SFANM <ne-pas-repondre@sfanm.fr>'
+    from_email = 'SFANM <sfanm@demarle.net>'
     to = membre.email
     #mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)            
     send_mail(subject, html_message, from_email, ['contact@sfanm.fr',to,'jm.demarle@outlook.fr'])   
@@ -149,7 +149,7 @@ def signupnew(request):
                     custuser.save()
                     html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "d adhésion"})
                     try:
-                        send_mail('[SFANM] : demande adhésion', html_message, 'ne-pas-repondre@sfanm.fr', ['contact@sfanm.fr',emails,'jm.demarle@outlook.fr'])
+                        send_mail('[SFANM] : demande adhésion', html_message, 'SFANM <sfanm@demarle.net>', ['contact@sfanm.fr',emails,'jm.demarle@outlook.fr'])
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     return redirect('signupsuccess')
@@ -180,7 +180,7 @@ def signupagain(request):
                     custuser = CustomUser.objects.get(email=emails)
                     html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "de renouvellement d adhésion" })
                     try:
-                        send_mail('[SFANM] : demande renouvellement adhésion', html_message, 'ne-pas-repondre@sfanm.fr', ['contact@sfanm.fr',emails,'jm.demarle@outlook.fr'])
+                        send_mail('[SFANM] : demande renouvellement adhésion', html_message, 'SFANM <sfanm@demarle.net>', ['contact@sfanm.fr',emails,'jm.demarle@outlook.fr'])
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     return redirect('signupsuccess')
