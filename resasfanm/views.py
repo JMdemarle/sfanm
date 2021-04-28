@@ -81,7 +81,7 @@ def newresa(request,idcapa):
     if not(Capacite.objects.filter(datecapa=dateret1).exists()):
         subject = 'SFANM - Problème de définition des dates de réservation'
         html_message = 'il n est pas possible de retirer les ruches après la date de dépôt'
-        from_email = 'SFANM <sfanm@demarle.net>'
+        from_email = 'SFANM <sfanm@deje5295.odns.fr>'
         to = 'contact@sfanm.fr'
         mail.send_mail(subject, html_message, from_email, [to])             
 
@@ -144,9 +144,9 @@ def newresa(request,idcapa):
                     
                 #  Envoi mail
                 subject = 'SFANM - Confirmation de réservation'
-                html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': reservation})
+                html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': reservation, 'le_api': reservation.apiculteur})
                 #plain_message = strip_tags(html_message)
-                from_email = 'SFANM <sfanm@demarle.net>'
+                from_email = 'SFANM <sfanm@deje5295.odns.fr>'
                 to = request.user.email
                 pdf = Etiquette(reservation.id)
                 try:
@@ -237,9 +237,9 @@ def modresa(request,idresa):
                 
             #  Envoi mail
             subject = 'SFANM - Confirmation modification de réservation'
-            html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': resam})
+            html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': resam, 'le_api': reservation.apiculteur})
             #plain_message = strip_tags(html_message)
-            from_email = 'SFANM <sfanm@demarle.net>'
+            from_email = 'SFANM <sfanm@deje5295.odns.fr>'
             to = request.user.email
             pdf = Etiquette(resam.id)
             try:
@@ -273,9 +273,9 @@ def affpourdelresa(request,idresa):
 def delresa(request,idresa):
     resam = Reservation.objects.get(id=idresa)
     subject = 'SFANM - Confirmation d"annulation de réservation'
-    html_message = render_to_string('resasfanm/mailconfirmationannulreservation.html', {'la_resa': resam})
+    html_message = render_to_string('resasfanm/mailconfirmationannulreservation.html', {'la_resa': resam, 'le_api': resam.apiculteur})
     #plain_message = strip_tags(html_message)
-    from_email = 'SFANM <sfanm@demarle.net>'
+    from_email = 'SFANM <sfanm@deje5295.odns.fr>'
     to = request.user.email
     #mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)            
     mail.send_mail(subject, html_message, from_email, [to])             
@@ -548,7 +548,7 @@ def newinscription(request,idevt):
                     subject = 'SFANM - Confirmation d"inscription'
                     html_message = render_to_string('resasfanm/mailconfirmationinscription.html', {'le_evt': evt, 'le_api': api})
                     #plain_message = strip_tags(html_message)
-                    from_email = 'SFANM <sfanm@demarle.net>'
+                    from_email = 'SFANM <sfanm@deje5295.odns.fr>'
                     to = request.user.email
                     #mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)            
                     mail.send_mail(subject, html_message, from_email, [to])             
@@ -570,7 +570,7 @@ def delinscription(request,idevt):
     subject = 'SFANM - Confirmation d"annulation d"inscription'
     html_message = render_to_string('resasfanm/mailconfirmationannulinscription.html', {'le_evt' : evt})
     #plain_message = strip_tags(html_message)
-    from_email = 'SFANM <sfanm@demarle.net>'
+    from_email = 'SFANM <sfanm@deje5295.odns.fr>'
     to = request.user.email
     #mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)            
     mail.send_mail(subject, html_message, from_email, [to])             
