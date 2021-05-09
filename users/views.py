@@ -1,5 +1,9 @@
 # views de account
+import os
+
 from django.contrib.auth import login as auth_login, authenticate, logout
+
+from django.conf import settings
 
 from django.views.generic.edit import FormView
 
@@ -21,7 +25,7 @@ from django.core.files.storage import FileSystemStorage, default_storage
 
 from django.shortcuts import render, redirect
 
-from django.core.mail import send_mail, BadHeaderError
+from django.core.mail import send_mail, BadHeaderError, EmailMessage
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy,resolve, Resolver404
@@ -51,8 +55,13 @@ def mailacquit(request,membreid):
     #plain_message = strip_tags(html_message)
     from_email = 'SFANM <sfanm@deje5295.odns.fr>'
     to = membre.email
-    #mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)            
-    send_mail(subject, html_message, from_email, ['contact@sfanm.fr',to,'jm.demarle@outlook.fr'])   
+    #mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)       
+#    img = Image(os.path.join(settings.STATIC_ROOT, 'img/sfanmlogo.jpg'),width=28*mm,height=28*mm)
+
+    message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[to])
+    message.attach_file(os.path.join(settings.STATIC_ROOT, 'doc/connexion.docx'))
+    message.send() 
+#    send_mail(subject, html_message, from_email, ['contact@sfanm.fr',to,'jm.demarle@outlook.fr'])   
     return redirect('contactsuccess','/users/listmembres')
     #return redirect('listmembres')  
 
