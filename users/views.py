@@ -58,7 +58,7 @@ def mailacquit(request,membreid):
     #mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)       
 #    img = Image(os.path.join(settings.STATIC_ROOT, 'img/sfanmlogo.jpg'),width=28*mm,height=28*mm)
 
-    message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[to])
+    message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=['contact@sfanm.fr',to])
     message.attach_file(os.path.join(settings.STATIC_ROOT, 'doc/connexion.docx'))
     message.send() 
 #    send_mail(subject, html_message, from_email, ['contact@sfanm.fr',to,'jm.demarle@outlook.fr'])   
