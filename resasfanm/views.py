@@ -237,7 +237,7 @@ def modresa(request,idresa):
                 
             #  Envoi mail
             subject = 'SFANM - Confirmation modification de réservation'
-            html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': resam, 'le_api': reservation.apiculteur})
+            html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': resam, 'le_api': resam.apiculteur})
             #plain_message = strip_tags(html_message)
             from_email = 'SFANM <sfanm@deje5295.odns.fr>'
             to = request.user.email
