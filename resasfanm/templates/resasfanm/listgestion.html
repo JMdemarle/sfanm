@@ -23,7 +23,7 @@
           <th>Nb Apidea/Kieler</th>
           <th>Nb Mini Plus</th>
           <th>Nb Warre</th>
-          <th>Nb ruchettes Dadant</th>
+          <th>Nb ruchettes</th>
 
       </tr>
     </thead>
@@ -39,7 +39,9 @@
             <td> {{ capacite.get_encoursruches2 }} </a></td>
             <td> {{ capacite.get_encoursruches3 }} </a></td>
             <td> {{ capacite.get_encoursruches4 }} </a></td>
-            <td> <a href="{% url 'editentreesortie' capacite.datecapa %}">Imprimer </a> </td>
+            <td> <a href="{% url 'editentreesortie' capacite.datecapa %}"  class="btn btn-outline-primary">Imprimer </a> </td>
+            <td> <a href="{% url 'listentrees' capacite.datecapa %}" class="btn btn-outline-primary">entrées réelles </a></td>
+
 
             
           </tr>

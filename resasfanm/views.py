@@ -32,7 +32,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import NewReservationForm, ModReservationForm, NewEvenementForm, ModEvenementForm, NewInscriptionForm
+from .forms import NewReservationForm, ModReservationForm, NewEvenementForm, ModEvenementForm, NewInscriptionForm, ModEntreeReelleForm
 from datetime import timedelta 
 import datetime
 
@@ -42,7 +42,7 @@ from io import BytesIO, StringIO
 #from zipfile import ZipFile
 
 from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib import colors
 from reportlab.lib.units import mm, inch
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, Image
@@ -129,6 +129,11 @@ def newresa(request,idcapa):
                 reservation.nbtypfecond2 = form.cleaned_data['nbtypfecond2']
                 reservation.nbtypfecond3 = form.cleaned_data['nbtypfecond3']
                 reservation.nbtypfecond4 = form.cleaned_data['nbtypfecond4']
+                reservation.nbdepotfecond1 = reservation.nbtypfecond1
+                reservation.nbdepotfecond2 = reservation.nbtypfecond2
+                reservation.nbdepotfecond3 = reservation.nbtypfecond3
+                reservation.nbdepotfecond4 = reservation.nbtypfecond4
+                reservation.nbreinedepot = reservation.nbreine                                                
                 dated = datededepot             
                 #
                 reservation.save()
@@ -219,6 +224,11 @@ def modresa(request,idresa):
             resam.nbtypfecond2 = form.cleaned_data['nbtypfecond2']
             resam.nbtypfecond3 = form.cleaned_data['nbtypfecond3']
             resam.nbtypfecond4 = form.cleaned_data['nbtypfecond4']
+            resam.nbdepotfecond1 = resam.nbtypfecond1
+            resam.nbdepotfecond2 = resam.nbtypfecond2
+            resam.nbdepotfecond3 = resam.nbtypfecond3
+            resam.nbdepotfecond4 = resam.nbtypfecond4
+            resam.nbreinedepot = resam.nbreine                                                
             dated = datededepot             
             #
             resam.save()
@@ -325,6 +335,31 @@ def listentrees(request,dateentree):
 
     return render(request, 'resasfanm/listentrees.html', {'les_resas':resas, 'date_entree': datee})
 
+@login_required 
+@staff_member_required
+def entreereelle(request,idresa):
+    resam = Reservation.objects.get(id=idresa)
+    msg = ''
+    if request.method == 'POST':
+        form = ModEntreeReelleForm(request.POST, initial={'la_resa' : resam, })
+        if "cancel" in request.POST:
+            return redirect('listentrees', resam.datedepot) 
+        else:
+            if form.is_valid():
+                resam.nbreinedepot = form.cleaned_data['nbreinedepot']
+                resam.nbdepotfecond1 = form.cleaned_data['nbdepotfecond1']
+                resam.nbdepotfecond2 = form.cleaned_data['nbdepotfecond2']
+                resam.nbdepotfecond3 = form.cleaned_data['nbdepotfecond3']
+                resam.nbdepotfecond4 = form.cleaned_data['nbdepotfecond4']
+                resam.save()
+                return redirect('listentrees', resam.datedepot)  # TODO: redirect to the created topic page
+            else:
+                msg = 'il y a un pb'
+    else:
+        form = ModEntreeReelleForm(initial={'la_resa' : resam, })
+
+    return render(request, 'resasfanm/entreereelle.html', {'form': form, 'mod' : True, 'msg' : msg, 'la_resa' : resam})
+
 @login_required
 @staff_member_required
 def listsorties(request,datesortie):
@@ -347,12 +382,13 @@ def editentreesortie(request,dateedit):
 
     def myLaterPages(canvas, doc):
         canvas.saveState()
+
         canvas.setFont('Times-Roman',9)
         canvas.drawString(inch, 0.75 * inch, "Page %d %s" % (doc.page, pageinfo))
         canvas.restoreState()
     
     pdf_buffer = BytesIO()
-    doc = SimpleDocTemplate(pdf_buffer, pagesize=A4, leftMargin=15*mm,topMargin=10*mm, bottomMargin=1*mm)   
+    doc = SimpleDocTemplate(pdf_buffer, pagesize=landscape(A4), leftMargin=15*mm,topMargin=10*mm, bottomMargin=1*mm)   
     #doc = SimpleDocTemplate("/tmp/somefilename.pdf", pagesize=A4, topMargin=5*mm, bottomMargin=1*mm)
     Story = []
     style = styles["Normal"]
@@ -371,12 +407,14 @@ def editentreesortie(request,dateedit):
     resas = Reservation.objects.filter(datedepot=datee).order_by('apiculteur__nom')
     
 # Make heading for each column and start data list
-    data = [['Apicuteur','Prénom','téléphone','Nb reines','Nb ruches','Présent']]
+    data = [['Apicuteur','Prénom','téléphone','Nb reines', 'Apidéa', 'Miniplus', 'Warre', 'Ruchette', 'Total','Emargement']]
 # Assemble data for each column using simple loop to append it into data list
     for resa in resas:
-        data.append([resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone,resa.nbreine,resa.nbruches,''])
-
-    tableThatSplitsOverPages = Table(data, colWidths=(45*mm,40*mm,30*mm,30*mm, 20*mm, 20*mm),rowHeights=(10*mm), repeatRows=1)
+        data.append([resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone,resa.nbreinedepot, \
+            str(resa.nbdepotfecond1) ,resa.nbdepotfecond2, resa.nbdepotfecond3, resa.nbdepotfecond4, resa.nbruchesdepot,''])
+# nom prenom telephone nb reines nb ruches présent
+    tableThatSplitsOverPages = Table(data, colWidths=(45*mm,40*mm,30*mm,20*mm,20*mm, 20*mm, 20*mm, 20*mm, \
+         20*mm, 35*mm),rowHeights=(10*mm), repeatRows=1)
     tableThatSplitsOverPages.hAlign = 'LEFT'
     tblStyle = TableStyle([('TEXTCOLOR',(0,0),(-1,-1),colors.black),
         ('VALIGN',(0,0),(-1,-1),'TOP'),
@@ -398,12 +436,14 @@ def editentreesortie(request,dateedit):
     resas = Reservation.objects.filter(dateretrait=datee).order_by('apiculteur__nom')
     
 # Make heading for each column and start data list
-    data = [['Apicuteur','Prénom','téléphone','Nb reines','Nb ruches','Présent']]
+    data = [['Apicuteur','Prénom','téléphone','Nb reines', 'Apidéa', 'Miniplus', 'Warre', 'Ruchette', 'Total','Emargement']]
 # Assemble data for each column using simple loop to append it into data list
     for resa in resas:
-        data.append([resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone,resa.nbreine,resa.nbruches,''])
-
-    tableThatSplitsOverPages = Table(data, colWidths=(45*mm,40*mm,30*mm,30*mm, 20*mm, 20*mm),rowHeights=(10*mm), repeatRows=1)
+        data.append([resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone,resa.nbreinedepot, \
+            str(resa.nbdepotfecond1) ,resa.nbdepotfecond2, resa.nbdepotfecond3, resa.nbdepotfecond4, resa.nbruchesdepot,''])
+# nom prenom telephone nb reines nb ruches présent
+    tableThatSplitsOverPages = Table(data, colWidths=(45*mm,40*mm,30*mm,20*mm,20*mm, 20*mm, 20*mm, 20*mm, \
+         20*mm, 35*mm),rowHeights=(10*mm), repeatRows=1)
     tableThatSplitsOverPages.hAlign = 'LEFT'
     tblStyle = TableStyle([('TEXTCOLOR',(0,0),(-1,-1),colors.black),
         ('VALIGN',(0,0),(-1,-1),'TOP'),

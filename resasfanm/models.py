@@ -47,12 +47,17 @@ class Reservation(models.Model):
 	apiculteur = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='reservations')
 	
 	nbreine = models.IntegerField(default = 1, verbose_name="nombre reines")
+	nbreinedepot = models.IntegerField(default = 1, verbose_name="réel reines")
 	datedepot = models.DateField(verbose_name="Date depot")
 	dateretrait = models.DateField(verbose_name="Date retrait")
 	nbtypfecond1 = models.IntegerField(default = 0, verbose_name="nombre apidea/Kieler ")
 	nbtypfecond2 = models.IntegerField(default = 0, verbose_name="nombre Miniplus      ")
 	nbtypfecond3 = models.IntegerField(default = 0, verbose_name="nombre Warre         ")
 	nbtypfecond4 = models.IntegerField(default = 0, verbose_name="nombre ruchette      ")
+	nbdepotfecond1 = models.IntegerField(default = 0, verbose_name="réel apidea/Kieler ")
+	nbdepotfecond2 = models.IntegerField(default = 0, verbose_name="réel Miniplus      ")
+	nbdepotfecond3 = models.IntegerField(default = 0, verbose_name="réel Warre         ")
+	nbdepotfecond4 = models.IntegerField(default = 0, verbose_name="réel ruchette      ")
 	ordre = models.IntegerField(verbose_name="ordre",default=1)
 	enattente = models.BooleanField(default = False, verbose_name = 'En attente')
 	def __str__(self):
@@ -72,6 +77,8 @@ class Reservation(models.Model):
 	def nbruches(self):
 		return self.nbtypfecond1 + self.nbtypfecond2 + self.nbtypfecond3 + self.nbtypfecond4
 	
+	def nbruchesdepot(self):
+    		return self.nbdepotfecond1 + self.nbdepotfecond2 + self.nbdepotfecond3 + self.nbdepotfecond4
 		
 	
 	
@@ -96,56 +103,56 @@ class Capacite(models.Model):
 		presences = Presence.objects.filter(capa=self)
 		nbreines = self.nreinesmax
 		for presence in presences:
-			nbreines = nbreines - presence.resa.nbreine
+			nbreines = nbreines - presence.resa.nbreinedepot
 		return nbreines
 		
 	def get_entreesdate(self):
 		reservations = Reservation.objects.filter(datedepot=self.datecapa)
 		nbentrees = 0
 		for reservation in reservations:
-			nbentrees = nbentrees + reservation.nbreine
+			nbentrees = nbentrees + reservation.nbreinedepot
 		return nbentrees
 		
 	def get_sortiesdate(self):
 		reservations = Reservation.objects.filter(dateretrait=self.datecapa)
 		nbsorties = 0
 		for reservation in reservations:
-			nbsorties = nbsorties + reservation.nbreine
+			nbsorties = nbsorties + reservation.nbreinedepot
 		return nbsorties
 	
 	def get_encoursreines(self):
 		presences = Presence.objects.filter(capa=self)
 		nbreines = 0
 		for presence in presences:
-			nbreines = nbreines + presence.resa.nbreine
+			nbreines = nbreines + presence.resa.nbreinedepot
 		return nbreines
 	
 	def get_encoursruches1(self):
 		presences = Presence.objects.filter(capa=self)
 		nbruches1 = 0
 		for presence in presences:
-			nbruches1 = nbruches1 + presence.resa.nbtypfecond1
+			nbruches1 = nbruches1 + presence.resa.nbdepotfecond1
 		return nbruches1
 
 	def get_encoursruches2(self):
 		presences = Presence.objects.filter(capa=self)
 		nbruches2 = 0
 		for presence in presences:
-			nbruches2 = nbruches2 + presence.resa.nbtypfecond2
+			nbruches2 = nbruches2 + presence.resa.nbdepotfecond2
 		return nbruches2
 
 	def get_encoursruches3(self):
 		presences = Presence.objects.filter(capa=self)
 		nbruches3 = 0
 		for presence in presences:
-			nbruches3 = nbruches3 + presence.resa.nbtypfecond3
+			nbruches3 = nbruches3 + presence.resa.nbdepotfecond3
 		return nbruches3
 
 	def get_encoursruches4(self):
 		presences = Presence.objects.filter(capa=self)
 		nbruches4 = 0
 		for presence in presences:
-			nbruches4 = nbruches4 + presence.resa.nbtypfecond4
+			nbruches4 = nbruches4 + presence.resa.nbdepotfecond4
 		return nbruches4
 
 

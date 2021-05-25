@@ -6,6 +6,7 @@ from crispy_forms.layout import Layout, Submit, Row, Column, HTML, ButtonHolder
 from crispy_forms.bootstrap import InlineField
 
 from datetime import date, datetime
+
 #from bootstrap_datepicker_plus import DatePickerInput
 
 #from bootstrap_modal_forms.forms import BSModalForm
@@ -105,6 +106,48 @@ class ModReservationForm(forms.Form):
          
         )
 
+class ModEntreeReelleForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        initial_arguments = kwargs.get('initial', None)
+
+        self.resa = initial_arguments.get('la_resa',None)
+        
+        #self.fields['nbreine'] = forms.IntegerField(label = 'Nombre reines', required = True, initial = self.resa.nbreine)
+
+        self.fields['nbreinedepot'] = forms.IntegerField(label = 'Nb reines  ', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['nbdepotfecond1'] = forms.IntegerField(label = 'Nb Apidéa/Kieler  ', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['nbdepotfecond2'] = forms.IntegerField(label = 'Nb MiniPlus       ', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['nbdepotfecond3'] = forms.IntegerField(label = 'Nb Warré          ', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+        self.fields['nbdepotfecond4'] = forms.IntegerField(label = 'Nb Ruchette-dadant', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+        self.fields["nbreinedepot"].initial = self.resa.nbreinedepot
+        self.fields['nbdepotfecond1'].initial = self.resa.nbtypfecond1
+        self.fields['nbdepotfecond2'].initial = self.resa.nbdepotfecond2
+        self.fields['nbdepotfecond3'].initial = self.resa.nbdepotfecond3
+        self.fields['nbdepotfecond4'].initial = self.resa.nbdepotfecond4
+        print(self.resa.datedepot)
+        print(str(self.resa.datedepot))
+        self.depot = str(self.resa.datedepot)
+        self.strurl = "'listentrees'" + ' ' + "'" + self.depot + "'" 
+
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('nbreinedepot', css_class='form-group col-lg-2 col-md-3 mb-0'),
+                Column('nbdepotfecond1', css_class='form-group col-lg-2 col-md-6 mb-0'),
+                Column('nbdepotfecond2', css_class='form-group col-lg-2 col-md-6 mb-0'),
+                Column('nbdepotfecond3', css_class='form-group col-lg-2 col-md-6 mb-0'),
+                Column('nbdepotfecond4', css_class='form-group col-lg-2 col-md-6 mb-0'),
+            ),
+            HTML("<br>"),
+            Row(
+                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url " + self.strurl + " %}' class='btn btn-success btn-block'>Revenir</a></div>"),
+                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-primary btn-block', >Modifier</button>"),
+            ),
+         
+        )
  
 class NewEvenementForm(forms.Form):
  

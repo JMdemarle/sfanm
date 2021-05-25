@@ -38,6 +38,7 @@ urlpatterns = [
     path('listsorties/<str:datesortie>',views.listsorties,name='listsorties'),
     path('listsorties/<str:datesortie>',views.listsorties,name='listsorties'),
     path('editentreesortie/<str:dateedit>',views.editentreesortie,name='editentreesortie'),
+    path('entreereelle/<int:idresa>',views.entreereelle,name='entreereelle'),
     
 
 

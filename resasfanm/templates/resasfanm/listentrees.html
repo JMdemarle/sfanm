@@ -16,7 +16,11 @@
       <tr>
           <th>Apiculteur</th>
           <th>Date sortie</th>
-          <th>Nombre ruches</th>
+          <th>Apidéa</th>
+          <th>MiniPlus</th>
+          <th>Warré</th>
+          <th>Ruchette</th>
+          <th>Total</th>
           <th>Nombre reines</th>
       </tr>
     </thead>
@@ -26,14 +30,19 @@
             <td> {{ resa.apiculteur.email }}</td>
 
             <td> {{ resa.dateretrait }}</td>
-            <td> {{ resa.nbruches }}</td>
-            <td> {{ resa.nbreine }}</td>
+            <td> {{ resa.nbdepotfecond1 }}</td>
+            <td> {{ resa.nbdepotfecond2 }}</td>
+            <td> {{ resa.nbdepotfecond3 }}</td>
+            <td> {{ resa.nbdepotfecond4 }}</td>
+            <td> {{ resa.nbruchesdepot }}</td>
+            <td> {{ resa.nbreinedepot }}</td>
+            <td> <a href="{% url 'entreereelle' resa.id %}"  class="btn btn-outline-primary">Entrées Réelles </a> </td>
             
           </tr>
       {% endfor %}
     </tbody>
   </table>
   <br>
-    <a href="{% url 'listgestion'  %}" class="btn btn-primary">Retour</a>
+    <a href="{% url 'listgestion'  %}" class="btn btn-outline-primary">Retour</a>
   
 {% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'baseadmin.html' %}
+
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}mise à jours réservation {% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'listgestion' %}" >Activité de la station</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'listentrees' la_resa.datedepot %}" >Les Entrées du {{ la_resa.datedepot }} </a></li>
+  <li class="breadcrumb-item active">MAJ entrées réelles </li>
+
+{% endblock %}
+
+{% block content %}
+  <h3>Mise à jour des dépôts réels</h3>
+  <br>
+  <h3>Annoncé par {{la_resa.apiculteur.nom}} pour le dépôt du {{la_resa.datedepot}}</h3>
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th class="form-group col-lg-2 col-md-6 mb-0">Nombre reines</th>
+        <th class="form-group col-lg-2 col-md-6 mb-0">Apidéa</th>
+          <th class="form-group col-lg-2 col-md-6 mb-0">MiniPlus</th>
+          <th class="form-group col-lg-2 col-md-6 mb-0">Warré</th>
+          <th class="form-group col-lg-2 col-md-6 mb-0">Ruchette</th>
+          <th class="form-group col-lg-2 col-md-6 mb-0">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+          <tr>
+            <td> {{ la_resa.nbreine }}</td>
+            <td> {{ la_resa.nbtypfecond1 }}</td>
+            <td> {{ la_resa.nbtypfecond2 }}</td>
+            <td> {{ la_resa.nbtypfecond3 }}</td>
+            <td> {{ la_resa.nbtypfecond4 }}</td>
+            <td> {{ la_resa.nbruches }}</td>
+            
+          </tr>
+    </tbody>
+  </table>
+ <br>
+ <h3>Il a amené:  </h3>
+{% if msg != "" %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+
+                        {{ msg }}
+
+                    </div>
+{% endif %}
+  {% crispy form %}
+{% endblock %}
