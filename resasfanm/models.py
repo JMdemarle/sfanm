@@ -77,6 +77,7 @@ class Reservation(models.Model):
 	def nbruches(self):
 		return self.nbtypfecond1 + self.nbtypfecond2 + self.nbtypfecond3 + self.nbtypfecond4
 	
+	@property
 	def nbruchesdepot(self):
     		return self.nbdepotfecond1 + self.nbdepotfecond2 + self.nbdepotfecond3 + self.nbdepotfecond4
 		
