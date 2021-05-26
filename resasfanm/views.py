@@ -409,9 +409,21 @@ def editentreesortie(request,dateedit):
 # Make heading for each column and start data list
     data = [['Apicuteur','Prénom','téléphone','Nb reines', 'Apidéa', 'Miniplus', 'Warre', 'Ruchette', 'Total','Emargement']]
 # Assemble data for each column using simple loop to append it into data list
+    nb1 = 0
+    nb2 = 0
+    nb3 = 0
+    nb4 = 0
+    nbr = 0
+
     for resa in resas:
         data.append([resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone,resa.nbreinedepot, \
             str(resa.nbdepotfecond1) ,resa.nbdepotfecond2, resa.nbdepotfecond3, resa.nbdepotfecond4, resa.nbruchesdepot,''])
+        nb1 += resa.nbdepotfecond1
+        nb2 += resa.nbdepotfecond2
+        nb3 += resa.nbdepotfecond3
+        nb4 += resa.nbdepotfecond4                        
+        nbr += resa.nbreinedepot                        
+    data.append(['','', 'Total', str(nbr), str(nb1), str(nb2), str(nb3), str(nb4), '', '']) \
 # nom prenom telephone nb reines nb ruches présent
     tableThatSplitsOverPages = Table(data, colWidths=(45*mm,40*mm,30*mm,20*mm,20*mm, 20*mm, 20*mm, 20*mm, \
          20*mm, 35*mm),rowHeights=(10*mm), repeatRows=1)
@@ -438,10 +450,22 @@ def editentreesortie(request,dateedit):
 # Make heading for each column and start data list
     data = [['Apicuteur','Prénom','téléphone','Nb reines', 'Apidéa', 'Miniplus', 'Warre', 'Ruchette', 'Total','Emargement']]
 # Assemble data for each column using simple loop to append it into data list
+    nb1 = 0
+    nb2 = 0
+    nb3 = 0
+    nb4 = 0
+    nbr = 0
     for resa in resas:
         data.append([resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone,resa.nbreinedepot, \
             str(resa.nbdepotfecond1) ,resa.nbdepotfecond2, resa.nbdepotfecond3, resa.nbdepotfecond4, resa.nbruchesdepot,''])
-# nom prenom telephone nb reines nb ruches présent
+        nb1 += resa.nbdepotfecond1
+        nb2 += resa.nbdepotfecond2
+        nb3 += resa.nbdepotfecond3
+        nb4 += resa.nbdepotfecond4                        
+        nbr += resa.nbreinedepot                        
+    data.append(['','', 'Total', str(nbr), str(nb1), str(nb2), str(nb3), str(nb4), '', '']) \
+    # nom prenom telephone nb rei
+    # nes nb ruches présent
     tableThatSplitsOverPages = Table(data, colWidths=(45*mm,40*mm,30*mm,20*mm,20*mm, 20*mm, 20*mm, 20*mm, \
          20*mm, 35*mm),rowHeights=(10*mm), repeatRows=1)
     tableThatSplitsOverPages.hAlign = 'LEFT'
