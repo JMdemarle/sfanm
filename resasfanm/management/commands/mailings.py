@@ -26,6 +26,8 @@ class Command(BaseCommand):
         try:
             message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[to])
             message.attach('etiquettes.pdf', pdf, 'application/pdf')
+            message.attach_file(os.path.join(settings.STATIC_ROOT, 'doc/connexion.docx'))
+
         except Exception as e: print(e)
         else:
             print ('message préparé')
