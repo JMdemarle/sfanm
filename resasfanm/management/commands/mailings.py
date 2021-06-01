@@ -1,7 +1,11 @@
 from django.core import mail
 from django.core.mail import EmailMessage
 
+import os
+
 from datetime import date, datetime, timedelta
+
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.template.loader import render_to_string
@@ -100,7 +104,7 @@ class Command(BaseCommand):
         time = timezone.now().strftime('%X')
         self.stdout.write("It's now %s" % time)
         datej = date.today()
-        datej3 = datej + timedelta(days=5)
+        datej3 = datej + timedelta(days=4)
         print(datej3)
         
         # mailing de rappel pour les réservations
