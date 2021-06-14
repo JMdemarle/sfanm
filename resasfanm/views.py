@@ -416,13 +416,14 @@ def editentreesortie(request,dateedit):
     nbr = 0
 
     for resa in resas:
-        data.append([resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone,resa.nbreinedepot, \
-            str(resa.nbdepotfecond1) ,resa.nbdepotfecond2, resa.nbdepotfecond3, resa.nbdepotfecond4, resa.nbruchesdepot,''])
-        nb1 += resa.nbdepotfecond1
-        nb2 += resa.nbdepotfecond2
-        nb3 += resa.nbdepotfecond3
-        nb4 += resa.nbdepotfecond4                        
-        nbr += resa.nbreinedepot                        
+        if resa.nbreinedepot > 0:
+            data.append([resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone,resa.nbreinedepot, \
+                str(resa.nbdepotfecond1) ,resa.nbdepotfecond2, resa.nbdepotfecond3, resa.nbdepotfecond4, resa.nbruchesdepot,''])
+            nb1 += resa.nbdepotfecond1
+            nb2 += resa.nbdepotfecond2
+            nb3 += resa.nbdepotfecond3
+            nb4 += resa.nbdepotfecond4                        
+            nbr += resa.nbreinedepot                        
     data.append(['','', 'Total', str(nbr), str(nb1), str(nb2), str(nb3), str(nb4), '', '']) \
 # nom prenom telephone nb reines nb ruches présent
     tableThatSplitsOverPages = Table(data, colWidths=(45*mm,40*mm,30*mm,20*mm,20*mm, 20*mm, 20*mm, 20*mm, \
@@ -456,13 +457,14 @@ def editentreesortie(request,dateedit):
     nb4 = 0
     nbr = 0
     for resa in resas:
-        data.append([resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone,resa.nbreinedepot, \
-            str(resa.nbdepotfecond1) ,resa.nbdepotfecond2, resa.nbdepotfecond3, resa.nbdepotfecond4, resa.nbruchesdepot,''])
-        nb1 += resa.nbdepotfecond1
-        nb2 += resa.nbdepotfecond2
-        nb3 += resa.nbdepotfecond3
-        nb4 += resa.nbdepotfecond4                        
-        nbr += resa.nbreinedepot                        
+        if resa.nbreinedepot > 0:
+            data.append([resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone,resa.nbreinedepot, \
+                str(resa.nbdepotfecond1) ,resa.nbdepotfecond2, resa.nbdepotfecond3, resa.nbdepotfecond4, resa.nbruchesdepot,''])
+            nb1 += resa.nbdepotfecond1
+            nb2 += resa.nbdepotfecond2
+            nb3 += resa.nbdepotfecond3
+            nb4 += resa.nbdepotfecond4                        
+            nbr += resa.nbreinedepot                        
     data.append(['','', 'Total', str(nbr), str(nb1), str(nb2), str(nb3), str(nb4), '', '']) \
     # nom prenom telephone nb rei
     # nes nb ruches présent
