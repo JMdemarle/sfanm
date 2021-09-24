@@ -41,7 +41,7 @@ urlpatterns = [
         template_name='users/password_reset.html',
         email_template_name='users/password_reset_email.html',
         subject_template_name='users/password_reset_subject.txt',
-        from_email='ne-pas-repondre@sfanm.fr'), 
+        from_email='SFANM <sfanm@deje5295.odns.fr>'), 
         name='password_reset'),
         
         
@@ -49,7 +49,7 @@ urlpatterns = [
         template_name='users/password_reset_evt.html',
         email_template_name='users/password_reset_email.html',
         subject_template_name='users/password_reset_subject.txt',
-        from_email='ne-pas-repondre@sfanm.fr',
+        from_email='SFANM <sfanm@deje5295.odns.fr>',
         success_url = reverse_lazy('password_reset_done_evt')), 
         name='password_reset_evt'),
     path('resetevt/done',
@@ -59,7 +59,7 @@ urlpatterns = [
         template_name='users/password_reset_resa.html',
         email_template_name='users/password_reset_email.html',
         subject_template_name='users/password_reset_subject.txt',
-        from_email='ne-pas-repondre@sfanm.fr',
+        from_email='SFANM <sfanm@deje5295.odns.fr>',
         success_url = reverse_lazy('password_reset_done_resa')), 
         name='password_reset_resa'),
     path('resetresa/done',
