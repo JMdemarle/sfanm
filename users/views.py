@@ -59,7 +59,7 @@ def mailacquit(request,membreid):
 #    img = Image(os.path.join(settings.STATIC_ROOT, 'img/sfanmlogo.jpg'),width=28*mm,height=28*mm)
 
     message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=['contact@sfanm.fr',to])
-    message.attach_file(os.path.join(settings.STATIC_ROOT, 'doc/connexion.docx'))
+    message.attach_file(os.path.join(settings.STATIC_ROOTDOC, 'doc/connexion.docx'))
     message.send() 
 #    send_mail(subject, html_message, from_email, ['contact@sfanm.fr',to,'jm.demarle@outlook.fr'])   
     return redirect('contactsuccess','/users/listmembres')
@@ -119,7 +119,7 @@ class PasswordResetViewNew(PasswordResetView):
         return render(request, "users/password_reset.html", {'form': PasswordResetForm})
                    
 
-
+# Nouvelle adhésion
 def signupnew(request):
     url = request.GET.get("next")       
     if request.method == 'GET':
@@ -164,6 +164,7 @@ def signupnew(request):
                     return redirect('signupsuccess')
     return render(request, "users/signupnew.html", {'form': form})
 
+# réadhésion
 def signupagain(request):
     url = request.GET.get("next")
     if request.method == 'GET':

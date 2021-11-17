@@ -690,7 +690,7 @@ def Etiquette(idresa):
       % ( resa.apiculteur.nom,resa.apiculteur.prenom, resa.apiculteur.telephone, resa.datedepot.strftime("%d / %m / %y" ), resa.dateretrait.strftime("%d / %m / %y" ))
     print (ptext)
     parag = Paragraph(ptext, styles["Normal"])
-    img = Image(os.path.join(settings.STATIC_ROOT, 'img/sfanmlogo.jpg'),width=28*mm,height=28*mm)
+    img = Image(os.path.join(settings.STATIC_ROOTDOC, 'img/sfanmlogo.jpg'),width=28*mm,height=28*mm)
     data = []
     for i in range (1,6):
         data.append([img,parag,img,parag])

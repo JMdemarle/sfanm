@@ -1,0 +1,16 @@
+{% load cms_tags menu_tags %}
+
+
+{% for child in children %}
+
+
+    <li class="nav-link">
+        <a class="navbar-brand" href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
+        {% if child.children %}
+            <ul class="sub_menu">
+                {% show_menu from_level to_level extra_inactive extra_active template '' '' child %}
+            </ul>
+        {% endif %}
+    </li>
+
+{% endfor %}
