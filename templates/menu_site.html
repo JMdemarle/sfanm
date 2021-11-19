@@ -8,6 +8,7 @@
         <a class="navbar-brand" href="{% url 'listouv' %}">Réservations </a>
         <a class="navbar-brand" href="{% url 'listevts' %}">Formations</a>
         {% show_menu 0 1 100 100 "cms/menu.html" %}
+        {% show_menu 0 1 100 100 %}
         {% if user.is_authenticated %}
         {% if user.is_staff %}
         <a class="navbar-brand" href="{% url 'home' %}">Administration</a>
