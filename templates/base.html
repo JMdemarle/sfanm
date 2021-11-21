@@ -1,5 +1,5 @@
 {% load static %}
-{% load cms_tags menu_tags cache %}
+{% load cms_tags menu_tags %}
 
 <!DOCTYPE html>
 
@@ -15,6 +15,7 @@
 
 {% block body %}
 {% include "menu_site.html" %}
+
   <div class="container">
       {% if user.is_staff %}
       <ol class="breadcrumb my-4">
