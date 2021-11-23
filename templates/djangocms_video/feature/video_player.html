@@ -1,0 +1,41 @@
+{% load i18n cms_tags %}
+
+<div class="djangocms-video-plugin">
+        {% if instance.embed_link %}
+        {# show iframe if embed_link is provided #}
+        {#<iframe src="{{ instance.embed_link_with_parameters }}" {{ instance.attributes_str }} frameborder="0" allowfullscreen="true"></iframe> #}
+        {# <video poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg" class="js-player"> "}"
+            <video class="js-player">
+            <source src="{{ instance.embed_link_with_parameters }}"/></video>
+
+
+        {% with disabled=instance.embed_link %}
+            {% for plugin in instance.child_plugin_instances %}
+                {% render_plugin plugin %}
+            {% endfor %}
+        {% endwith %}
+    {% else %}
+        {# render <source> or <track> plugins #}
+        <video controls {{ instance.attributes_str }}
+            {% if instance.poster %} poster="{{ instance.poster.url }}"{% endif %}>
+            {% for plugin in instance.child_plugin_instances %}
+                {% render_plugin plugin %}
+            {% endfor %}
+            {% trans "Your browser doesn't support this video format." %}
+        </video>
+    {% endif %}
+
+    {% comment %}
+        # Available variables:
+        {{ instance.template }}
+        {{ instance.label }}
+        {{ instance.embed_link }}
+        {{ instance.poster }}
+        {{ instance.attributes_str }}
+    {% endcomment %}
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.5.6/plyr.css" />
+
+
+    <script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
+
+</div>

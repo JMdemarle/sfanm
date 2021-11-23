@@ -17,6 +17,9 @@ class CustomUserResource(resources.ModelResource):
 class CustomUserAdminExpImp(ImportExportModelAdmin):
     resource_class = CustomUserResource
 
+class UserSetInline(admin.TabularInline):
+    model = CustomUser.groups.through
+    #raw_id_fields = ('email',)  # optional, if you have too many users
 
 #class CustomUserAdmin(UserAdmin):
 class CustomUserAdmin(ImportExportModelAdmin):
@@ -24,12 +27,20 @@ class CustomUserAdmin(ImportExportModelAdmin):
 # pour import / export
     resource_class = CustomUserResource
 
-    list_display = ('email', 'nom', 'prenom','adresse1','adresse2','codepostal','ville','telephone','nbreinesmax','is_staff', 'is_active','acquitte',)
+    list_display = ('email', 'nom', 'prenom','adresse1','adresse2','codepostal','ville','telephone','nbreinesmax','is_staff', 'is_active','acquitte')
     list_filter = ('email', 'is_staff', 'is_active','acquitte',)
+    #inlines = [UserSetInline]
+    filter_horizontal = ('groups', 'user_permissions',)
+
     fieldsets = (
         (None, {'fields': ('email','password', 'nom','prenom','nbreinesmax')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active','is_superuser','acquitte')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active','is_superuser','acquitte',)}),
         ('coordonnées',{'fields': ('adresse1','adresse2','codepostal','ville','telephone')}),
+        ('Group Permissions', {
+            'classes': ('collapse',),
+            'fields': ('groups', 'user_permissions', )
+        })
+
     )
     add_fieldsets = (
         (None, {
@@ -39,6 +50,8 @@ class CustomUserAdmin(ImportExportModelAdmin):
      )
     search_fields = ('email',)
     ordering = ('email',)
+
+
 
 
 #admin.site.unregister(CustomUser)
