@@ -15,14 +15,15 @@
             {% endfor %}
         {% endwith %}
     {% else %}
-        {# render <source> or <track> plugins #}
+        {# render <source> or <track> plugins ajt de class="js-player #}
         <video controls {{ instance.attributes_str }}
-            {% if instance.poster %} poster="{{ instance.poster.url }}"{% endif %}>
+            {% if instance.poster %} poster="{{ instance.poster.url }}"{% endif %} class="js-player" >
             {% for plugin in instance.child_plugin_instances %}
                 {% render_plugin plugin %}
             {% endfor %}
             {% trans "Your browser doesn't support this video format." %}
-        </video>
+        </video> #}
+
     {% endif %}
 
     {% comment %}
