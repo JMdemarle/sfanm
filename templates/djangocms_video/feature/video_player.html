@@ -1,7 +1,13 @@
 {% load i18n cms_tags %}
 
+<p>j y passe</p>
+<p>{{ instance.attributes_str }}</p>
+
 <div class="djangocms-video-plugin">
+
+    <script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
         {% if instance.embed_link %}
+        <p> embed </p>
         {# show iframe if embed_link is provided #}
         {#<iframe src="{{ instance.embed_link_with_parameters }}" {{ instance.attributes_str }} frameborder="0" allowfullscreen="true"></iframe> #}
         {# <video poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg" class="js-player"> #}
@@ -15,9 +21,12 @@
             {% endfor %}
         {% endwith %}
     {% else %}
+        <p> pas embed </p>
         {# render <source> or <track> plugins ajt de class="js-player #}
-        <video controls {{ instance.attributes_str }}
+        <video controls 
             {% if instance.poster %} poster="{{ instance.poster.url }}"{% endif %} class="js-player" >
+            <source src=" {{ instance.attributes_str }}"/>
+
             {% for plugin in instance.child_plugin_instances %}
                 {% render_plugin plugin %}
             {% endfor %}
@@ -34,9 +43,7 @@
         {{ instance.poster }}
         {{ instance.attributes_str }}
     {% endcomment %}
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.5.6/plyr.css" />
 
 
-    <script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
 
 </div>
