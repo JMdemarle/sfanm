@@ -21,7 +21,8 @@
             {% endfor %}
         {% endwith %}
     {% else %}
-        <p> pas embed </p>
+        <p> pas embed </p><p>{{ instance.attributes_str }}</p>
+
         {# render <source> or <track> plugins ajt de class="js-player #}
         <video controls 
             {% if instance.poster %} poster="{{ instance.poster.url }}"{% endif %} class="js-player" >
