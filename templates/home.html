@@ -4,7 +4,6 @@
 <html>
     <head>
         {% include "head.html" %}
-        <link href="https://vjs.zencdn.net/7.17.0/video-js.css" rel="stylesheet" />
         {% render_block "css" %}
     </head>
     <body>
@@ -19,9 +18,16 @@
         <script src="{% static 'js/bootstrap.min.js' %}"></script>
         <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>        
     <!--    <script src="{% static 'js/plyr.js' %}"></script>
-        <script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
+        <script src="https://cdn.plyr.io/3.5.6/plyr.js"></script> -->
 
-        {% render_block "js" %} -->
+        {% render_block "js" %} 
+        <script>
+const noContext = document.getElementById('noContextMenu');
 
+noContext.addEventListener('contextmenu', e => {
+  e.preventDefault();
+});
+        </script>
     </body>
 </html>
+

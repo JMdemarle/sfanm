@@ -1,12 +1,9 @@
 {% load i18n cms_tags %}
 
-<p>j y passe</p>
-<p>{{ instance.attributes_str }}</p>
 
-<div class="djangocms-video-plugin">
+<div class="djangocms-video-plugin" id="noContextMenu">
 
         {% if instance.embed_link %}
-        <p> embed </p>
         {# show iframe if embed_link is provided #}
         {#<iframe src="{{ instance.embed_link_with_parameters }}" {{ instance.attributes_str }} frameborder="0" allowfullscreen="true"></iframe> #}
         {# <video poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg" class="js-player"> #}
@@ -20,11 +17,10 @@
             {% endfor %}
         {% endwith %}
     {% else %}
-        <p> pas embed </p>
 
         {# render <source> or <track> plugins ajt de class="js-player id="player"#}
-        <video controls playsinline     width="640"
-        height="264"     class="video-js"
+        <video-js controls playsinline     width="640"
+        height="480"     class="video-js vjs-theme-city" liveui data-setup='{}'
             {% if instance.poster %} poster="{{ instance.poster.url }}"{% endif %}  >
 
             {% for plugin in instance.child_plugin_instances %}
@@ -33,7 +29,7 @@
             <p class="vjs-no-js">
             {% trans "Your browser doesn't support this video format." %}
             </p>
-        </video> 
+        </video-js> 
 
     {% endif %}
 
