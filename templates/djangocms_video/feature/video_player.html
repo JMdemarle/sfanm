@@ -5,7 +5,6 @@
 
 <div class="djangocms-video-plugin">
 
-    <script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
         {% if instance.embed_link %}
         <p> embed </p>
         {# show iframe if embed_link is provided #}
@@ -21,17 +20,19 @@
             {% endfor %}
         {% endwith %}
     {% else %}
-        <p> pas embed </p><p>{{ instance.attributes_str }}</p>
+        <p> pas embed </p>
 
-        {# render <source> or <track> plugins ajt de class="js-player #}
-        <video controls 
-            {% if instance.poster %} poster="{{ instance.poster.url }}"{% endif %} class="js-player" >
-            <source src=" {{ instance.attributes_str }}"/>
+        {# render <source> or <track> plugins ajt de class="js-player id="player"#}
+        <video controls playsinline     width="640"
+        height="264"     class="video-js"
+            {% if instance.poster %} poster="{{ instance.poster.url }}"{% endif %}  >
 
             {% for plugin in instance.child_plugin_instances %}
                 {% render_plugin plugin %}
             {% endfor %}
+            <p class="vjs-no-js">
             {% trans "Your browser doesn't support this video format." %}
+            </p>
         </video> 
 
     {% endif %}
