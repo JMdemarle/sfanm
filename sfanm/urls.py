@@ -25,7 +25,7 @@ urlpatterns = [
     path('resasfanm/', include('resasfanm.urls')),
     path('users/', include('users.urls')),
 #    path('', resas_views.home, name = 'home'),
-    path('', resas_views.home, name = 'listouv'),
+    path('', resas_views.home, name = 'home'),
     path('home', resas_views.home, name = 'home'),
     re_path(r'^', include('cms.urls')),
 
