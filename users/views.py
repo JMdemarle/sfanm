@@ -209,9 +209,10 @@ def contactView(request):
         if form.is_valid():
             subject = form.cleaned_data['subject']
             from_email = form.cleaned_data['from_email']
+            emet_email = 'SFANM <sfanm@deje5295.odns.fr>'
             message = form.cleaned_data['message']
             try:
-                send_mail(subject, message, from_email, ['contact@sfanm.fr'])
+                send_mail(subject, message, emet_email, ['contact@sfanm.fr',from_email])
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
                 
