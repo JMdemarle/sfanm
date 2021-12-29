@@ -65,5 +65,8 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
+    def get_nom(self):
+        return self.nom
+
     def set_password(self, raw_password):
         self.password = make_password(raw_password)

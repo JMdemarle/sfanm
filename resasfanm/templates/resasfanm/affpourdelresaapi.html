@@ -1,0 +1,24 @@
+
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'listgestion' %}" >Activité de la station</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'listentrees' la_resa.datedepot %}" >Les Entrées du {{ la_resa.datedepot }} </a></li>
+  <li class="breadcrumb-item active">Annulation</li>
+{% endblock %}
+
+{% block content %}
+
+<h2>Annulation de la réservation</h2>  <br>
+ <div class="row">
+    <div class="col-lg-3 col-sm-4"> apiculteur: {{ la_resa.apiculteur}} </div>
+    <div class="col-lg-3 col-sm-4"> Date depot: {{ la_resa.datedepot}} </div>
+    <div class="col-lg-3 col-sm-4"> Nb reines: {{ la_resa.nbreine}} </div>
+  </div>
+  <br>
+   <div class="row">
+    <div class="col-lg-3 col-sm-3"><a href="{% url 'listentrees' la_resa.datedepot  %}" class="btn btn-primary btn-block">Revenir</a></div>
+    <div class="col-lg-3 col-sm-3"><a href="{% url 'delResaApi' la_resa.id %}" class="btn btn-danger btn-block">Annuler réservation</a></div>
+  </div>
+
+{% endblock %}

@@ -27,12 +27,14 @@ from datetime import date, datetime
 
 
 from resasfanm.models import Reservation, Capacite, Presence, Evenement, Inscription
+from users.models import CustomUser
+
 from django.contrib.auth.models import User
 
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import NewReservationForm, ModReservationForm, NewEvenementForm, ModEvenementForm, NewInscriptionForm, ModEntreeReelleForm
+from .forms import NewReservationForm, NewReservationApiForm, ModReservationForm,  NewEvenementForm, ModEvenementForm, NewInscriptionForm, ModEntreeReelleForm
 from datetime import timedelta 
 import datetime
 
@@ -71,6 +73,114 @@ def home(request):
 #       return redirect('listresas') 
             return render(request, 'resasfanm/maintenance.html')
 
+# réservation créée par admin pour le compte API
+@login_required
+def newresaapi(request,idcapa):
+    msg =''
+    capa = Capacite.objects.get(id=idcapa)
+    datededepot = capa.datecapa
+    dateret1 = datededepot + timedelta(days=14)
+    lesApis = CustomUser.objects.filter(is_active = True)
+    if not(Capacite.objects.filter(datecapa=dateret1).exists()):
+        subject = 'SFANM - Problème de définition des dates de réservation'
+        html_message = 'il n est pas possible de retirer les ruches après la date de dépôt'
+        from_email = 'SFANM <sfanm@deje5295.odns.fr>'
+        to = 'contact@sfanm.fr'
+        mail.send_mail(subject, html_message, from_email, [to])             
+
+        return render(request, 'resasfanm/resaimpossible.html')
+
+        
+    dateret2 = dateret1 + timedelta(days=7)
+    if Capacite.objects.filter(datecapa=dateret2).exists():
+        datechoix = ((dateret1 , dateret1),(dateret2, dateret2))
+    else:
+        datechoix = ((dateret1 , dateret1),(dateret1 , dateret1))
+        
+    if request.method == 'POST':
+        form = NewReservationApiForm(request.POST, initial={'la_date' : datededepot, 'choix_date' : datechoix, 'les_apis' : lesApis})
+        if form.is_valid():
+            nbreinedemand = form.cleaned_data['nbreine']
+            dated = datededepot             
+            datert = datetime.datetime.strptime(form.cleaned_data['dateretrait'], "%Y-%m-%d").date()
+            # vérification des capacités
+            resaok = True
+            while (dated < datert):
+                capac = Capacite.objects.filter(datecapa = dated).first()
+                if (capac.get_reinesdispos() < nbreinedemand):
+                    resaok = False
+                    msg += 'Manque de capacité à la station le ' + dated.strftime("%d/%m/%Y")
+                dated = dated + timedelta(days=7)
+            if nbreinedemand > request.user.nbreinesmax:
+                resaok = False
+                msg += 'Vous dépassez votre quotat de ' + str(request.user.nbreinesmax) + ' reines' 
+            nbtypfecond1 = form.cleaned_data['nbtypfecond1']
+            nbtypfecond2 = form.cleaned_data['nbtypfecond2']
+            nbtypfecond3 = form.cleaned_data['nbtypfecond3']
+            nbtypfecond4 = form.cleaned_data['nbtypfecond4']
+            if (nbtypfecond1 + nbtypfecond2 + nbtypfecond3 + nbtypfecond4) > nbreinedemand:
+                resaok = False
+                msg += 'Le nombre de ruches est supérieur à celui des reines !  '  
+            formApiculteur = form.cleaned_data['apiculteur']
+            formDateDepot = form.cleaned_data['datedepot']
+            if Reservation.objects.filter(apiculteur=formApiculteur, datedepot=formDateDepot).exists():
+                resaok = False
+                msg += 'L apiculteur a déjà une reservation pour cette date'
+            if (resaok):
+                reservation = Reservation()
+                idapiculteur = formApiculteur
+                reservation.apiculteur = CustomUser.objects.get(id=idapiculteur)
+                reservation.nbreine = form.cleaned_data['nbreine']
+                reservation.datedepot = formDateDepot
+                reservation.dateretrait = form.cleaned_data['dateretrait']
+                reservation.nbtypfecond1 = form.cleaned_data['nbtypfecond1']
+                reservation.nbtypfecond2 = form.cleaned_data['nbtypfecond2']
+                reservation.nbtypfecond3 = form.cleaned_data['nbtypfecond3']
+                reservation.nbtypfecond4 = form.cleaned_data['nbtypfecond4']
+                reservation.nbdepotfecond1 = reservation.nbtypfecond1
+                reservation.nbdepotfecond2 = reservation.nbtypfecond2
+                reservation.nbdepotfecond3 = reservation.nbtypfecond3
+                reservation.nbdepotfecond4 = reservation.nbtypfecond4
+                reservation.nbreinedepot = reservation.nbreine                                                
+                dated = datededepot             
+                #
+                reservation.save()
+                dater = datetime.datetime.strptime(reservation.dateretrait, "%Y-%m-%d").date()
+                # mise à jour des présences
+                while (dated < dater):
+                    present = Presence()
+                    capac = Capacite.objects.filter(datecapa = dated).first()
+                    present.capa = capac
+                    present.resa = reservation
+                    present.save()
+                    dated = dated + timedelta(days=7)
+                    
+                #  Envoi mail
+                subject = 'SFANM - Confirmation de réservation'
+                html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': reservation, 'le_api': reservation.apiculteur, })
+                #plain_message = strip_tags(html_message)
+                from_email = 'SFANM <sfanm@deje5295.odns.fr>'
+                to = request.user.email
+                pdf = Etiquette(reservation.id)
+                try:
+                        #mail.send_mail(subject, html_message, from_email, [to])
+                    message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[to])
+                    message.attach('etiquettes.pdf', pdf, 'application/pdf')
+
+                except Exception as e: print(e)
+                else:
+                    print ('message préparé')
+            #message.content_subtype = "text/plain"
+                    try:
+                        message.send() 
+                        print('mail envoyé')
+                    except:
+                        print('pb envoi')
+
+                return redirect('listentrees', datededepot)  
+    else:
+        form = NewReservationApiForm(initial={'la_date' : datededepot, 'choix_date' : datechoix,  'les_apis' : lesApis})
+    return render(request, 'resasfanm/newresaapi.html', {'form': form, 'mod' : False, 'msg' : msg, 'date_depot' : datededepot})
 
 @login_required
 def newresa(request,idcapa):
@@ -174,7 +284,109 @@ def newresa(request,idcapa):
         form = NewReservationForm(initial={'la_date' : datededepot, 'choix_date' : datechoix})
     return render(request, 'resasfanm/newresa.html', {'form': form, 'mod' : False, 'msg' : msg})
 
-# Modification rerservation
+# Modification rerservation pour un apiculteur
+@login_required
+def modResaApi(request,idresa,idapi):
+    msg =''
+    resam = Reservation.objects.get(id=idresa)
+    api = CustomUser.objects.get(id=idapi)
+    datededepot = resam.datedepot
+    dateret0 = datededepot + timedelta(days=7)
+    dateret1 = datededepot + timedelta(days=14)
+    dateret2 = dateret1 + timedelta(days=7)
+    if Capacite.objects.filter(datecapa=dateret2).exists():
+        datechoix = ((dateret0 , dateret0), (dateret1 , dateret1),(dateret2, dateret2))
+    else:
+        datechoix = ((dateret0 , dateret0),(dateret1 , dateret1))
+
+    form = ModReservationForm(request.POST, initial={'la_date' : datededepot, 'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : True})
+
+    if form.is_valid():
+        nbreinedemand = form.cleaned_data['nbreine']
+        dated = datededepot             
+        datert = datetime.datetime.strptime(form.cleaned_data['dateretrait'], "%Y-%m-%d").date()
+        # vérification des capacités
+        resaok = True
+        while (dated < datert):
+            capac = Capacite.objects.filter(datecapa = dated).first()
+            if (capac.get_reinesdispos() < nbreinedemand):
+                resaok = False
+                msg += 'Manque de capacité à la station le ' + dated.strftime("%d/%m/%Y")
+            dated = dated + timedelta(days=7)
+            print(dated)
+        if nbreinedemand > request.user.nbreinesmax:
+            resaok = False
+            msg += 'Vous dépassez votre quotat de ' + str(request.user.nbreinesmax) + ' reines' 
+        nbtypfecond1 = form.cleaned_data['nbtypfecond1']
+        nbtypfecond2 = form.cleaned_data['nbtypfecond2']
+        nbtypfecond3 = form.cleaned_data['nbtypfecond3']
+        nbtypfecond4 = form.cleaned_data['nbtypfecond4']
+        if (nbtypfecond1 + nbtypfecond2 + nbtypfecond3 + nbtypfecond4) > nbreinedemand:
+            resaok = False
+            msg += 'Le nombre de ruches est supérieur à celui des reines !  '   
+            
+        if (resaok):
+            #reservation = Reservation()
+            resam.apiculteur = api
+            resam.nbreine = form.cleaned_data['nbreine']
+            resam.datedepot = form.cleaned_data['datedepot']
+            resam.dateretrait = form.cleaned_data['dateretrait']
+            resam.nbtypfecond1 = form.cleaned_data['nbtypfecond1']
+            resam.nbtypfecond2 = form.cleaned_data['nbtypfecond2']
+            resam.nbtypfecond3 = form.cleaned_data['nbtypfecond3']
+            resam.nbtypfecond4 = form.cleaned_data['nbtypfecond4']
+            resam.nbdepotfecond1 = resam.nbtypfecond1
+            resam.nbdepotfecond2 = resam.nbtypfecond2
+            resam.nbdepotfecond3 = resam.nbtypfecond3
+            resam.nbdepotfecond4 = resam.nbtypfecond4
+            resam.nbreinedepot = resam.nbreine                                                
+            dated = datededepot             
+            #
+            resam.save()
+            dater = datetime.datetime.strptime(resam.dateretrait, "%Y-%m-%d").date()
+                # mise à jour des présences
+            # Etape 1 = supression
+            Presence.objects.filter(resa = resam).delete()
+            # Etape 2 = création à nouveau
+            while (dated < dater):
+                present = Presence()
+                capac = Capacite.objects.filter(datecapa = dated).first()
+                present.capa = capac
+                present.resa = resam
+                present.save()
+                dated = dated + timedelta(days=7)
+                
+            #  Envoi mail
+            subject = 'SFANM - Confirmation modification de réservation'
+            html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': resam, 'le_api': resam.apiculteur})
+            #plain_message = strip_tags(html_message)
+            from_email = 'SFANM <sfanm@deje5295.odns.fr>'
+            to = api.email
+            pdf = Etiquette(resam.id)
+            try:
+                        #mail.send_mail(subject, html_message, from_email, [to])
+                message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[to])
+                message.attach('etiquettes.pdf', pdf, 'application/pdf')
+
+            except Exception as e: print(e)
+            else:
+                print ('message préparé')
+            #message.content_subtype = "text/plain"
+                try:
+                    message.send() 
+                    print('mail envoyé')
+                except:
+                    print('pb envoi')
+                
+            return redirect('listentrees', datededepot)  
+    else:
+        form = ModReservationForm(initial={'la_date' : datededepot, 'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : True})
+    return render(request, 'resasfanm/newresaapi.html', {'form': form, 'mod' : True, 'msg' : msg, 'le_api' : api, 'date_depot' : datededepot})
+
+
+
+
+# Modification rerservation par un apiculteur
 @login_required
 def modresa(request,idresa):
     msg =''
@@ -188,7 +400,7 @@ def modresa(request,idresa):
     else:
         datechoix = ((dateret1 , dateret1),(dateret1 , dateret1))
 
-    form = ModReservationForm(request.POST, initial={'la_date' : datededepot, 'choix_date' : datechoix,'la_resa' : resam})
+    form = ModReservationForm(request.POST, initial={'la_date' : datededepot, 'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : False})
 
     if form.is_valid():
         nbreinedemand = form.cleaned_data['nbreine']
@@ -269,7 +481,7 @@ def modresa(request,idresa):
                 
             return redirect('listresas')  
     else:
-        form = ModReservationForm(initial={'la_date' : datededepot, 'choix_date' : datechoix,'la_resa' : resam})
+        form = ModReservationForm(initial={'la_date' : datededepot, 'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : False})
     return render(request, 'resasfanm/newresa.html', {'form': form, 'mod' : True, 'msg' : msg})
 
 @login_required 
@@ -277,6 +489,10 @@ def affpourdelresa(request,idresa):
     resam = Reservation.objects.get(id=idresa)
     return render(request, 'resasfanm/affpourdelresa.html', {'la_resa': resam})
     
+@login_required 
+def affpourdelresaapi(request,idresa):
+    resam = Reservation.objects.get(id=idresa)
+    return render(request, 'resasfanm/affpourdelresaapi.html', {'la_resa': resam})
 
 
 @login_required 
@@ -291,7 +507,20 @@ def delresa(request,idresa):
     mail.send_mail(subject, html_message, from_email, [to])             
     resam.delete()
     return redirect('listresas')  
-    
+
+@login_required 
+def delResaApi(request,idresa):
+    resam = Reservation.objects.get(id=idresa)
+    subject = 'SFANM - Confirmation d"annulation de réservation'
+    html_message = render_to_string('resasfanm/mailconfirmationannulreservation.html', {'la_resa': resam, 'le_api': resam.apiculteur})
+    #plain_message = strip_tags(html_message)
+    from_email = 'SFANM <sfanm@deje5295.odns.fr>'
+    to = request.user.email
+    #mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)            
+    mail.send_mail(subject, html_message, from_email, [to])             
+    resam.delete()
+    return redirect('listgestion')  
+
 @login_required 
 def listcapacites(request):
 # affiche les dates sur lesquelles l'apiculteur n'a pas réservé

@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}Crée une nouvelle réservation {% endblock %}
+
+{% if user.is_staff %}
+
+  {% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'listgestion' %}" >Activité de la station</a></li>
+
+  {% if mod   == True %}
+    <li class="breadcrumb-item"><a href="{% url 'listentrees' date_depot %}" >Les Entrées du {{ date_depot }} </a></li>
+    <li class="breadcrumb-item active"> Modification Réservation</li>
+  {% else %}
+    <li class="breadcrumb-item active"> Création Réservation</li>
+  {% endif %} 
+
+  {% endblock %}
+ {% endif %}
+
+{% block content %}
+  {% if mod   == True %}
+    <h3>Modification de la réservation de {{le_api.nom}} </h3>
+  {% else %}
+    <h3>Nouvelle réservation  de {{le_api.nom}}</h3>
+  {% endif %} 
+
+{% if msg != "" %}
+                    <div class="alert alert-danger">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+
+                        {{ msg }}
+
+                    </div>
+{% endif %}
+  {% crispy form %}
+{% endblock %}

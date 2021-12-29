@@ -37,6 +37,8 @@
             <td> {{ resa.nbruchesdepot }}</td>
             <td> {{ resa.nbreinedepot }}</td>
             <td> <a href="{% url 'entreereelle' resa.id %}"  class="btn btn-outline-primary">Entrées Réelles </a> </td>
+            <td> <a href="{% url 'modResaApi' resa.id  resa.apiculteur.id %}"  class="btn btn-outline-primary">Modifier</a> </td>
+            <td> <a href="{% url 'affpourdelresaapi' resa.id %}"  class="btn btn-outline-danger">Supprimer</a> </td>
             
           </tr>
       {% endfor %}

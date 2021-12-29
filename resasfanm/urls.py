@@ -14,6 +14,10 @@ urlpatterns = [
     path('delresa/<int:idresa>',views.delresa,name='delresa'),
     path('affpourdelresa/<int:idresa>',views.affpourdelresa,name='affpourdelresa'), 
     
+    path('modResaApi/<int:idresa>/<int:idapi>',views.modResaApi,name='modResaApi'),
+    path('delResaApi/<int:idresa>',views.delResaApi,name='delResaApi'),
+    path('affpourdelresaapi/<int:idresa>',views.affpourdelresaapi,name='affpourdelresaapi'), 
+    path('newresaapi/<int:idcapa>',views.newresaapi,name='newresaapi'),
 
     path('newevenement',views.newevenement,name='newevenement'),
     path('listevenements',views.listevenements,name='listevenements'),
