@@ -70,9 +70,10 @@ def mailacquit(request,membreid):
 def membresrazacquitte(request):
     membres = CustomUser.objects.all()
     for membre in membres:
-        membre.acquitte = False
-        membre.is_active = False
-        membre.save()
+        if not membre.is_staff:
+            membre.acquitte = False
+            membre.is_active = False
+            membre.save()
     return redirect('listmembres')
 
 @login_required 
