@@ -33,7 +33,8 @@ import csv
 
 from users.models import CustomUser
 
-from .forms import SignUpForm, ContactForm, Okpourcontinuer, SignupForm, SignupNewForm, SignupAgainForm, LoginForm, MonCompteForm, ModMembreForm
+from .forms import SignUpForm, ContactForm, Okpourcontinuer, SignupForm, SignupNewForm, SignupAgainForm, LoginForm, MonCompteForm, \
+     ModMembreForm, CreeMembreForm
 
 @staff_member_required
 def listmembres(request):
@@ -102,6 +103,41 @@ def modmembre(request,membreid):
     else:
         form = ModMembreForm(initial={'le_membre' : membre})
     return render(request, 'users/modmembre.html', {'form': form,'le_membre': membre})
+
+@login_required 
+@staff_member_required
+def creemembre(request):
+    form = CreeMembreForm(request.POST)
+    if request.method == 'POST':
+        if "cancel" in request.POST:
+            return redirect('listmembres')
+        else:
+            if form.is_valid():
+                emails = form.cleaned_data['email']
+                if CustomUser.objects.filter(email=emails).exists(): # return True/False
+                    messages.add_message(request, messages.ERROR, 'Le compte existe.')
+                    messages.add_message(request, messages.ERROR, 'Est-ce pour un renouvellement d"adhésion?')
+                else:
+                    custuser = CustomUser()
+                    custuser.email = emails
+                    custuser.nom = form.cleaned_data['nom'].upper()
+                    custuser.prenom = form.cleaned_data['prenom'].title()
+                    custuser.adresse1 = form.cleaned_data['adresse1']
+                    custuser.adresse2 = form.cleaned_data['adresse2']
+                    custuser.codepostal = form.cleaned_data['codepostal']
+                    custuser.ville = form.cleaned_data['ville']
+                    custuser.telephone = form.cleaned_data['telephone']
+                    custuser.is_active = False
+                    custuser.save()
+           #         html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "d adhésion"})
+           #         try:
+           #             send_mail('[SFANM] : demande adhésion', html_message, 'SFANM <sfanm@deje5295.odns.fr>', ['contact@sfanm.fr',emails,'jm.demarle@outlook.fr'])
+           #         except BadHeaderError:
+           #             return HttpResponse('Invalid header found.')
+                    return redirect('home')
+    else:
+        form = CreeMembreForm()
+    return render(request, "users/creemembre.html", {'form': form})
 
 
 def signup(request):

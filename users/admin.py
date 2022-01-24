@@ -30,16 +30,11 @@ class CustomUserAdmin(ImportExportModelAdmin):
     list_display = ('email', 'nom', 'prenom','adresse1','adresse2','codepostal','ville','telephone','nbreinesmax','is_staff', 'is_active','acquitte')
     list_filter = ('email', 'is_staff', 'is_active','acquitte',)
     #inlines = [UserSetInline]
-    filter_horizontal = ('groups', 'user_permissions',)
 
     fieldsets = (
         (None, {'fields': ('email','password', 'nom','prenom','nbreinesmax')}),
         ('Permissions', {'fields': ('is_staff', 'is_active','is_superuser','acquitte',)}),
-        ('coordonnées',{'fields': ('adresse1','adresse2','codepostal','ville','telephone')}),
-        ('Group Permissions', {
-            'classes': ('collapse',),
-            'fields': ('groups', 'user_permissions', )
-        })
+        ('coordonnées',{'fields': ('adresse1','adresse2','codepostal','ville','telephone')})
 
     )
     add_fieldsets = (

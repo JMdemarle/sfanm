@@ -25,7 +25,7 @@ urlpatterns = [
     path('razacquitte',views.razacquitte,name='razacquitte'),
     
     path('modmembre/<int:membreid>',views.modmembre,name='modmembre'),
-    
+    path('creemembre',views.creemembre,name='creemembre'),    
 
 
     path('mon_compte',views.mon_compte,name='mon_compte'),

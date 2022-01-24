@@ -87,6 +87,52 @@ class SignupAgainForm(forms.Form):
         )
 
 
+class CreeMembreForm(forms.Form):
+    email = forms.EmailField(required=True, label = 'Email',widget=forms.TextInput(attrs={'class': 'form-control','placeholder':'Email'}))
+    is_active = forms.BooleanField(required=False, label ='actif')
+    acquitte = forms.BooleanField(required=False, label ='reçu envoyé')
+    nbreinesmax = forms.IntegerField(required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    nom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    prenom = forms.CharField(max_length=25, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    adresse1 = forms.CharField(max_length=40, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    adresse2 = forms.CharField(max_length=40, required=False,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    codepostal = forms.IntegerField(required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    ville = forms.CharField(max_length=35, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    telephone = forms.CharField(max_length=15,min_length=10, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+ 
+        self.helper = FormHelper()
+ 
+        self.helper.layout = Layout(
+           'email',
+            Row(
+                Column('nom', css_class='form-group col-lg-6 col-md-6 mb-0'),
+                Column('prenom', css_class='form-group col-lg-6 col-md-6 mb-0'),
+
+            ),
+            'telephone',
+            'adresse1',
+            'adresse2',
+            Row(
+                Column('codepostal', css_class='form-group col-md-3 mb-0'),
+                Column('ville', css_class='form-group col-md-9 mb-0'),
+            ),
+             HTML("<br>"), 
+            Row(
+                Column('is_active', css_class='form-group col-lg-4 col-md-4 mb-0'),
+                Column('acquitte', css_class='form-group col-lg-4 col-md-4 mb-0'),
+                Column('nbreinesmax', css_class='form-group col-lg-4 col-md-4 mb-0'),
+
+            ),
+             HTML("<br>"), 
+             Row(
+                Submit('cancel', 'Annuler',css_class='form-group col-md-4 mb-0 btn-info',formnovalidate='formnovalidate',),
+                Submit('submit', 'Soumettre',css_class='form-group col-md-4 mb-0 btn-danger'),
+                css_class='form-row'
+            ),
+        )
+
 class ModMembreForm(forms.Form):
     is_active = forms.BooleanField(required=False, label ='actif')
     acquitte = forms.BooleanField(required=False, label ='reçu envoyé')
