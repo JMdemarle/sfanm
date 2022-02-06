@@ -15,7 +15,7 @@
   </div>
   <br>
   <br>
- <h2> Mes réservations à la SFANM  <a href="{% url 'capacites'  %}" class="btn btn-primary">Nouvelle reservation</a></h2>
+ <h2> Mes réservations à la SFANM  <a href="{% url 'capacites'  %}" class="btn btn-outline-primary">Nouvelle reservation</a></h2>
   <table class="table">
     <thead class="thead-inverse">
       <tr>
@@ -34,8 +34,8 @@
             <td> {{ resa.dateretrait }}</td>
             <td> {{ resa.nbruches }}</td>
             <td> {{ resa.nbreine }}</td>
-            <td><a href="{% url 'modresa' resa.id %}" class="btn btn-primary">Modifier Réservation</a></td>
-            <td><a href="{% url 'affpourdelresa' resa.id %}" class="btn btn-danger">Annuler Réservation</a></td>
+            <td><a href="{% url 'modresa' resa.id %}" class="btn btn-outline-primary">Modifier Réservation</a></td>
+            <td><a href="{% url 'affpourdelresa' resa.id %}" class="btn btn-outline-danger">Annuler Réservation</a></td>
             
           </tr>
       {% empty %}

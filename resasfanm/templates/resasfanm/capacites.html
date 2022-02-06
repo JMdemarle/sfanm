@@ -29,11 +29,11 @@
             </td>
             <td> {{ capacite.nreinesmax }}</td>
             <td> {{ capacite.get_reinesdispos}}</td>
-            <td><a href="{% url 'newresa' capacite.id %}" class="btn btn-primary">Choisir</a></td>
+            <td><a href="{% url 'newresa' capacite.id %}" class="btn btn-outline-primary">Choisir</a></td>
           </tr>
       {% endfor %}
     </tbody>
   </table>
-  <a href="{% url 'listresas' %}" class="btn btn-success">Revenir</a>
+  <a href="{% url 'listresas' %}" class="btn btn-outline-success">Revenir</a>
 
 {% endblock %}

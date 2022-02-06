@@ -50,8 +50,8 @@ class NewReservationForm(forms.Form):
             HTML("<br>"),
             Row(
 
-                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'capacites'  %}' class='btn btn-success btn-block'>Revenir</a></div>"),
-                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-primary btn-block', >Réserver</button>"),
+                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'capacites'  %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
+                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Réserver</button>"),
             ),
         )
 
@@ -102,8 +102,8 @@ class NewReservationApiForm(forms.Form):
             HTML("<br>"),
             Row(
 
-                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url " + self.strurlEntrees + " %}' class='btn btn-success btn-block'>Revenir</a></div>"),
-                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-primary btn-block', >Réserver</button>"),
+                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url " + self.strurlEntrees + " %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
+                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-primary btn-outline-block', >Réserver</button>"),
             ),
         )
 
@@ -117,6 +117,7 @@ class ModReservationForm(forms.Form):
         self.datedepot = initial_arguments.get('la_date',None)
         self.datechoix = initial_arguments.get('choix_date',None)
         self.resa = initial_arguments.get('la_resa',None)
+        self.parAdmin = initial_arguments.get('par_admin',None)
         self.strurlEntrees = "'listentrees'" + ' ' + "'" + self.datedepot.isoformat() + "'" 
 
         
@@ -160,15 +161,15 @@ class ModReservationForm(forms.Form):
             self.helper.layout.append(
                             Row(
                         HTML("<div class='col-lg-3 col-sm-3'><a href='{% url " + self.strurlEntrees + " %}' class='btn btn-success btn-block'>Revenir</a></div>"),
-                        HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-primary btn-block', >Modifier</button>"),
+                        HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Modifier</button>"),
                     ),
 
             )
         else:
             self.helper.layout.append(            
                 Row(
-                        HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'listresas'  %}' class='btn btn-success btn-block'>Revenir</a></div>"),
-                        HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-primary btn-block', >Modifier</button>"),
+                        HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'listresas'  %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
+                        HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Modifier</button>"),
                     ),
         )
 
@@ -211,8 +212,8 @@ class ModEntreeReelleForm(forms.Form):
             ),
             HTML("<br>"),
             Row(
-                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url " + self.strurl + " %}' class='btn btn-success btn-block'>Revenir</a></div>"),
-                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-primary btn-block', >Modifier</button>"),
+                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url " + self.strurl + " %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
+                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Modifier</button>"),
             ),
          
         )
@@ -355,8 +356,8 @@ class NewInscriptionForm(forms.Form):
         self.helper.layout = Layout(
              HTML("<br>"), 
              Row(
-                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'listevtsmembre'  %}' class='btn btn-success btn-block'>Revenir</a></div>"),
-                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-primary btn-block', >Inscription</button>"),
+                HTML("<div class='col-lg-3 col-sm-3'><a href='{% url 'listevtsmembre'  %}' class='btn btn-outline-success btn-block'>Revenir</a></div>"),
+                HTML("<button type='submit' class='col-lg-3 col-sm-3 btn btn-outline-primary btn-block', >Inscription</button>"),
                 
             ),
 

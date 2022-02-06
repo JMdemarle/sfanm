@@ -2,13 +2,15 @@
 {% load cms_tags menu_tags cache %}
 
 
-<nav class="navbar navbar-expand-sm navbar-dark bg-success">
+<nav class="navbar navbar-expand-sm navbar-dark navbar-static-top" style="background-color:rgba(228,116,109,255)">
     <div class="container">
         <img src="/static/img/sfanmlogo.jpg" width="70" height="70" alt="">
+        <div class="border rounded" style="margin-left:20px">
         <a class="navbar-brand" href="{% url 'listouv' %}">Réservations </a>
         <a class="navbar-brand" href="{% url 'listevts' %}">Formations</a>
+
         {% show_menu 0 1 100 100 "cms/menu.html" %}
-        {% if user.is_authenticated %}
+      {% if user.is_authenticated %}
         {% if user.is_staff %}
         <a class="navbar-brand" href="{% url 'home' %}">Administration</a>
         {% endif %}
@@ -18,8 +20,9 @@
         <a class="navbar-brand" href="{% url 'contact' %}?next={{ request.path }}">Contact</a> 
         <ul class="navbar-brand">  </ul>
         {% endif %}
+      </div>
 
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="mainMenu">

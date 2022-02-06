@@ -35,16 +35,16 @@
             <td> {{ evt.get_placeslibres }}</td>
             <td> {{ evt.estinscrit|yesno:"oui,non"}} </td>
             {% if evt.estinscrit %}
-             <td><a href="{% url 'affpourdelinscription' evt.id %}" class="btn btn-danger">Annuler</a></td>
+             <td><a href="{% url 'affpourdelinscription' evt.id %}" class="btn btn-outline-danger">Annuler</a></td>
             {% else %}
               {% if evt.get_placeslibres > 0 %}
-                 <td><a href="{% url 'newinscription' evt.id %}" class="btn btn-primary">S inscrire</a></td>
+                 <td><a href="{% url 'newinscription' evt.id %}" class="btn btn-outline-primary">S inscrire</a></td>
               {% else %}
                  <td><a href="" class="btn btn-secondary">complet</a></td>
               
               {% endif %}
            {% endif %}
-            <td><a href="{% url 'voirevt' evt.id %}" class="btn btn-secondary">détail</a></td>
+            <td><a href="{% url 'voirevt' evt.id %}" class="btn btn-outline-secondary">détail</a></td>
 
           </tr>
       {% empty %}
