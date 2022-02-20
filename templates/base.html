@@ -17,14 +17,14 @@
 {% include "menu_site.html" %}
 
   <div class="container">
+    <ol class="breadcrumb my-4">
       {% if user.is_staff %}
-      <ol class="breadcrumb my-4">
       <li class="breadcrumb-item"><a href="{% url 'homeresa' %}" >Home</a></li>
+      {% endif %}
       
       {% block breadcrumb %}
       {% endblock %}
       </ol>
-      {% endif %}
 
 
       {% for message in messages %}
