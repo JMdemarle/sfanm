@@ -244,7 +244,7 @@ def contactView(request):
     else:
         form = ContactForm(request.POST)
         if form.is_valid():
-            subject = 'Demande de contact: ' + form.cleaned_data['subject']
+            subject = 'Demande de contact: ' + form.cleaned_data['subject'] + ' de la part de ' + form.cleaned_data['from_email']
             from_email = form.cleaned_data['from_email']
             emet_email = 'SFANM <sfanm@deje5295.odns.fr>'
             message = form.cleaned_data['message']
