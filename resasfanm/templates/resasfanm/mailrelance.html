@@ -5,7 +5,7 @@ La SFANM vous rappelle la tenue de l'évènement suivant:
 - date : {{le_evt.date }}
 - intitulé: {{le_evt.intitule}}
 - programme:
-{{le_evt.programme|linebreaks}}
+{{le_evt.programme | safe }}
 
 {% if le_evt.adresse1 is None %}
    L'emplacement vous sera communiqué ultérieurement

@@ -1,16 +1,32 @@
 {% load cms_tags menu_tags %}
 
 
-{% for child in children %}
+    {% for child in children %}
+<!-- no child pages  -->
+        {% if child.is_leaf_node %}
+            <a class="dropdown-item" href="{{ child.get_absolute_url }}}">{{child.get_menu_title }}</a>
 
-
-    
-        <a class="navbar-brand" href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
-        {% if child.children %}
-            <ul class="sub_menu">
-                {% show_menu from_level to_level extra_inactive extra_active template '' '' child %}
-            </ul>
         {% endif %}
-    
+<!-- /no child pages  -->
+<!-- has child pages  -->
+        {% if not child.is_leaf_node or child.ancestor %}
 
-{% endfor %}
+              <div class="dropdown navbar-brand">
+          
+                <a class="navbar-brand dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{child.get_menu_title }}
+                </a>
+    
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    {% if child.get_descendants %}
+                        {% for kid in child.get_descendants %}
+                                <a class="dropdown-item" href="{{ kid.get_absolute_url }}">{{kid.get_menu_title }}</a>
+
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+<!-- /has child pages  -->
+    {% endfor %} 
+<!-- /end for child -->

@@ -6,11 +6,12 @@
     <div class="container">
         <img src="/static/img/sfanmlogo.jpg" width="70" height="70" alt="">
         <div class="border rounded" style="margin-left:20px">
-          <a class="navbar-brand" href="https://sfanm.fr">Home </a>
-          <a class="navbar-brand" href="{% url 'listouv' %}">Réservations </a>
-        <a class="navbar-brand" href="{% url 'listevts' %}">Formations</a>
+          <a class="navbar-brand" href="https://sfanm.fr">Accueil &nbsp;</a>
+          <a class="navbar-brand" href="{% url 'listouv' %}">Réservations &nbsp;</a>
+        <a class="navbar-brand" href="{% url 'listevts' %}">Formations &nbsp;</a>
 
-        {% show_menu 0 1 100 100 "cms/menu.html" %}
+        {% show_menu 0 100 100 100 "cms/menu.html" %}
+
       {% if user.is_authenticated %}
         {% if user.is_staff %}
         <a class="navbar-brand" href="{% url 'home' %}">Administration</a>
@@ -23,7 +24,8 @@
         {% endif %}
       </div>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" 
+            aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="mainMenu">
