@@ -54,7 +54,7 @@ def mailacquit(request,membreid):
     subject = 'SFANM - Confirmation d Adhésion'
     html_message = render_to_string('users/mailconfirmationadhesion.html', {'le_user' : membre})
     #plain_message = strip_tags(html_message)
-    from_email = 'SFANM <sfanm@deje5295.odns.fr>'
+    from_email = 'SFANM ' + settings.DEFAULT_FROM_EMAIL
     to = membre.email
     #mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)       
 #    img = Image(os.path.join(settings.STATIC_ROOT, 'img/sfanmlogo.jpg'),width=28*mm,height=28*mm)
@@ -195,7 +195,7 @@ def signupnew(request):
                     custuser.save()
                     html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "d adhésion"})
                     try:
-                        send_mail('[SFANM] : demande adhésion', html_message, 'SFANM <sfanm@deje5295.odns.fr>', ['contact@sfanm.fr',emails,'jm.demarle@outlook.fr'])
+                        send_mail('[SFANM] : demande adhésion', html_message, 'SFANM ' + settings.DEFAULT_FROM_EMAIL, ['contact@sfanm.fr',emails,'jm.demarle@outlook.fr'])
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     return redirect('signupsuccess')
@@ -227,7 +227,7 @@ def signupagain(request):
                     custuser = CustomUser.objects.get(email=emails)
                     html_message = render_to_string('users/signup_email.html', {'le_user': custuser, 'le_motif': "de renouvellement d adhésion" })
                     try:
-                        send_mail('[SFANM] : demande renouvellement adhésion', html_message, 'SFANM <sfanm@deje5295.odns.fr>', ['contact@sfanm.fr',emails,'jm.demarle@outlook.fr'])
+                        send_mail('[SFANM] : demande renouvellement adhésion', html_message, 'SFANM ' + settings.DEFAULT_FROM_EMAIL, ['contact@sfanm.fr',emails,'jm.demarle@outlook.fr'])
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     return redirect('signupsuccess')
@@ -246,7 +246,7 @@ def contactView(request):
         if form.is_valid():
             subject = 'Demande de contact: ' + form.cleaned_data['subject'] + ' de la part de ' + form.cleaned_data['from_email']
             from_email = form.cleaned_data['from_email']
-            emet_email = 'SFANM <sfanm@deje5295.odns.fr>'
+            emet_email = 'SFANM '  + settings.DEFAULT_FROM_EMAIL
             message = form.cleaned_data['message']
             try:
                 send_mail(subject, message, emet_email, ['contact@sfanm.fr',from_email])
