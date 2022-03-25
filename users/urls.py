@@ -5,6 +5,8 @@ from django.urls import path, re_path
 from . import views
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
+from django.conf import settings
+
 
 #from users import views as users_views
 
@@ -41,7 +43,7 @@ urlpatterns = [
         template_name='users/password_reset.html',
         email_template_name='users/password_reset_email.html',
         subject_template_name='users/password_reset_subject.txt',
-        from_email='SFANM <sfanm@deje5295.odns.fr>'), 
+        from_email='SFANM ' + settings.DEFAULT_FROM_EMAIL), 
         name='password_reset'),
         
         
@@ -49,7 +51,7 @@ urlpatterns = [
         template_name='users/password_reset_evt.html',
         email_template_name='users/password_reset_email.html',
         subject_template_name='users/password_reset_subject.txt',
-        from_email='SFANM <sfanm@deje5295.odns.fr>',
+        from_email='SFANM ' + settings.DEFAULT_FROM_EMAIL,
         success_url = reverse_lazy('password_reset_done_evt')), 
         name='password_reset_evt'),
     path('resetevt/done',
@@ -59,7 +61,7 @@ urlpatterns = [
         template_name='users/password_reset_resa.html',
         email_template_name='users/password_reset_email.html',
         subject_template_name='users/password_reset_subject.txt',
-        from_email='SFANM <sfanm@deje5295.odns.fr>',
+        from_email='SFANM ' + settings.DEFAULT_FROM_EMAIL,
         success_url = reverse_lazy('password_reset_done_resa')), 
         name='password_reset_resa'),
     path('resetresa/done',
