@@ -1,0 +1,7 @@
+{% if node.get_descendants %}
+    {% for node2 in node.get_descendants %}
+        <li><a class="dropdown-item"  href="{{ node2.attr.redirect_url|default:node2.get_absolute_url }}">
+           D21 {{ node2.get_menu_title }}
+        </a></li>
+    {% endfor %}
+{% endif %}

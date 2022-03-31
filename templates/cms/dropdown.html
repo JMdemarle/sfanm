@@ -1,0 +1,26 @@
+{% load cms_tags menu_tags %}
+
+
+{% if child.children %}
+    {% for node in child.children %}
+    {% if node.is_leaf_node %}
+
+        <li><a class="dropdown-item"  href="{{ node.attr.redirect_url|default:node.get_absolute_url }}">
+           D1 {{ node.get_menu_title }}
+        </a></li>
+    {% else %}
+        <!-- Drop Down premier niveau-->
+
+        <li>  <a class="dropdown-item" href="#">
+                        DU2 {{node.get_menu_title }} &raquo</a>
+        
+          <ul class="submenu dropdown-menu">
+            {% show_menu from_level to_level extra_inactive extra_active "cms/dropdown_niv2.html" "" "" node %}
+        
+        
+          </ul>
+          </li>
+{% endif %}
+{% endfor %}
+{% endif %}
+

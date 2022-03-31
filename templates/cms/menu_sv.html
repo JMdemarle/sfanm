@@ -1,0 +1,24 @@
+{% load cms_tags menu_tags %}
+
+  {% for child in children %}
+    {% if child.is_leaf_node %}
+    <!-- Pas de sous menu -->
+    <a class="navbar-brand" href="{{ child.get_absolute_url }}">U1 {{child.get_menu_title }}</a>
+    {% else %}
+    <ul class="navbar-nav ml-auto">
+
+    <li class="dropdown nav-item">
+    <!-- Drop Down premier niveau-->
+      <a class="navbar-brand dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown"
+         aria-haspopup="true" aria-expanded="false">   U2 {{child.get_menu_title }} </a>
+    
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        {% show_menu from_level to_level extra_inactive extra_active "cms/dropdown.html" "" "" child %}
+
+
+      </ul>
+    </li>
+    {% endif %}
+<!-- /has child pages  -->
+  {% endfor %} 
+<!-- /end for child -->

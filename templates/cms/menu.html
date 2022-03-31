@@ -1,32 +1,24 @@
-{% load cms_tags menu_tags %}
+{% load menu_tags %}
 
-
-    {% for child in children %}
-<!-- no child pages  -->
-        {% if child.is_leaf_node %}
-            <a class="dropdown-item" href="{{ child.get_absolute_url }}}">{{child.get_menu_title }}</a>
-
-        {% endif %}
-<!-- /no child pages  -->
-<!-- has child pages  -->
-        {% if not child.is_leaf_node or child.ancestor %}
-
-              <div class="dropdown navbar-brand">
-          
-                <a class="navbar-brand dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    {{child.get_menu_title }}
-                </a>
-    
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    {% if child.get_descendants %}
-                        {% for kid in child.get_descendants %}
-                                <a class="dropdown-item" href="{{ kid.get_absolute_url }}">{{kid.get_menu_title }}</a>
-
-                        {% endfor %}
-                    {% endif %}
-                </div>
+{% for child in children %}
+    <li class="nav-item {% if child.children and dropdown %}dropdown icon-dropdown{% endif %}{% if child.selected %} active{% endif %}">
+        <a
+            class="nav-link{% if child.children and dropdown %} dropdown-toggle{% endif %}"
+            {% if child.children and dropdown %}
+                data-toggle="dropdown"
+                id="dropdown-{{ child.get_menu_title|slugify }}"
+                href="#"
+            {% else %}
+                href="{{ child.attr.redirect_url|default:child.get_absolute_url }}"
+            {% endif %}
+            >
+            {{ child.get_menu_title }}
+        </a>
+        {% if child.children and dropdown %}
+            <div class="dropdown-menu" aria-labelledby="dropdown-{{ child.get_menu_title|slugify }}">
+                {% show_menu from_level to_level extra_inactive extra_active "cms/dropdown.html" "" "" child %}
             </div>
         {% endif %}
-<!-- /has child pages  -->
-    {% endfor %} 
-<!-- /end for child -->
+    </li>
+{% endfor %}
+
