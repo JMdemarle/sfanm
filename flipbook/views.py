@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.template import RequestContext
 from flipbook.models import PdfFlipbook
 
+#@login_required
 def flipbook(request):
-    documents = PdfFlipbook.objects.all()
-    print(documents)
+    if request.user.is_authenticated:
+        documents = PdfFlipbook.objects.all()
+        print(documents)
 
-    return render(
-        request,
-        'index.html',
-        {'documents': documents}
-    )
+        return render(
+            request,
+            'index.html',
+            {'documents': documents}
+        )
+    else:
+        return redirect('loginadmin')
