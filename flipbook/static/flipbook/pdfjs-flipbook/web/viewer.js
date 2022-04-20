@@ -1753,8 +1753,8 @@ var SecondaryToolbar = {
     this.toggleButton = options.toggleButton;
     this.presentationModeButton = options.presentationModeButton;
     this.openFile = options.openFile;
-    this.print = options.print;
-    this.download = options.download;
+//    this.print = options.print;
+//    this.download = options.download;
     this.viewBookmark = options.viewBookmark;
     this.firstPage = options.firstPage;
     this.lastPage = options.lastPage;
@@ -1771,8 +1771,8 @@ var SecondaryToolbar = {
       { element: this.presentationModeButton,
         handler: this.presentationModeClick },
       { element: this.openFile, handler: this.openFileClick },
-      { element: this.print, handler: this.printClick },
-      { element: this.download, handler: this.downloadClick },
+ //     { element: this.print, handler: this.printClick },
+ //     { element: this.download, handler: this.downloadClick },
       { element: this.viewBookmark, handler: this.viewBookmarkClick },
       { element: this.firstPage, handler: this.firstPageClick },
       { element: this.lastPage, handler: this.lastPageClick },
@@ -4687,8 +4687,8 @@ var PDFViewerApplication = {
       presentationModeButton:
         document.getElementById('secondaryPresentationMode'),
       openFile: document.getElementById('secondaryOpenFile'),
-      print: document.getElementById('secondaryPrint'),
-      download: document.getElementById('secondaryDownload'),
+      //print: document.getElementById('secondaryPrint'),
+      //download: document.getElementById('secondaryDownload'),
       viewBookmark: document.getElementById('secondaryViewBookmark'),
       firstPage: document.getElementById('firstPage'),
       lastPage: document.getElementById('lastPage'),
@@ -6401,11 +6401,11 @@ function webViewerInitialized() {
   document.getElementById('openFile').addEventListener('click',
     SecondaryToolbar.openFileClick.bind(SecondaryToolbar));
 
-  document.getElementById('print').addEventListener('click',
-    SecondaryToolbar.printClick.bind(SecondaryToolbar));
+  //document.getElementById('print').addEventListener('click',
+  //  SecondaryToolbar.printClick.bind(SecondaryToolbar));
 
-  document.getElementById('download').addEventListener('click',
-    SecondaryToolbar.downloadClick.bind(SecondaryToolbar));
+ // document.getElementById('download').addEventListener('click',
+ //   SecondaryToolbar.downloadClick.bind(SecondaryToolbar));
 
 
   if (file && file.lastIndexOf('file:', 0) === 0) {

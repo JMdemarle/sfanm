@@ -10,9 +10,9 @@ La SFANM vous annonce la tenue de l'évènement suivant:
 
 {% if le_evt.adresse1 and le_evt.adresse1.strip %}
 Lieu
-{{ le_evt.adresse1}}
-{{ le_evt.adresse2}}
-{{ le_evt.codepostal}} {{ le_evt.ville}}
+{{ le_evt.adresse1 | safe}}
+{{ le_evt.adresse2 | safe}}
+{{ le_evt.codepostal}} {{ le_evt.ville | safe}}
 {% else %}
    L'emplacement vous sera communiqué ultérieurement
 {% endif %}
