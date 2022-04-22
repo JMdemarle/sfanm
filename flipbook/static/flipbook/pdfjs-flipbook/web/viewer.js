@@ -1753,6 +1753,7 @@ var SecondaryToolbar = {
     this.toggleButton = options.toggleButton;
     this.presentationModeButton = options.presentationModeButton;
     this.openFile = options.openFile;
+//JMD
 //    this.print = options.print;
 //    this.download = options.download;
     this.viewBookmark = options.viewBookmark;
@@ -1771,6 +1772,7 @@ var SecondaryToolbar = {
       { element: this.presentationModeButton,
         handler: this.presentationModeClick },
       { element: this.openFile, handler: this.openFileClick },
+//JMD      
  //     { element: this.print, handler: this.printClick },
  //     { element: this.download, handler: this.downloadClick },
       { element: this.viewBookmark, handler: this.viewBookmarkClick },
@@ -4687,6 +4689,7 @@ var PDFViewerApplication = {
       presentationModeButton:
         document.getElementById('secondaryPresentationMode'),
       openFile: document.getElementById('secondaryOpenFile'),
+      //JMD
       //print: document.getElementById('secondaryPrint'),
       //download: document.getElementById('secondaryDownload'),
       viewBookmark: document.getElementById('secondaryViewBookmark'),
@@ -6400,7 +6403,8 @@ function webViewerInitialized() {
 
   document.getElementById('openFile').addEventListener('click',
     SecondaryToolbar.openFileClick.bind(SecondaryToolbar));
-
+  
+//JMD
   //document.getElementById('print').addEventListener('click',
   //  SecondaryToolbar.printClick.bind(SecondaryToolbar));
 
