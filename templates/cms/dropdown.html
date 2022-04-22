@@ -11,7 +11,7 @@
     {% else %}
         <!-- Drop Down premier niveau-->
 
-        <li>  <a class="dropdown-item" href="#">
+        <li>  <a class="dropdown-item" href="{{ node.attr.redirect_url|default:node.get_absolute_url }}">
                         {{node.get_menu_title }} &raquo</a>
         
           <ul class="submenu dropdown-menu">
