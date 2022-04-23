@@ -4,6 +4,7 @@
 <div class="djangocms-video-plugin" id="noContextMenu">
 
         {% if instance.embed_link %}
+        <p> instance</p>
         {# show iframe if embed_link is provided #}
         {#<iframe src="{{ instance.embed_link_with_parameters }}" {{ instance.attributes_str }} frameborder="0" allowfullscreen="true"></iframe> #}
         {# <video poster="https://cdn.plyr.io/static/demo/View_From_A_Blue_Moon_Trailer-HD.jpg" class="js-player"> #}
@@ -17,6 +18,7 @@
             {% endfor %}
         {% endwith %}
     {% else %}
+<p>Test</p>
         {# render <source> or <track> plugins ajt de class="js-player id="player"#}
         <video-js controls playsinline     width="640"
         height="480"     class="video-js vjs-theme-city" liveui data-setup='{}' preload='auto'
