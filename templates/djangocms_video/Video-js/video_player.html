@@ -18,19 +18,28 @@
             {% endfor %}
         {% endwith %}
     {% else %}
-<p>Test</p>
+<p>Video JS</p>
         {# render <source> or <track> plugins ajt de class="js-player id="player"#}
-        <video-js controls playsinline     width="640"
-        height="480"     class="video-js vjs-theme-city" liveui data-setup='{}' preload='auto'
-            {% if instance.poster %} poster="{{ instance.poster.url }}"{% endif %}  >
-
-            {% for plugin in instance.child_plugin_instances %}
-                {% render_plugin plugin %}
-            {% endfor %}
-            <p class="vjs-no-js">
-            {% trans "Your browser doesn't support this video format." %}
-            </p>
-        </video-js> 
+        <video
+        id="my-video"
+        class="video-js"
+        controls
+        preload="auto"
+        width="640"
+        height="264"
+        poster="MY_VIDEO_POSTER.jpg"
+        data-setup="{}"
+      >
+      {% for plugin in instance.child_plugin_instances %}
+      {% render_plugin plugin %}
+  {% endfor %}
+        <p class="vjs-no-js">
+          To view this video please enable JavaScript, and consider upgrading to a
+          web browser that
+          <a href="https://videojs.com/html5-video-support/" target="_blank"
+            >supports HTML5 video</a
+          >
+        </p>
 
     {% endif %}
 
