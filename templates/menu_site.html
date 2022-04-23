@@ -16,7 +16,6 @@
       {% if user.is_authenticated %}
         <li class="nav-item"><a class="navbar-brand" href="{% url 'listouv' %}">Réservations &nbsp;</a></li>
         <li class="nav-item"><a class="navbar-brand" href="{% url 'listevts' %}">Inscriptions &nbsp;</a></li>
-      {% endif %}
 
         {% show_menu 0 100 100 100 "cms/menu_sv.html" %}
 
