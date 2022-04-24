@@ -18,8 +18,8 @@
         {% endwith %}
     {% else %}
         {# render <source> or <track> plugins ajt de class="js-player id="player"#}
-        <video-js controls playsinline     width="640"
-        height="480"     class="video-js vjs-theme-city" liveui data-setup='{}' preload='auto'
+        <video-js controls playsinline     
+            class="video-js vjs-theme-city" liveui data-setup='{}' preload='auto'
             {% if instance.poster %} poster="{{ instance.poster.url }}"{% endif %}  >
 
             {% for plugin in instance.child_plugin_instances %}
