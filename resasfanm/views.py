@@ -290,6 +290,7 @@ def modResaApi(request,idresa,idapi):
     msg =''
     resam = Reservation.objects.get(id=idresa)
     api = CustomUser.objects.get(id=idapi)
+    nbreineavant = resam.nbreine
     datededepot = resam.datedepot
     dateret0 = datededepot + timedelta(days=7)
     dateret1 = datededepot + timedelta(days=14)
@@ -309,7 +310,7 @@ def modResaApi(request,idresa,idapi):
         resaok = True
         while (dated < datert):
             capac = Capacite.objects.filter(datecapa = dated).first()
-            if (capac.get_reinesdispos() < nbreinedemand):
+            if (capac.get_reinesdispos() < nbreinedemand - nbreineavant):
                 resaok = False
                 msg += 'Manque de capacité à la station le ' + dated.strftime("%d/%m/%Y")
             dated = dated + timedelta(days=7)
