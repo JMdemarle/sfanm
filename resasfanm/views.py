@@ -392,6 +392,7 @@ def modresa(request,idresa):
     msg =''
     resam = Reservation.objects.get(id=idresa)
     print(resam.nbreine)
+    nbreineavt = resam.nbreine
     datededepot = resam.datedepot
     dateret1 = datededepot + timedelta(days=14)
     dateret2 = dateret1 + timedelta(days=7)
@@ -410,7 +411,7 @@ def modresa(request,idresa):
         resaok = True
         while (dated < datert):
             capac = Capacite.objects.filter(datecapa = dated).first()
-            if (capac.get_reinesdispos() < nbreinedemand):
+            if (capac.get_reinesdispos() < nbreinedemand - nbreineavt):
                 resaok = False
                 msg += 'Manque de capacité à la station le ' + dated.strftime("%d/%m/%Y")
             dated = dated + timedelta(days=7)
