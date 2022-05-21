@@ -7,6 +7,8 @@ from django.db.models.functions import Now, ExtractYear
 from django.dispatch import receiver 
 from django.conf import settings
 from users.models import CustomUser
+from datetime import timedelta 
+
 
 
 from decimal import *
@@ -102,10 +104,22 @@ class Capacite(models.Model):
 		
 	def get_reinesdispos(self):
 		presences = Presence.objects.filter(capa=self)
-		nbreines = self.nreinesmax
+		nbreinesdat1 = self.nreinesmax
 		for presence in presences:
-			nbreines = nbreines - presence.resa.nbreinedepot
-		return nbreines
+			nbreinesdat1 = nbreinesdat1 - presence.resa.nbreinedepot
+	# date suivante
+		datemin = self.datecapa
+		datesuiv = datemin + timedelta(days=7)
+		capas = Capacite.objects.filter(datecapa=datesuiv)
+		nbreinesdat2 = 0
+		for capa in capas:
+			presences = Presence.objects.filter(capa=capa)
+			nbreinesdat2 = self.nreinesmax
+			for presence in presences:
+				nbreinesdat2 = nbreinesdat2 - presence.resa.nbreinedepot
+    			
+    		
+		return min(nbreinesdat1, nbreinesdat2)
 		
 	def get_entreesdate(self):
 		reservations = Reservation.objects.filter(datedepot=self.datecapa)

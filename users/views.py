@@ -373,7 +373,10 @@ def loginadmin(request):
             #return redirect("home")
             if user is not None:
                 auth_login(request, user)
-                return redirect('home')
+                if user.is_staff:
+                    return redirect('home')
+                else:
+                    return redirect('listresas')
             
             else:
                 messages.add_message(request, messages.INFO, 'Informations de connexion erronées')
