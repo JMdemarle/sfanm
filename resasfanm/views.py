@@ -161,7 +161,8 @@ def newresaapi(request,idcapa):
                 html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': reservation, 'le_api': reservation.apiculteur, })
                 #plain_message = strip_tags(html_message)
                 from_email = 'SFANM <'  + settings.DEFAULT_FROM_EMAIL + '>'
-                to = formApiculteur.email
+                api = CustomUser.objects.get(id=formApiculteur)
+                to = api.email
                 pdf = Etiquette(reservation.id)
                 try:
                         #mail.send_mail(subject, html_message, from_email, [to])
