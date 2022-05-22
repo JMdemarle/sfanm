@@ -80,7 +80,7 @@ def newresaapi(request,idcapa):
     capa = Capacite.objects.get(id=idcapa)
     datededepot = capa.datecapa
     dateret1 = datededepot + timedelta(days=14)
-    lesApis = CustomUser.objects.filter(is_active = True).order_by(nom)
+    lesApis = CustomUser.objects.filter(is_active = True).order_by('nom')
     if not(Capacite.objects.filter(datecapa=dateret1).exists()):
         subject = 'SFANM - Problème de définition des dates de réservation'
         html_message = 'il n est pas possible de retirer les ruches après la date de dépôt'
