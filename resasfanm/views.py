@@ -80,7 +80,7 @@ def newresaapi(request,idcapa):
     capa = Capacite.objects.get(id=idcapa)
     datededepot = capa.datecapa
     dateret1 = datededepot + timedelta(days=14)
-    lesApis = CustomUser.objects.filter(is_active = True)
+    lesApis = CustomUser.objects.filter(is_active = True).order_by(nom)
     if not(Capacite.objects.filter(datecapa=dateret1).exists()):
         subject = 'SFANM - Problème de définition des dates de réservation'
         html_message = 'il n est pas possible de retirer les ruches après la date de dépôt'
@@ -105,15 +105,16 @@ def newresaapi(request,idcapa):
             datert = datetime.datetime.strptime(form.cleaned_data['dateretrait'], "%Y-%m-%d").date()
             # vérification des capacités
             resaok = True
-            while (dated < datert):
-                capac = Capacite.objects.filter(datecapa = dated).first()
-                if (capac.get_reinesdispos() < nbreinedemand):
-                    resaok = False
-                    msg += 'Manque de capacité à la station le ' + dated.strftime("%d/%m/%Y")
-                dated = dated + timedelta(days=7)
-            if nbreinedemand > request.user.nbreinesmax:
-                resaok = False
-                msg += 'Vous dépassez votre quotat de ' + str(request.user.nbreinesmax) + ' reines' 
+            # pas de contrôle car c'est l'admin qui fait
+            #while (dated < datert):
+            #    capac = Capacite.objects.filter(datecapa = dated).first()
+            #    if (capac.get_reinesdispos() < nbreinedemand):
+            #        resaok = False
+            #        msg += 'Manque de capacité à la station le ' + dated.strftime("%d/%m/%Y")
+            #    dated = dated + timedelta(days=7)
+            #if nbreinedemand > request.user.nbreinesmax:
+            #    resaok = False
+            #    msg += 'Vous dépassez votre quotat de ' + str(request.user.nbreinesmax) + ' reines' 
             nbtypfecond1 = form.cleaned_data['nbtypfecond1']
             nbtypfecond2 = form.cleaned_data['nbtypfecond2']
             nbtypfecond3 = form.cleaned_data['nbtypfecond3']
@@ -160,11 +161,11 @@ def newresaapi(request,idcapa):
                 html_message = render_to_string('resasfanm/mailconfirmationreservation.html', {'la_resa': reservation, 'le_api': reservation.apiculteur, })
                 #plain_message = strip_tags(html_message)
                 from_email = 'SFANM <'  + settings.DEFAULT_FROM_EMAIL + '>'
-                to = request.user.email
+                to = formApiculteur.email
                 pdf = Etiquette(reservation.id)
                 try:
                         #mail.send_mail(subject, html_message, from_email, [to])
-                    message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[to])
+                    message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[to, 'contact@sfanm.fr'])
                     message.attach('etiquettes.pdf', pdf, 'application/pdf')
 
                 except Exception as e: print(e)
@@ -308,16 +309,17 @@ def modResaApi(request,idresa,idapi):
         datert = datetime.datetime.strptime(form.cleaned_data['dateretrait'], "%Y-%m-%d").date()
         # vérification des capacités
         resaok = True
-        while (dated < datert):
-            capac = Capacite.objects.filter(datecapa = dated).first()
-            if (capac.get_reinesdispos() < nbreinedemand - nbreineavant):
-                resaok = False
-                msg += 'Manque de capacité à la station le ' + dated.strftime("%d/%m/%Y")
-            dated = dated + timedelta(days=7)
-            print(dated)
-        if nbreinedemand > request.user.nbreinesmax:
-            resaok = False
-            msg += 'Vous dépassez votre quotat de ' + str(request.user.nbreinesmax) + ' reines' 
+        # Pas de vérificattion, car c'est admin qui fait
+        #while (dated < datert):
+        #    capac = Capacite.objects.filter(datecapa = dated).first()
+        #    if (capac.get_reinesdispos() < nbreinedemand - nbreineavant):
+        #        resaok = False
+        #        msg += 'Manque de capacité à la station le ' + dated.strftime("%d/%m/%Y")
+        #    dated = dated + timedelta(days=7)
+        #    print(dated)
+        #if nbreinedemand > request.user.nbreinesmax:
+        #    resaok = False
+        #    msg += 'Vous dépassez votre quotat de ' + str(request.user.nbreinesmax) + ' reines' 
         nbtypfecond1 = form.cleaned_data['nbtypfecond1']
         nbtypfecond2 = form.cleaned_data['nbtypfecond2']
         nbtypfecond3 = form.cleaned_data['nbtypfecond3']
@@ -366,7 +368,7 @@ def modResaApi(request,idresa,idapi):
             pdf = Etiquette(resam.id)
             try:
                         #mail.send_mail(subject, html_message, from_email, [to])
-                message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[to])
+                message = EmailMessage(subject=subject,body=html_message,from_email=from_email,to=[to, 'contact@sfanm.fr'])
                 message.attach('etiquettes.pdf', pdf, 'application/pdf')
 
             except Exception as e: print(e)
@@ -391,10 +393,20 @@ def modResaApi(request,idresa,idapi):
 @login_required
 def modresa(request,idresa):
     msg =''
+    
     resam = Reservation.objects.get(id=idresa)
     print(resam.nbreine)
     nbreineavt = resam.nbreine
     datededepot = resam.datedepot
+
+# possibilité de ramener 3 reines de plus
+    ecartadmis = 0
+    datedujour = date.today()
+    onestdansles3jours = False
+    if (datedujour + timedelta(days=4)) > datededepot:
+        ecartadmis = 3
+        onestdansles3jours = True
+
     dateret1 = datededepot + timedelta(days=14)
     dateret2 = dateret1 + timedelta(days=7)
     if Capacite.objects.filter(datecapa=dateret2).exists():
@@ -414,12 +426,12 @@ def modresa(request,idresa):
             capac = Capacite.objects.filter(datecapa = dated).first()
             if (capac.get_reinesdispos() < nbreinedemand - nbreineavt):
                 resaok = False
-                msg += 'Manque de capacité à la station le ' + dated.strftime("%d/%m/%Y")
+                msg += ' ²Manque de capacité à la station le ' + dated.strftime("%d/%m/%Y")
             dated = dated + timedelta(days=7)
             print(dated)
-        if nbreinedemand > request.user.nbreinesmax:
+        if nbreinedemand > (request.user.nbreinesmax + ecartadmis):
             resaok = False
-            msg += 'Vous dépassez votre quotat de ' + str(request.user.nbreinesmax) + ' reines' 
+            msg += 'Vous dépassez votre quotat de ' + str(request.user.nbreinesmax + ecartadmis) + ' reines' 
         nbtypfecond1 = form.cleaned_data['nbtypfecond1']
         nbtypfecond2 = form.cleaned_data['nbtypfecond2']
         nbtypfecond3 = form.cleaned_data['nbtypfecond3']
