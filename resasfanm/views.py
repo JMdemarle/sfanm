@@ -530,9 +530,9 @@ def delResaApi(request,idresa):
     html_message = render_to_string('resasfanm/mailconfirmationannulreservation.html', {'la_resa': resam, 'le_api': resam.apiculteur})
     #plain_message = strip_tags(html_message)
     from_email = 'SFANM <'  + settings.DEFAULT_FROM_EMAIL + '>'
-    to = request.user.email
+    to = resam.apiculteur.email
     #mail.send_mail(subject, plain_message, from_email, [to], html_message=html_message)            
-    mail.send_mail(subject, html_message, from_email, [to])             
+    mail.send_mail(subject, html_message, from_email, [to,'contact@sfanm.fr'])             
     resam.delete()
     return redirect('listgestion')  
 
