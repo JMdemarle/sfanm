@@ -29,9 +29,11 @@
             </td>
             <td> {{ capacite.nreinesmax }}</td>
             <td> {{ capacite.get_reinesdispos}}</td>
-            {% if capacite.get_reinesdispos > 0 %}
-            <td><a href="{% url 'newresa' capacite.id %}" class="btn btn-outline-primary">Choisir</a></td>
-            {% endif %}
+            <td>
+              {% if capacite.get_reinesdispos > 0 %}
+                <a href="{% url 'newresa' capacite.id %}" class="btn btn-outline-primary">Choisir</a>
+              {% endif %}
+            </td>
           </tr>
       {% endfor %}
     </tbody>
