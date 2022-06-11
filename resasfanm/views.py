@@ -540,7 +540,8 @@ def delResaApi(request,idresa):
 def listcapacites(request):
 # affiche les dates sur lesquelles l'apiculteur n'a pas réservé
     datesreservees = Reservation.objects.filter(apiculteur=request.user).values_list('datedepot',flat = True)
-    datestart = date.today() + timedelta(days=2)
+    # days=0 acr résa possible jusque derrière minute
+    datestart = date.today() + timedelta(days=0)
     capacites = Capacite.objects.filter(depotpossible=True).filter(datecapa__gt = datestart).exclude(datecapa__in=datesreservees)
     return render(request, 'resasfanm/capacites.html', {'les_capacites':capacites})
 
