@@ -134,7 +134,10 @@ class ModReservationForm(forms.Form):
 
         #self.fields['datedepot'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date','class': 'form-control'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
 # possibilité de réserver sur 3 semaines supprimée ==> , disabled = True, required = False
-        self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix,widget=forms.Select(attrs={'class': 'form-control'}), disabled = True, required = False) 
+        if self.parAdmin:
+            self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix,widget=forms.Select(attrs={'class': 'form-control'})) 
+        else:
+            self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix,widget=forms.Select(attrs={'class': 'form-control'}), disabled = True, required = False) 
 
         self.fields['nbtypfecond1'] = forms.IntegerField(label = 'Nombre Apidéa/Kieler  ', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
         self.fields['nbtypfecond2'] = forms.IntegerField(label = 'Nombre MiniPlus       ', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))

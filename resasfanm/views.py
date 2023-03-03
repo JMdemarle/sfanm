@@ -417,7 +417,7 @@ def modResaApi(request,idresa,idapi):
             return redirect('listentrees', datededepot)  
     else:
         form = ModReservationForm(initial={'la_date' : datededepot, 'libel_depot' : libeldepot,'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : True})
-    return render(request, 'resasfanm/newresaapi.html', {'form': form, 'mod' : True, 'msg' : msg, 'le_api' : api, 'date_depot' : datededepot})
+    return render(request, 'resasfanm/newresaapi.html', {'form': form, 'mod' : True, 'msg' : msg, 'le_api' : api, 'date_depot' : datededepot, 'libel_depot' : libeldepot})
 
 
 
@@ -622,10 +622,11 @@ def listgestion(request):
 @login_required 
 @staff_member_required
 def listentrees(request,dateentree):
+    capa = Capacite.objects.filter(datecapa = dateentree).first()
     datee = datetime.datetime.strptime(dateentree, "%Y-%m-%d").date()
     resas = Reservation.objects.filter(datedepot=datee)
 
-    return render(request, 'resasfanm/listentrees.html', {'les_resas':resas, 'date_entree': datee})
+    return render(request, 'resasfanm/listentrees.html', {'les_resas':resas, 'date_entree': capa.libelle})
 
 @login_required 
 @staff_member_required
@@ -655,10 +656,11 @@ def entreereelle(request,idresa):
 @login_required
 @staff_member_required
 def listsorties(request,datesortie):
+    capa = Capacite.objects.filter(datecapa = datesortie).first()
     dates = datetime.datetime.strptime(datesortie, "%Y-%m-%d").date()
     resas = Reservation.objects.filter(dateretrait=dates)
 
-    return render(request, 'resasfanm/listsorties.html', {'les_resas':resas, 'date_sortie': dates})
+    return render(request, 'resasfanm/listsorties.html', {'les_resas':resas, 'date_sortie': dates, 'libel_sortie' : capa.libelle})
     
 def editentreesortie(request,dateedit):
     PAGE_HEIGHT=defaultPageSize[1]; PAGE_WIDTH=defaultPageSize[0]

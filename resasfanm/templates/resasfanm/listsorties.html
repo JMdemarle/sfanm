@@ -3,7 +3,7 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'listgestion' %}" >Activité de la station</a></li>
-  <li class="breadcrumb-item active">Les Sorties du {{ date_sortie }} </li>
+  <li class="breadcrumb-item active">Les Sorties du {{ libel_sortie }} </li>
 {% endblock %}
 
 {% block content %}
@@ -25,7 +25,7 @@
           <tr>
             <td> {{ resa.apiculteur.email }}</td>
 
-            <td> {{ resa.datedepot }}</td>
+            <td> {{ resa.libeldepot }}</td>
             <td> {{ resa.nbruches }}</td>
             <td> {{ resa.nbreinedepot }}</td>
             

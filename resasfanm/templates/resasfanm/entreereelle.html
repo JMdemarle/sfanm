@@ -8,7 +8,7 @@
 
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'listgestion' %}" >Activité de la station</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'listentrees' la_resa.datedepot %}" >Les Entrées du {{ la_resa.datedepot }} </a></li>
+  <li class="breadcrumb-item"><a href="{% url 'listentrees' la_resa.datedepot %}" >Les Entrées du {{ la_resa.libeldepot }} </a></li>
   <li class="breadcrumb-item active">MAJ entrées réelles </li>
 
 {% endblock %}
@@ -16,7 +16,7 @@
 {% block content %}
   <h3>Mise à jour des dépôts réels</h3>
   <br>
-  <h3>Annoncé par {{la_resa.apiculteur.nom}} pour le dépôt du {{la_resa.datedepot}}</h3>
+  <h3>Annoncé par {{la_resa.apiculteur.nom}} pour le dépôt du {{la_resa.libeldepot}}</h3>
   <table class="table">
     <thead class="thead-inverse">
       <tr>

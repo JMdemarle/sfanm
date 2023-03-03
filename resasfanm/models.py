@@ -68,8 +68,8 @@ class Reservation(models.Model):
 		nous permettra de reconnaître facilement les différents objets que 
 		nous traiterons plus tard dans l'administration
 		"""
-		return self.datedepot.strftime('%d/%m/%Y')
-		
+		return self.datedepot.strftime('%d/%m/%Y') + '-' + self.dateretrait.strftime('%d/%m/%Y') + '-' + str(self.nbreine) + '-' + self.apiculteur.nom
+ 		
 	
 		
 	class Meta:

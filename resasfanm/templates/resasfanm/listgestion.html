@@ -31,7 +31,7 @@
       {% for capacite in les_capacites %}
           <tr>
 
-            <td> {{ capacite.datecapa }} </td>
+            <td> {{ capacite.libelle }} </td>
             <td> <a href="{% url 'listentrees' capacite.datecapa %}">{{ capacite.get_entreesdate }} </a></td>
             <td> <a href="{% url 'listsorties' capacite.datecapa %}">{{ capacite.get_sortiesdate }} </a></td>
             <td> {{ capacite.get_encoursreines }} </a></td>

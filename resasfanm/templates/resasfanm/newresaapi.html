@@ -12,7 +12,7 @@
   <li class="breadcrumb-item"><a href="{% url 'listgestion' %}" >Activité de la station</a></li>
 
   {% if mod   == True %}
-    <li class="breadcrumb-item"><a href="{% url 'listentrees' date_depot %}" >Les Entrées du {{ date_depot }} </a></li>
+    <li class="breadcrumb-item"><a href="{% url 'listentrees' date_depot %}" >Les Entrées du {{ libel_depot }} </a></li>
     <li class="breadcrumb-item active"> Modification Réservation</li>
   {% else %}
     <li class="breadcrumb-item active"> Création Réservation</li>
