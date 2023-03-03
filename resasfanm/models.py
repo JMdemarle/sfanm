@@ -74,6 +74,15 @@ class Reservation(models.Model):
 		
 	class Meta:
 		unique_together = ('apiculteur', 'datedepot',)
+
+	@property
+	def libeldepot(self):
+		print (Capacite.objects.filter(datecapa=self.datedepot).first().libelle)
+		return Capacite.objects.filter(datecapa=self.datedepot).first().libelle
+
+	@property
+	def libelretrait(self):
+		return Capacite.objects.filter(datecapa=self.dateretrait).first().libelle
 	
 	@property
 	def nbruches(self):
@@ -81,7 +90,7 @@ class Reservation(models.Model):
 	
 	@property
 	def nbruchesdepot(self):
-    		return self.nbdepotfecond1 + self.nbdepotfecond2 + self.nbdepotfecond3 + self.nbdepotfecond4
+		return self.nbdepotfecond1 + self.nbdepotfecond2 + self.nbdepotfecond3 + self.nbdepotfecond4
 		
 	
 	
@@ -90,6 +99,7 @@ class Capacite(models.Model):
 	nreinesmax = models.IntegerField(default = 0, verbose_name="capacité reines")
 	stationouverte = models.BooleanField(default = False)
 	depotpossible = models.BooleanField(default = True)
+	libelle = models.CharField(max_length=20, null = True, blank=True) 
 	def __str__(self):
 		""" 
 		Cette méthode que nous définirons dans tous les modèles

@@ -17,13 +17,15 @@ class NewReservationForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         initial_arguments = kwargs.get('initial', None)
-
-        self.datedepot = initial_arguments.get('la_date',None)
+        print(initial_arguments)
+        self.libeldepot = initial_arguments.get('lib_depot',None)
         self.datechoix = initial_arguments.get('choix_date',None)
+        print(self.libeldepot)
         
 #        self.fields['api'] = forms.CharField(max_length=25)
         self.fields['nbreine'] = forms.IntegerField(label = 'Nombre reines', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
-        self.fields['datedepot'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date','class': 'form-control'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
+        self.fields['libeldepot'] = forms.CharField(label = 'Dépot',    widget=forms.TextInput(attrs={'class': 'form-control'}),initial=self.libeldepot, disabled = True)
+        #self.fields['datedepot'] = forms.T(widget=forms.DateInput(attrs={'type': 'date','class': 'form-control'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
 #        self.fields['dateretrait'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'},format=('%Y-%m-%d')))
         self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix,widget=forms.Select(attrs={'class': 'form-control'})) 
 
@@ -38,7 +40,7 @@ class NewReservationForm(forms.Form):
                 Column('nbreine', css_class='form-group col-md-3 mb-0'),
             ),
             Row(
-                Column('datedepot', css_class='form-group col-md-3 mb-0'),
+                Column('libeldepot', css_class='form-group col-md-3 mb-0'),
                 Column('dateretrait', css_class='form-group col-md-3 mb-0'),
             ),
             Row(
@@ -60,8 +62,9 @@ class NewReservationApiForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         initial_arguments = kwargs.get('initial', None)
+        print(initial_arguments)
 
-        self.datedepot = initial_arguments.get('la_date',None)
+        self.libeldepot = initial_arguments.get('lib_depot',None)
         self.datechoix = initial_arguments.get('choix_date',None)
         self.lesApis = initial_arguments.get('les_apis',None)
 #        self.strurlEntrees = "'listentrees'" + ' ' + "'" + self.datedepot.isoformat() + "'" 
@@ -73,7 +76,8 @@ class NewReservationApiForm(forms.Form):
 
 #        self.fields['api'] = forms.CharField(max_length=25)
         self.fields['nbreine'] = forms.IntegerField(label = 'Nombre reines', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
-        self.fields['datedepot'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date','class': 'form-control'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
+#        self.fields['datedepot'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date','class': 'form-control'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
+        self.fields['libeldepot'] = forms.CharField(label = 'Dépot',    widget=forms.TextInput(attrs={'class': 'form-control'}),initial=self.libeldepot, disabled = True)
 #        self.fields['dateretrait'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'},format=('%Y-%m-%d')))
         self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix,widget=forms.Select(attrs={'class': 'form-control'})) 
 
@@ -90,7 +94,7 @@ class NewReservationApiForm(forms.Form):
                 Column('nbreine', css_class='form-group col-md-3 mb-0'),
             ),
             Row(
-                Column('datedepot', css_class='form-group col-md-3 mb-0'),
+                Column('libeldepot', css_class='form-group col-md-3 mb-0'),
                 Column('dateretrait', css_class='form-group col-md-3 mb-0'),
             ),
             Row(
@@ -114,7 +118,9 @@ class ModReservationForm(forms.Form):
         super().__init__(*args, **kwargs)
         initial_arguments = kwargs.get('initial', None)
 
+        self.libeldepot = initial_arguments.get('libel_depot',None)
         self.datedepot = initial_arguments.get('la_date',None)
+
         self.datechoix = initial_arguments.get('choix_date',None)
         self.resa = initial_arguments.get('la_resa',None)
         self.parAdmin = initial_arguments.get('par_admin',None)
@@ -122,8 +128,9 @@ class ModReservationForm(forms.Form):
 
         
         #self.fields['nbreine'] = forms.IntegerField(label = 'Nombre reines', required = True, initial = self.resa.nbreine)
+        self.fields['libeldepot'] = forms.CharField(label = 'Dépot',    widget=forms.TextInput(attrs={'class': 'form-control'}),initial=self.libeldepot, disabled = True)
 
-        self.fields['datedepot'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date','class': 'form-control'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
+        #self.fields['datedepot'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date','class': 'form-control'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
         self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix,widget=forms.Select(attrs={'class': 'form-control'})) 
 
         self.fields['nbtypfecond1'] = forms.IntegerField(label = 'Nombre Apidéa/Kieler  ', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -132,7 +139,7 @@ class ModReservationForm(forms.Form):
         self.fields['nbtypfecond4'] = forms.IntegerField(label = 'Nombre Ruchette-dadant', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
 
         self.fields["nbreine"].initial = self.resa.nbreine
-        self.fields['datedepot'].initial = self.resa.datedepot
+        #self.fields['datedepot'].initial = self.resa.datedepot
         self.fields['dateretrait'].initial = self.resa.dateretrait
         self.fields['nbtypfecond1'].initial = self.resa.nbtypfecond1
         self.fields['nbtypfecond2'].initial = self.resa.nbtypfecond2
@@ -145,7 +152,7 @@ class ModReservationForm(forms.Form):
             Row (Column('nbreine', css_class='form-group col-md-3 mb-0'),
             ),
             Row(
-                Column('datedepot', css_class='form-group col-md-3 mb-0'),
+                Column('libeldepot', css_class='form-group col-md-3 mb-0'),
                 Column('dateretrait', css_class='form-group col-md-3 mb-0'),
             ),
             Row(

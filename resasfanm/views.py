@@ -79,9 +79,14 @@ def newresaapi(request,idcapa):
     msg =''
     capa = Capacite.objects.get(id=idcapa)
     datededepot = capa.datecapa
+    libeldepot = capa.libelle
     dateret1 = datededepot + timedelta(days=14)
     lesApis = CustomUser.objects.filter(is_active = True).order_by('nom')
-    if not(Capacite.objects.filter(datecapa=dateret1).exists()):
+    caparet1 = Capacite.objects.filter(datecapa=dateret1).first()
+    if caparet1:
+        libelret1 = caparet1.libelle
+    else:
+    #if not(Capacite.objects.filter(datecapa=dateret1).exists()):
         subject = 'SFANM - Problème de définition des dates de réservation'
         html_message = 'il n est pas possible de retirer les ruches après la date de dépôt'
         from_email = 'SFANM <' + settings.DEFAULT_FROM_EMAIL + '>'
@@ -89,16 +94,20 @@ def newresaapi(request,idcapa):
         mail.send_mail(subject, html_message, from_email, [to])             
 
         return render(request, 'resasfanm/resaimpossible.html')
+    
 
         
     dateret2 = dateret1 + timedelta(days=7)
-    if Capacite.objects.filter(datecapa=dateret2).exists():
-        datechoix = ((dateret1 , dateret1),(dateret2, dateret2))
+    caparet2 = Capacite.objects.filter(datecapa=dateret2).first()
+
+    if caparet2:
+        libelret2 = caparet2.libelle
+        datechoix = ((dateret1 , libelret1),(dateret2, libelret2))
     else:
-        datechoix = ((dateret1 , dateret1),(dateret1 , dateret1))
+        datechoix = ((dateret1 , libelret1),(dateret1 , libelret1))
         
     if request.method == 'POST':
-        form = NewReservationApiForm(request.POST, initial={'la_date' : datededepot, 'choix_date' : datechoix, 'les_apis' : lesApis})
+        form = NewReservationApiForm(request.POST, initial={'la_date' : datededepot, 'lib_depot' : libeldepot, 'choix_date' : datechoix, 'les_apis' : lesApis})
         if form.is_valid():
             nbreinedemand = form.cleaned_data['nbreine']
             dated = datededepot             
@@ -123,7 +132,7 @@ def newresaapi(request,idcapa):
                 resaok = False
                 msg += 'Le nombre de ruches est supérieur à celui des reines !  '  
             formApiculteur = form.cleaned_data['apiculteur']
-            formDateDepot = form.cleaned_data['datedepot']
+            formDateDepot = datededepot
             if Reservation.objects.filter(apiculteur=formApiculteur, datedepot=formDateDepot).exists():
                 resaok = False
                 msg += 'L apiculteur a déjà une reservation pour cette date'
@@ -181,7 +190,7 @@ def newresaapi(request,idcapa):
 
                 return redirect('listentrees', datededepot)  
     else:
-        form = NewReservationApiForm(initial={'la_date' : datededepot, 'choix_date' : datechoix,  'les_apis' : lesApis})
+        form = NewReservationApiForm(initial={'la_date' : datededepot, 'lib_depot' : libeldepot,'choix_date' : datechoix,  'les_apis' : lesApis})
     return render(request, 'resasfanm/newresaapi.html', {'form': form, 'mod' : False, 'msg' : msg, 'date_depot' : datededepot})
 
 @login_required
@@ -189,8 +198,14 @@ def newresa(request,idcapa):
     msg =''
     capa = Capacite.objects.get(id=idcapa)
     datededepot = capa.datecapa
+    libeldepot = capa.libelle
+    print(libeldepot)
     dateret1 = datededepot + timedelta(days=14)
-    if not(Capacite.objects.filter(datecapa=dateret1).exists()):
+    caparet1 = Capacite.objects.filter(datecapa=dateret1).first()
+    if caparet1:
+        libelret1 = caparet1.libelle
+    else:    
+    #if not(Capacite.objects.filter(datecapa=dateret1).exists()):
         subject = 'SFANM - Problème de définition des dates de réservation'
         html_message = 'il n est pas possible de retirer les ruches après la date de dépôt'
         from_email = 'SFANM <' + settings.DEFAULT_FROM_EMAIL + '>'
@@ -201,13 +216,17 @@ def newresa(request,idcapa):
 
         
     dateret2 = dateret1 + timedelta(days=7)
-    if Capacite.objects.filter(datecapa=dateret2).exists():
-        datechoix = ((dateret1 , dateret1),(dateret2, dateret2))
+    caparet2 = Capacite.objects.filter(datecapa=dateret2    ).first()
+    if caparet2:
+        libelret2 = caparet2.libelle
+
+    #if Capacite.objects.filter(datecapa=dateret2).exists():
+        datechoix = ((dateret1 , libelret1),(dateret2, libelret2))
     else:
-        datechoix = ((dateret1 , dateret1),(dateret1 , dateret1))
+        datechoix = ((dateret1 , libelret1),(dateret1 , libelret1))
         
     if request.method == 'POST':
-        form = NewReservationForm(request.POST, initial={'la_date' : datededepot, 'choix_date' : datechoix})
+        form = NewReservationForm(request.POST, initial={'lib_depot' : libeldepot, 'choix_date' : datechoix})
         if form.is_valid():
             nbreinedemand = form.cleaned_data['nbreine']
             dated = datededepot             
@@ -235,7 +254,7 @@ def newresa(request,idcapa):
                 reservation = Reservation()
                 reservation.apiculteur = request.user
                 reservation.nbreine = form.cleaned_data['nbreine']
-                reservation.datedepot = form.cleaned_data['datedepot']
+                reservation.datedepot = datededepot
                 reservation.dateretrait = form.cleaned_data['dateretrait']
                 reservation.nbtypfecond1 = form.cleaned_data['nbtypfecond1']
                 reservation.nbtypfecond2 = form.cleaned_data['nbtypfecond2']
@@ -283,7 +302,7 @@ def newresa(request,idcapa):
 
                 return redirect('listresas')  # TODO: redirect to the created topic page
     else:
-        form = NewReservationForm(initial={'la_date' : datededepot, 'choix_date' : datechoix})
+        form = NewReservationForm(initial={'lib_depot' : libeldepot, 'choix_date' : datechoix})
     return render(request, 'resasfanm/newresa.html', {'form': form, 'mod' : False, 'msg' : msg})
 
 # Modification rerservation pour un apiculteur
@@ -294,15 +313,21 @@ def modResaApi(request,idresa,idapi):
     api = CustomUser.objects.get(id=idapi)
     nbreineavant = resam.nbreine
     datededepot = resam.datedepot
+    libeldepot = Capacite.objects.filter(datecapa=datededepot).first().libelle
+
     dateret0 = datededepot + timedelta(days=7)
     dateret1 = datededepot + timedelta(days=14)
     dateret2 = dateret1 + timedelta(days=7)
-    if Capacite.objects.filter(datecapa=dateret2).exists():
-        datechoix = ((dateret0 , dateret0), (dateret1 , dateret1),(dateret2, dateret2))
+    libelret0 = Capacite.objects.filter(datecapa=dateret0).first().libelle
+    libelret1 = Capacite.objects.filter(datecapa=dateret1).first().libelle
+    caparet2 = Capacite.objects.filter(datecapa=dateret2).first()
+    if caparet2:
+        libelret2 = caparet2.libelle
+        datechoix = ((dateret0 , libelret0), (dateret1 , libelret1),(dateret2, libelret2))
     else:
-        datechoix = ((dateret0 , dateret0),(dateret1 , dateret1))
+        datechoix = ((dateret0 , libelret0),(dateret1 , libelret1))
 
-    form = ModReservationForm(request.POST, initial={'la_date' : datededepot, 'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : True})
+    form = ModReservationForm(request.POST, initial={'la_date' : datededepot, 'libel_depot' : libeldepot,'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : True})
 
     if form.is_valid():
         nbreinedemand = form.cleaned_data['nbreine']
@@ -333,7 +358,7 @@ def modResaApi(request,idresa,idapi):
             #reservation = Reservation()
             resam.apiculteur = api
             resam.nbreine = form.cleaned_data['nbreine']
-            resam.datedepot = form.cleaned_data['datedepot']
+            resam.datedepot = datededepot 
             resam.dateretrait = form.cleaned_data['dateretrait']
             resam.nbtypfecond1 = form.cleaned_data['nbtypfecond1']
             resam.nbtypfecond2 = form.cleaned_data['nbtypfecond2']
@@ -384,7 +409,7 @@ def modResaApi(request,idresa,idapi):
                 
             return redirect('listentrees', datededepot)  
     else:
-        form = ModReservationForm(initial={'la_date' : datededepot, 'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : True})
+        form = ModReservationForm(initial={'la_date' : datededepot, 'libel_depot' : libeldepot,'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : True})
     return render(request, 'resasfanm/newresaapi.html', {'form': form, 'mod' : True, 'msg' : msg, 'le_api' : api, 'date_depot' : datededepot})
 
 
@@ -399,6 +424,8 @@ def modresa(request,idresa):
     print(resam.nbreine)
     nbreineavt = resam.nbreine
     datededepot = resam.datedepot
+    capadepot = Capacite.objects.filter(datecapa=datededepot).first()
+    libeldepot = capadepot.libelle
 
 # possibilité de ramener 3 reines de plus
     ecartadmis = 0
@@ -409,13 +436,19 @@ def modresa(request,idresa):
         onestdansles3jours = True
 
     dateret1 = datededepot + timedelta(days=14)
+    caparet1 = Capacite.objects.filter(datecapa=dateret1).first()
+    libelret1 = caparet1.libelle    
     dateret2 = dateret1 + timedelta(days=7)
-    if Capacite.objects.filter(datecapa=dateret2).exists():
-        datechoix = ((dateret1 , dateret1),(dateret2, dateret2))
-    else:
-        datechoix = ((dateret1 , dateret1),(dateret1 , dateret1))
+    caparet2 = Capacite.objects.filter(datecapa=dateret2).first()
 
-    form = ModReservationForm(request.POST, initial={'la_date' : datededepot, 'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : False})
+    if caparet2:
+        libelret2 = caparet2.libelle    
+
+        datechoix = ((dateret1 , libelret1),(dateret2, libelret2))
+    else:
+        datechoix = ((dateret1 , libelret1),(dateret1 , libelret1))
+
+    form = ModReservationForm(request.POST, initial={'la_date': datededepot, 'libel_depot' : libeldepot, 'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : False})
 
     if form.is_valid():
         nbreinedemand = form.cleaned_data['nbreine']
@@ -445,7 +478,7 @@ def modresa(request,idresa):
             #reservation = Reservation()
             resam.apiculteur = request.user
             resam.nbreine = form.cleaned_data['nbreine']
-            resam.datedepot = form.cleaned_data['datedepot']
+            resam.datedepot = datededepot
             resam.dateretrait = form.cleaned_data['dateretrait']
             resam.nbtypfecond1 = form.cleaned_data['nbtypfecond1']
             resam.nbtypfecond2 = form.cleaned_data['nbtypfecond2']
@@ -496,7 +529,7 @@ def modresa(request,idresa):
                 
             return redirect('listresas')  
     else:
-        form = ModReservationForm(initial={'la_date' : datededepot, 'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : False})
+        form = ModReservationForm(initial={'la_date': datededepot, 'libel_depot' : libeldepot, 'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : False})
     return render(request, 'resasfanm/newresa.html', {'form': form, 'mod' : True, 'msg' : msg})
 
 @login_required 

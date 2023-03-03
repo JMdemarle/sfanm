@@ -12,10 +12,10 @@ admin.site.register(TypEmail)
 
 class CapaciteAdmin(admin.ModelAdmin):
     model = Capacite
-    list_display = ('datecapa', 'nreinesmax', 'stationouverte','depotpossible',)
+    list_display = ('datecapa', 'nreinesmax', 'stationouverte','depotpossible','libelle')
     list_filter = ('datecapa',)
     fieldsets = (
-        (None, {'fields': ('datecapa','nreinesmax', 'stationouverte','depotpossible')}),
+        (None, {'fields': ('datecapa','nreinesmax', 'stationouverte','depotpossible', 'libelle')}),
     )
     search_fields = ('datecapa',)
     ordering = ('datecapa',)

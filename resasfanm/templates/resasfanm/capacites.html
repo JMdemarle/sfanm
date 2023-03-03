@@ -25,7 +25,7 @@
       {% for capacite in les_capacites %}
           <tr>
             <td>
-              <a href="{% url 'newresa' capacite.id %}">{{ capacite.datecapa }}</a> 
+              <a href="{% url 'newresa' capacite.id %}">{{ capacite.libelle }}</a> 
             </td>
             <td> {{ capacite.nreinesmax }}</td>
             <td> {{ capacite.get_reinesdispos}}</td>
