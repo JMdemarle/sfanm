@@ -27,7 +27,9 @@ class NewReservationForm(forms.Form):
         self.fields['libeldepot'] = forms.CharField(label = 'Dépot',    widget=forms.TextInput(attrs={'class': 'form-control'}),initial=self.libeldepot, disabled = True)
         #self.fields['datedepot'] = forms.T(widget=forms.DateInput(attrs={'type': 'date','class': 'form-control'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
 #        self.fields['dateretrait'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'},format=('%Y-%m-%d')))
-        self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix,widget=forms.Select(attrs={'class': 'form-control'})) 
+
+# possibilité de réserver sur 3 semaines supprimée ==> , disabled = True, required = False
+        self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix,widget=forms.Select(attrs={'class': 'form-control'}), disabled = True, required = False) 
 
         self.fields['nbtypfecond1'] = forms.IntegerField(label = 'Nombre Apidéa/Kieler  ', required = True,initial='0',widget=forms.TextInput(attrs={'class': 'form-control'}))
         self.fields['nbtypfecond2'] = forms.IntegerField(label = 'Nombre MiniPlus       ', required = True,initial='0',widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -131,7 +133,8 @@ class ModReservationForm(forms.Form):
         self.fields['libeldepot'] = forms.CharField(label = 'Dépot',    widget=forms.TextInput(attrs={'class': 'form-control'}),initial=self.libeldepot, disabled = True)
 
         #self.fields['datedepot'] = forms.DateField(widget=forms.DateInput(attrs={'type': 'date','class': 'form-control'},format=('%Y-%m-%d')),initial=self.datedepot, disabled = True)
-        self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix,widget=forms.Select(attrs={'class': 'form-control'})) 
+# possibilité de réserver sur 3 semaines supprimée ==> , disabled = True, required = False
+        self.fields['dateretrait'] = forms.ChoiceField(choices = self.datechoix,widget=forms.Select(attrs={'class': 'form-control'}), disabled = True, required = False) 
 
         self.fields['nbtypfecond1'] = forms.IntegerField(label = 'Nombre Apidéa/Kieler  ', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))
         self.fields['nbtypfecond2'] = forms.IntegerField(label = 'Nombre MiniPlus       ', required = True,widget=forms.TextInput(attrs={'class': 'form-control'}))

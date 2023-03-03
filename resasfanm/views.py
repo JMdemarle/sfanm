@@ -214,23 +214,23 @@ def newresa(request,idcapa):
 
         return render(request, 'resasfanm/resaimpossible.html')
 
-        
-    dateret2 = dateret1 + timedelta(days=7)
-    caparet2 = Capacite.objects.filter(datecapa=dateret2    ).first()
-    if caparet2:
-        libelret2 = caparet2.libelle
-
-    #if Capacite.objects.filter(datecapa=dateret2).exists():
-        datechoix = ((dateret1 , libelret1),(dateret2, libelret2))
-    else:
-        datechoix = ((dateret1 , libelret1),(dateret1 , libelret1))
+    # Possibilité de réserver sur 3semaines supprimée    
+    #dateret2 = dateret1 + timedelta(days=7)
+    #caparet2 = Capacite.objects.filter(datecapa=dateret2    ).first()
+    #if caparet2:
+    #    libelret2 = caparet2.libelle
+    #    datechoix = ((dateret1 , libelret1),(dateret2, libelret2))
+    #else:
+    datechoix = ((dateret1 , libelret1),(dateret1 , libelret1))
         
     if request.method == 'POST':
         form = NewReservationForm(request.POST, initial={'lib_depot' : libeldepot, 'choix_date' : datechoix})
         if form.is_valid():
             nbreinedemand = form.cleaned_data['nbreine']
-            dated = datededepot             
-            datert = datetime.datetime.strptime(form.cleaned_data['dateretrait'], "%Y-%m-%d").date()
+            dated = datededepot          
+    # Possibilité de réserver sur 3semaines supprimée
+            datert = dateret1
+            # datert = datetime.datetime.strptime(form.cleaned_data['dateretrait'], "%Y-%m-%d").date()
             # vérification des capacités
             resaok = True
             while (dated < datert):
@@ -255,7 +255,11 @@ def newresa(request,idcapa):
                 reservation.apiculteur = request.user
                 reservation.nbreine = form.cleaned_data['nbreine']
                 reservation.datedepot = datededepot
-                reservation.dateretrait = form.cleaned_data['dateretrait']
+    # Possibilité de réserver sur 3semaines supprimée
+                print('===> date')
+                print(dateret1)
+                reservation.dateretrait = dateret1
+                #reservation.dateretrait = form.cleaned_data['dateretrait']
                 reservation.nbtypfecond1 = form.cleaned_data['nbtypfecond1']
                 reservation.nbtypfecond2 = form.cleaned_data['nbtypfecond2']
                 reservation.nbtypfecond3 = form.cleaned_data['nbtypfecond3']
@@ -268,7 +272,9 @@ def newresa(request,idcapa):
                 dated = datededepot             
                 #
                 reservation.save()
-                dater = datetime.datetime.strptime(reservation.dateretrait, "%Y-%m-%d").date()
+    # Possibilité de réserver sur 3semaines supprimée
+                dater = datert
+    #            dater = datetime.datetime.strptime(reservation.dateretrait, "%Y-%m-%d").date()
                 # mise à jour des présences
                 while (dated < dater):
                     present = Presence()
@@ -317,6 +323,7 @@ def modResaApi(request,idresa,idapi):
 
     dateret0 = datededepot + timedelta(days=7)
     dateret1 = datededepot + timedelta(days=14)
+    
     dateret2 = dateret1 + timedelta(days=7)
     libelret0 = Capacite.objects.filter(datecapa=dateret0).first().libelle
     libelret1 = Capacite.objects.filter(datecapa=dateret1).first().libelle
@@ -438,21 +445,22 @@ def modresa(request,idresa):
     dateret1 = datededepot + timedelta(days=14)
     caparet1 = Capacite.objects.filter(datecapa=dateret1).first()
     libelret1 = caparet1.libelle    
-    dateret2 = dateret1 + timedelta(days=7)
-    caparet2 = Capacite.objects.filter(datecapa=dateret2).first()
 
-    if caparet2:
-        libelret2 = caparet2.libelle    
-
-        datechoix = ((dateret1 , libelret1),(dateret2, libelret2))
-    else:
-        datechoix = ((dateret1 , libelret1),(dateret1 , libelret1))
+    # Possibilité de réserver sur 3semaines supprimée
+    #dateret2 = dateret1 + timedelta(days=7)
+    #caparet2 = Capacite.objects.filter(datecapa=dateret2).first()
+    #if caparet2:
+    #    libelret2 = caparet2.libelle    
+    #    datechoix = ((dateret1 , libelret1),(dateret2, libelret2))
+    #else:
+    datechoix = ((dateret1 , libelret1),(dateret1 , libelret1))
 
     form = ModReservationForm(request.POST, initial={'la_date': datededepot, 'libel_depot' : libeldepot, 'choix_date' : datechoix,'la_resa' : resam, 'par_admin' : False})
 
     if form.is_valid():
         nbreinedemand = form.cleaned_data['nbreine']
-        dated = datededepot             
+        dated = datededepot        
+
         datert = datetime.datetime.strptime(form.cleaned_data['dateretrait'], "%Y-%m-%d").date()
         # vérification des capacités
         resaok = True
@@ -479,7 +487,9 @@ def modresa(request,idresa):
             resam.apiculteur = request.user
             resam.nbreine = form.cleaned_data['nbreine']
             resam.datedepot = datededepot
-            resam.dateretrait = form.cleaned_data['dateretrait']
+    # Possibilité de réserver sur 3semaines supprimée
+            resam.dateretrait = dateret1
+            #resam.dateretrait = form.cleaned_data['dateretrait']
             resam.nbtypfecond1 = form.cleaned_data['nbtypfecond1']
             resam.nbtypfecond2 = form.cleaned_data['nbtypfecond2']
             resam.nbtypfecond3 = form.cleaned_data['nbtypfecond3']
@@ -492,7 +502,10 @@ def modresa(request,idresa):
             dated = datededepot             
             #
             resam.save()
-            dater = datetime.datetime.strptime(resam.dateretrait, "%Y-%m-%d").date()
+
+    # Possibilité de réserver sur 3semaines supprimée
+            dater = dateret1
+            #dater = datetime.datetime.strptime(resam.dateretrait, "%Y-%m-%d").date()
                 # mise à jour des présences
             # Etape 1 = supression
             Presence.objects.filter(resa = resam).delete()
