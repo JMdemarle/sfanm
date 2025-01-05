@@ -8,6 +8,9 @@
         {% render_block "css" %}
     </head>
     <body>
+        {% load static %}
+{% load cms_tags sekizai_tags %}
+{% load menu_tags %}
         {% cms_toolbar %}
         {% include "menu_site.html" %}
         {% show_breadcrumb  1 'cms/breadcrumb.html' %}
