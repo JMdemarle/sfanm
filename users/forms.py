@@ -98,7 +98,7 @@ class CreeMembreForm(forms.Form):
     adresse2 = forms.CharField(max_length=40, required=False,widget=forms.TextInput(attrs={'class': 'form-control'}))
     codepostal = forms.IntegerField(required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
     ville = forms.CharField(max_length=35, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
-    telephone = forms.CharField(max_length=15,min_length=10, required=True,widget=forms.TextInput(attrs={'class': 'form-control'}))
+    telephone = forms.CharField(max_length=15,min_length=10, required=False,widget=forms.TextInput(attrs={'class': 'form-control'}))
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
  
