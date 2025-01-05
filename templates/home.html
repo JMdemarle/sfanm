@@ -1,6 +1,7 @@
 {% load cms_tags sekizai_tags %}
 {% load menu_tags %}
 {% load static %}
+
 <html>
     <head>
         {% include "head.html" %}
@@ -9,6 +10,7 @@
     <body>
         {% cms_toolbar %}
         {% include "menu_site.html" %}
+        {% show_breadcrumb "cms/breadcrumb.html" %}
 
         {% if user.is_authenticated %}
             {% placeholder "content" %}
