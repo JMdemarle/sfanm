@@ -2,12 +2,5 @@
 {% load cms_tags menu_tags cache %}
 <ol class="breadcrumb my-4">
  
-{% for ancestor in ancestors %}
-    {% if not forloop.last %}
-        <li class="breadcrumb-item"><a href="{{ ancestor.get_absolute_url }}">{{ ancestor.get_menu_title }}</a></li>
-    {% else %}
-	    <li class="breadcrumb-item active"><a href="{{ ancestor.get_absolute_url }}">{{ ancestor.get_menu_title }}</a></li>
-	{% endif %}
-{% endfor %}
 
 </ol>
